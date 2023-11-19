@@ -1,2 +1,2 @@
 # node-xdf
-Extensible Data Format (XDF) on Node
+Extensible Data Format (XDF) on Node + TypeScript
