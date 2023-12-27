@@ -1,2 +1,2 @@
 # node-xdf
-Extensible Data Format (XDF) for multi-modal, time-series data
+Extensible Data Format (XDF) for persisting multi-modal, time-series data with metadata
