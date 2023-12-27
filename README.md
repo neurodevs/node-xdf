@@ -1,2 +1,2 @@
 # node-xdf
-Extensible Data Format (XDF) on Node + TypeScript
+Extensible Data Format (XDF) for multi-modal, time-series data
