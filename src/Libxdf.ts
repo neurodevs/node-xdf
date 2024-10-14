@@ -52,9 +52,15 @@ export default class LibxdfImpl implements Libxdf {
 			},
 		})
 	}
+
+	public loadXdf(path: string) {
+		return this.bindings.load_xdf(path)
+	}
 }
 
-export interface Libxdf {}
+export interface Libxdf {
+	loadXdf(path: string): XdfFile
+}
 
 export type LibxdfConstructor = new (libxdfPath: string) => Libxdf
 

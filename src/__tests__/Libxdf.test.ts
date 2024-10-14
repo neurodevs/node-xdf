@@ -15,10 +15,12 @@ import SpyLibxdf from '../testDoubles/SpyLibxdf'
 export default class LibxdfTest extends AbstractSpruceTest {
 	private static instance: SpyLibxdf
 	private static libxdfPath: string
+	private static path: string
 	private static shouldThrowWhenLoadingBindings: boolean
 	private static fakeBindings: LibxdfBindings
 	private static ffiRsOpenOptions?: OpenParams
 	private static ffiRsDefineOptions?: FfiRsDefineOptions
+	private static loadXdfCalls: string[] = []
 
 	protected static async beforeEach() {
 		await super.beforeEach()
@@ -26,6 +28,7 @@ export default class LibxdfTest extends AbstractSpruceTest {
 		LibxdfImpl.Class = SpyLibxdf
 
 		this.libxdfPath = generateId()
+		this.path = generateId()
 		this.shouldThrowWhenLoadingBindings = false
 		this.fakeBindings = this.FakeBindings()
 
@@ -82,6 +85,17 @@ export default class LibxdfTest extends AbstractSpruceTest {
 		)
 	}
 
+	@test()
+	protected static async loadXdfCallsBindings() {
+		this.instance.loadXdf(this.path)
+
+		assert.isEqual(
+			this.loadXdfCalls[0],
+			this.path,
+			'Should have called load_xdf(path)!'
+		)
+	}
+
 	private static clearAndFakeFfi() {
 		delete this.ffiRsOpenOptions
 		delete this.ffiRsDefineOptions
@@ -109,7 +123,8 @@ export default class LibxdfTest extends AbstractSpruceTest {
 
 	private static FakeBindings() {
 		return {
-			load_xdf: (_libxdfPath: string) => {
+			load_xdf: (path: string) => {
+				this.loadXdfCalls.push(path)
 				return {} as XdfFile
 			},
 		}
