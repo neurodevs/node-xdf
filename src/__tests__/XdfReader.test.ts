@@ -66,8 +66,9 @@ export default class XdfReaderTest extends AbstractSpruceTest {
 	protected static async createsLibxdfInstance() {
 		await this.load()
 
-		assert.isTruthy(
+		assert.isEqual(
 			FakeLibxdf.libxdfPath,
+			this.defaultLibxdfPath,
 			'Should have created a Libxdf instance!'
 		)
 	}
@@ -89,6 +90,8 @@ export default class XdfReaderTest extends AbstractSpruceTest {
 			timeoutMs,
 		})
 	}
+
+	private static readonly defaultLibxdfPath = '/usr/local/lib/libxdf.a'
 
 	private static XdfReader() {
 		return XdfReaderImpl.Create() as SpyXdfReader
