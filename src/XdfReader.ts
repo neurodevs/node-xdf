@@ -1,5 +1,6 @@
 import { assertOptions } from '@sprucelabs/schema'
 import SpruceError from './errors/SpruceError'
+import LibxdfImpl from './Libxdf'
 
 export default class XdfReaderImpl implements XdfReader {
 	public static Class?: XdfReaderConstructor
@@ -7,6 +8,7 @@ export default class XdfReaderImpl implements XdfReader {
 	protected constructor() {}
 
 	public static Create() {
+		LibxdfImpl.Create('asdf')
 		return new (this.Class ?? this)()
 	}
 

@@ -4,6 +4,8 @@ import AbstractSpruceTest, {
 	errorAssert,
 	generateId,
 } from '@sprucelabs/test-utils'
+import LibxdfImpl from '../Libxdf'
+import FakeLibxdf from '../testDoubles/FakeLibxdf'
 import SpyXdfReader from '../testDoubles/SpyXdfReader'
 import XdfReaderImpl from '../XdfReader'
 
@@ -15,6 +17,7 @@ export default class XdfReaderTest extends AbstractSpruceTest {
 		await super.beforeEach()
 
 		XdfReaderImpl.Class = SpyXdfReader
+		LibxdfImpl.Class = FakeLibxdf
 
 		this.filePath = generateId()
 		this.instance = this.XdfReader()
@@ -54,6 +57,16 @@ export default class XdfReaderTest extends AbstractSpruceTest {
 		const waitsNotTooLong = actualWaitTimeMs < expectedWaitTimeMs * 1.5
 
 		assert.isTrue(waitsLongEnough && waitsNotTooLong)
+	}
+
+	@test()
+	protected static async createsLibxdfInstance() {
+		await this.load()
+
+		assert.isTruthy(
+			FakeLibxdf.libxdfPath,
+			'Should have created a Libxdf instance!'
+		)
 	}
 
 	private static async load(options?: TestXdfReaderLoadOptions) {
