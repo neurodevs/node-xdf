@@ -49,20 +49,6 @@ export default class XdfReaderTest extends AbstractSpruceTest {
 	}
 
 	@test()
-	protected static async loadAcceptsTimeoutOption() {
-		const expectedWaitTimeMs = 10
-		const startTime = Date.now()
-
-		await this.load({ timeoutMs: expectedWaitTimeMs })
-
-		const actualWaitTimeMs = Date.now() - startTime
-		const waitsLongEnough = actualWaitTimeMs >= expectedWaitTimeMs * 0.6
-		const waitsNotTooLong = actualWaitTimeMs < expectedWaitTimeMs * 1.4
-
-		assert.isTrue(waitsLongEnough && waitsNotTooLong)
-	}
-
-	@test()
 	protected static async createsLibxdfInstance() {
 		await this.load()
 

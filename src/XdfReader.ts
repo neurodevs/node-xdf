@@ -21,7 +21,6 @@ export default class XdfReaderImpl implements XdfReader {
 		const { timeoutMs = 0 } = options ?? {}
 
 		this.assertValidTimeout(timeoutMs)
-		await this.wait(timeoutMs)
 		await this.libxdf.loadXdf(filePath)
 	}
 
