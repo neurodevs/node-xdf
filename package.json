@@ -1,6 +1,7 @@
 {
-  "name": "node-xdf",
-  "version": "0.0.2",
+  "name": "@neurodevs/node-xdf",
+  "version": "0.1.0",
+  "main": "build/index.js",
   "repository": "https://github.com/neurodevs/node-xdf",
   "scripts": {
     "build.ci": "yarn build.tsc && yarn build.resolve-paths && yarn lint",
@@ -70,8 +71,6 @@
     "@sprucelabs/schema": "^29.4.43",
     "@sprucelabs/spruce-core-schemas": "^39.0.277",
     "@sprucelabs/spruce-skill-utils": "^30.4.10",
-    "@types/ffi-napi": "^4.0.10",
-    "ffi-napi": "^4.0.3",
-    "node-gyp": "^10.1.0"
+    "ffi-rs": "^1.0.96"
   }
 }

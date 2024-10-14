@@ -2,19 +2,12 @@ import { assertOptions } from '@sprucelabs/schema'
 import SpruceError from './errors/SpruceError'
 
 export default class XdfReaderImpl implements XdfReader {
-	private static Class?: XdfReaderClass
+	public static Class?: XdfReaderConstructor
 
-	public static setClass(Class: XdfReaderClass) {
-		this.Class = Class
-	}
+	protected constructor() {}
 
-	public static getClass(): XdfReaderClass {
-		return this.Class ?? this
-	}
-
-	public static Reader() {
-		const Class = this.getClass()
-		return new Class()
+	public static Create() {
+		return new (this.Class ?? this)()
 	}
 
 	public async load(filePath: string, options?: XdfReaderLoadOptions) {
@@ -43,8 +36,8 @@ export interface XdfReader {
 	load(filePath: string, options?: XdfReaderLoadOptions): Promise<void>
 }
 
+export type XdfReaderConstructor = new () => XdfReader
+
 export interface XdfReaderLoadOptions {
 	timeoutMs?: number
 }
-
-export type XdfReaderClass = new () => XdfReader

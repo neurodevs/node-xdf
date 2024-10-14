@@ -1,51 +1,26 @@
 import { assertOptions } from '@sprucelabs/schema'
-import ffi from 'ffi-napi'
+import { DataType, define, FieldType, FuncObj, open } from 'ffi-rs'
 import SpruceError from './errors/SpruceError'
 
 export default class LibxdfImpl implements Libxdf {
-	protected bindings: LibxdfBindings
+	public static Class?: LibxdfConstructor
+	public static ffiRsOpen = open
+	public static ffiRsDefine = define
 
-	private static instance?: Libxdf
-	private static ffi = ffi
+	protected bindings!: LibxdfBindings
 	private libxdfPath: string
-
-	public static getInstance() {
-		if (!this.instance) {
-			this.setInstance(this.Libxdf())
-		}
-		return this.instance!
-	}
-
-	public static setInstance(instance: Libxdf) {
-		this.instance = instance
-	}
-
-	public static clearInstance() {
-		this.instance = undefined
-	}
-
-	public static setFfi(ffi: any) {
-		this.ffi = ffi
-	}
-
-	public static getFfi() {
-		return this.ffi
-	}
-
-	public static Libxdf() {
-		const { LIBXDF_PATH } = assertOptions(
-			process.env,
-			['LIBXDF_PATH'],
-			'Please set env.LIBXDF_PATH!'
-		)
-		const instance = new this(LIBXDF_PATH)
-		this.setInstance(instance)
-		return instance
-	}
 
 	protected constructor(libxdfPath: string) {
 		this.libxdfPath = libxdfPath
+		this.tryToLoadBindings()
+	}
 
+	public static Create(libxdfPath: string) {
+		assertOptions({ libxdfPath }, ['libxdfPath'])
+		return new (this.Class ?? this)(libxdfPath)
+	}
+
+	private tryToLoadBindings() {
 		try {
 			this.bindings = this.loadBindings()
 		} catch {
@@ -57,14 +32,36 @@ export default class LibxdfImpl implements Libxdf {
 	}
 
 	private loadBindings() {
-		return LibxdfImpl.ffi.Library(this.libxdfPath, {
-			load_xdf: ['int', ['string']],
-		}) as LibxdfBindings
+		this.openLibxdf()
+		return this.defineBindings()
+	}
+
+	private openLibxdf() {
+		LibxdfImpl.ffiRsOpen({
+			library: 'xdf',
+			path: this.libxdfPath,
+		})
+	}
+
+	private defineBindings() {
+		return LibxdfImpl.ffiRsDefine({
+			load_xdf: {
+				library: 'xdf',
+				retType: DataType.External,
+				paramsType: [DataType.String],
+			},
+		})
 	}
 }
 
 export interface Libxdf {}
 
+export type LibxdfConstructor = new (libxdfPath: string) => Libxdf
+
 export interface LibxdfBindings {
-	load_xdf(path: string): number
+	load_xdf(path: string): XdfFile
 }
+
+export type FfiRsDefineOptions = FuncObj<FieldType, boolean | undefined>
+
+export type XdfFile = any

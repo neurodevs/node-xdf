@@ -1,14 +1,11 @@
-import XdfReaderImpl from './XdfReader'
-
 export { default as XdfReaderImpl } from './XdfReader'
 export * from './XdfReader'
 
-async function main() {
-	const xdfReader = XdfReaderImpl.Reader()
-	const data = await xdfReader.load(
-		'/Users/ericyates/sessions/user_65958e3e0f960597b9dc23da/session_866.xdf'
-	)
-	console.log(data)
-}
+export { default as LibxdfImpl } from './Libxdf'
+export * from './Libxdf'
 
-main()
+export { default as SpyXdfReader } from './testDoubles/SpyXdfReader'
+export * from './testDoubles/SpyXdfReader'
+
+export { default as SpyLibxdf } from './testDoubles/SpyLibxdf'
+export * from './testDoubles/SpyLibxdf'

@@ -4,38 +4,34 @@ import AbstractSpruceTest, {
 	errorAssert,
 	generateId,
 } from '@sprucelabs/test-utils'
-import XdfReader from '../../XdfReader'
-import XdfReaderImpl from '../../XdfReader'
-import SpyXdfReader from '../support/SpyXdfReader'
+import SpyXdfReader from '../testDoubles/SpyXdfReader'
+import XdfReaderImpl from '../XdfReader'
 
 export default class XdfReaderTest extends AbstractSpruceTest {
-	private static xdfReader: XdfReader
-	private static randomFilePath: string
+	private static instance: SpyXdfReader
+	private static filePath: string
 
 	protected static async beforeEach() {
 		await super.beforeEach()
-		this.xdfReader = new XdfReader()
-		this.randomFilePath = generateId()
-		assert.isTruthy(this.xdfReader)
+
+		XdfReaderImpl.Class = SpyXdfReader
+
+		this.filePath = generateId()
+		this.instance = this.XdfReader()
 	}
 
 	@test()
-	protected static canSetAndGetClass() {
-		XdfReaderImpl.setClass(SpyXdfReader)
-		assert.isEqual(XdfReaderImpl.getClass(), SpyXdfReader)
-	}
-
-	@test()
-	protected static async factoryInstantiatesSetClass() {
-		XdfReaderImpl.setClass(SpyXdfReader)
-		const reader = XdfReaderImpl.Reader()
-		assert.isInstanceOf(reader, SpyXdfReader)
+	protected static async canCreateInstance() {
+		assert.isTruthy(this.instance, 'Should have created an instance!')
 	}
 
 	@test()
 	protected static async loadThrowsWithMissingRequiredOptions() {
-		//@ts-ignore
-		const err = await assert.doesThrowAsync(() => this.xdfReader.load())
+		const err = await assert.doesThrowAsync(
+			//@ts-ignore
+			async () => await this.instance.load()
+		)
+
 		errorAssert.assertError(err, 'MISSING_PARAMETERS', {
 			parameters: ['filePath'],
 		})
@@ -61,8 +57,8 @@ export default class XdfReaderTest extends AbstractSpruceTest {
 	}
 
 	private static async load(options?: TestXdfReaderLoadOptions) {
-		const { filePath = this.randomFilePath, ...loadOptions } = options ?? {}
-		await this.xdfReader.load(filePath, loadOptions)
+		const { filePath = this.filePath, ...loadOptions } = options ?? {}
+		await this.instance.load(filePath, loadOptions)
 	}
 
 	private static async assertInvalidTimeout(timeoutMs: number) {
@@ -70,6 +66,10 @@ export default class XdfReaderTest extends AbstractSpruceTest {
 		errorAssert.assertError(err, 'INVALID_TIMEOUT_MS', {
 			timeoutMs,
 		})
+	}
+
+	private static XdfReader() {
+		return XdfReaderImpl.Create() as SpyXdfReader
 	}
 }
 
