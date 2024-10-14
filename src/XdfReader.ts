@@ -1,15 +1,19 @@
 import { assertOptions } from '@sprucelabs/schema'
 import SpruceError from './errors/SpruceError'
-import LibxdfImpl from './Libxdf'
+import LibxdfImpl, { Libxdf } from './Libxdf'
 
 export default class XdfReaderImpl implements XdfReader {
 	public static Class?: XdfReaderConstructor
 
-	protected constructor() {}
+	private readonly libxdf: Libxdf
+
+	protected constructor(libxdf: Libxdf) {
+		this.libxdf = libxdf
+	}
 
 	public static Create() {
-		LibxdfImpl.Create('asdf')
-		return new (this.Class ?? this)()
+		const libxdf = LibxdfImpl.Create('asdf')
+		return new (this.Class ?? this)(libxdf)
 	}
 
 	public async load(filePath: string, options?: XdfReaderLoadOptions) {
@@ -18,6 +22,7 @@ export default class XdfReaderImpl implements XdfReader {
 
 		this.assertValidTimeout(timeoutMs)
 		await this.wait(timeoutMs)
+		await this.libxdf.loadXdf(filePath)
 	}
 
 	protected assertValidTimeout(timeoutMs: number) {
@@ -38,7 +43,7 @@ export interface XdfReader {
 	load(filePath: string, options?: XdfReaderLoadOptions): Promise<void>
 }
 
-export type XdfReaderConstructor = new () => XdfReader
+export type XdfReaderConstructor = new (libxdf: Libxdf) => XdfReader
 
 export interface XdfReaderLoadOptions {
 	timeoutMs?: number

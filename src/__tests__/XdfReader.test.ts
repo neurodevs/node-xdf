@@ -19,6 +19,8 @@ export default class XdfReaderTest extends AbstractSpruceTest {
 		XdfReaderImpl.Class = SpyXdfReader
 		LibxdfImpl.Class = FakeLibxdf
 
+		FakeLibxdf.resetTestDouble()
+
 		this.filePath = generateId()
 		this.instance = this.XdfReader()
 	}
@@ -47,14 +49,15 @@ export default class XdfReaderTest extends AbstractSpruceTest {
 	}
 
 	@test()
-	protected static async loadAcceptsTimeoutOptionAndWaits() {
+	protected static async loadAcceptsTimeoutOption() {
 		const expectedWaitTimeMs = 10
 		const startTime = Date.now()
+
 		await this.load({ timeoutMs: expectedWaitTimeMs })
 
 		const actualWaitTimeMs = Date.now() - startTime
-		const waitsLongEnough = actualWaitTimeMs >= expectedWaitTimeMs
-		const waitsNotTooLong = actualWaitTimeMs < expectedWaitTimeMs * 1.5
+		const waitsLongEnough = actualWaitTimeMs >= expectedWaitTimeMs * 0.6
+		const waitsNotTooLong = actualWaitTimeMs < expectedWaitTimeMs * 1.4
 
 		assert.isTrue(waitsLongEnough && waitsNotTooLong)
 	}
@@ -67,6 +70,12 @@ export default class XdfReaderTest extends AbstractSpruceTest {
 			FakeLibxdf.libxdfPath,
 			'Should have created a Libxdf instance!'
 		)
+	}
+
+	@test()
+	protected static async callsLoadXdfWithFilePath() {
+		await this.load()
+		assert.isEqual(FakeLibxdf.loadXdfCalls[0], this.filePath)
 	}
 
 	private static async load(options?: TestXdfReaderLoadOptions) {
