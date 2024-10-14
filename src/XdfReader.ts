@@ -11,7 +11,7 @@ export default class XdfReaderImpl implements XdfReader {
 		this.libxdf = libxdf
 	}
 
-	public static Create(libxdfPath = '/usr/local/lib/libxdf.a') {
+	public static Create(libxdfPath = '/usr/local/lib/libxdf.dylib') {
 		const libxdf = LibxdfImpl.Create(libxdfPath)
 		return new (this.Class ?? this)(libxdf)
 	}

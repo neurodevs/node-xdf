@@ -50,12 +50,10 @@ export default class XdfReaderTest extends AbstractSpruceTest {
 
 	@test()
 	protected static async createsLibxdfInstance() {
-		await this.load()
-
 		assert.isEqual(
 			FakeLibxdf.libxdfPath,
 			this.defaultLibxdfPath,
-			'Should have created a Libxdf instance!'
+			`Should create libxdf with path: ${this.defaultLibxdfPath}!\n`
 		)
 	}
 
@@ -72,12 +70,13 @@ export default class XdfReaderTest extends AbstractSpruceTest {
 
 	private static async assertInvalidTimeout(timeoutMs: number) {
 		const err = await assert.doesThrowAsync(() => this.load({ timeoutMs }))
+
 		errorAssert.assertError(err, 'INVALID_TIMEOUT_MS', {
 			timeoutMs,
 		})
 	}
 
-	private static readonly defaultLibxdfPath = '/usr/local/lib/libxdf.a'
+	private static readonly defaultLibxdfPath = '/usr/local/lib/libxdf.dylib'
 
 	private static XdfReader() {
 		return XdfReaderImpl.Create() as SpyXdfReader

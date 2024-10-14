@@ -23,10 +23,11 @@ export default class LibxdfImpl implements Libxdf {
 	private tryToLoadBindings() {
 		try {
 			this.bindings = this.loadBindings()
-		} catch {
+		} catch (err: any) {
 			throw new SpruceError({
 				code: 'FAILED_TO_LOAD_LIBXDF',
 				libxdfPath: this.libxdfPath,
+				originalError: err,
 			})
 		}
 	}
@@ -54,7 +55,7 @@ export default class LibxdfImpl implements Libxdf {
 	}
 
 	public loadXdf(path: string) {
-		return this.bindings.load_xdf(path)
+		return this.bindings.load_xdf([path])
 	}
 }
 
@@ -65,7 +66,7 @@ export interface Libxdf {
 export type LibxdfConstructor = new (libxdfPath: string) => Libxdf
 
 export interface LibxdfBindings {
-	load_xdf(path: string): XdfFile
+	load_xdf(path: string[]): XdfFile
 }
 
 export type FfiRsDefineOptions = FuncObj<FieldType, boolean | undefined>

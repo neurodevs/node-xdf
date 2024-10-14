@@ -20,7 +20,7 @@ export default class LibxdfTest extends AbstractSpruceTest {
 	private static fakeBindings: LibxdfBindings
 	private static ffiRsOpenOptions?: OpenParams
 	private static ffiRsDefineOptions?: FfiRsDefineOptions
-	private static loadXdfCalls: string[] = []
+	private static loadXdfCalls: string[][] = []
 
 	protected static async beforeEach() {
 		await super.beforeEach()
@@ -89,9 +89,9 @@ export default class LibxdfTest extends AbstractSpruceTest {
 	protected static async loadXdfCallsBindings() {
 		this.instance.loadXdf(this.path)
 
-		assert.isEqual(
+		assert.isEqualDeep(
 			this.loadXdfCalls[0],
-			this.path,
+			[this.path],
 			'Should have called load_xdf(path)!'
 		)
 	}
@@ -123,7 +123,7 @@ export default class LibxdfTest extends AbstractSpruceTest {
 
 	private static FakeBindings() {
 		return {
-			load_xdf: (path: string) => {
+			load_xdf: (path: string[]) => {
 				this.loadXdfCalls.push(path)
 				return {} as XdfFile
 			},
