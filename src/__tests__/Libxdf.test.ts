@@ -13,7 +13,7 @@ import LibxdfImpl, {
 import SpyLibxdf from '../testDoubles/SpyLibxdf'
 
 export default class LibxdfTest extends AbstractSpruceTest {
-	private static libxdf: SpyLibxdf
+	private static instance: SpyLibxdf
 	private static libxdfPath: string
 	private static shouldThrowWhenLoadingBindings: boolean
 	private static fakeBindings: LibxdfBindings
@@ -31,12 +31,12 @@ export default class LibxdfTest extends AbstractSpruceTest {
 
 		this.clearAndFakeFfi()
 
-		this.libxdf = this.Libxdf()
+		this.instance = this.Libxdf()
 	}
 
 	@test()
 	protected static canCreateInstance() {
-		assert.isTruthy(this.libxdf, 'Should create an instance!')
+		assert.isTruthy(this.instance, 'Should create an instance!')
 	}
 
 	@test()
