@@ -39,7 +39,7 @@ export default class LibxdfImpl implements Libxdf {
 
 	private openLibxdf() {
 		LibxdfImpl.ffiRsOpen({
-			library: 'xdf',
+			library: 'libxdf',
 			path: this.libxdfPath,
 		})
 	}
@@ -47,8 +47,8 @@ export default class LibxdfImpl implements Libxdf {
 	private defineBindings() {
 		return LibxdfImpl.ffiRsDefine({
 			load_xdf: {
-				library: 'xdf',
-				retType: DataType.External,
+				library: 'libxdf',
+				retType: DataType.I32,
 				paramsType: [DataType.String],
 			},
 		})
@@ -66,8 +66,10 @@ export interface Libxdf {
 export type LibxdfConstructor = new (libxdfPath: string) => Libxdf
 
 export interface LibxdfBindings {
-	load_xdf(path: string[]): XdfFile
+	load_xdf(path: string[]): LibxdfStatusCode
 }
+
+export type LibxdfStatusCode = 0 | Exclude<number, 0>
 
 export type FfiRsDefineOptions = FuncObj<FieldType, boolean | undefined>
 

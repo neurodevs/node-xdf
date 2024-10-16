@@ -65,7 +65,7 @@ export default class LibxdfTest extends AbstractSpruceTest {
 	@test()
 	protected static async callsFfiRsOpenWithRequiredOptions() {
 		assert.isEqualDeep(this.ffiRsOpenOptions, {
-			library: 'xdf',
+			library: 'libxdf',
 			path: this.libxdfPath,
 		})
 	}
@@ -76,8 +76,8 @@ export default class LibxdfTest extends AbstractSpruceTest {
 			this.ffiRsDefineOptions,
 			{
 				load_xdf: {
-					library: 'xdf',
-					retType: DataType.External,
+					library: 'libxdf',
+					retType: DataType.I32,
 					paramsType: [DataType.String],
 				},
 			},

@@ -12,7 +12,7 @@ export default class SpruceError extends BaseSpruceError<ErrorOptions> {
 				break
 
 			case 'FAILED_TO_LOAD_LIBXDF':
-				message = `Failed to load libxdf bindings from: ${options?.libxdfPath}! Please make sure you have libxdf installed at env.LIBXDF_PATH.`
+				message = `Failed to load libxdf bindings from: ${options?.libxdfPath}!`
 				break
 
 			default:

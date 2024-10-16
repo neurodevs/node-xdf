@@ -1,8 +1,6 @@
-/* eslint-disable @typescript-eslint/no-namespace */
-/* eslint-disable no-redeclare */
-
 import { default as SchemaEntity } from '@sprucelabs/schema'
 import * as SpruceSchema from '@sprucelabs/schema'
+
 
 
 
@@ -34,7 +32,6 @@ export declare namespace SpruceErrors.NodeXdf {
 	export type InvalidTimeoutMsEntity = SchemaEntity<SpruceErrors.NodeXdf.InvalidTimeoutMsSchema>
 
 }
-
 
 
 export declare namespace SpruceErrors.NodeXdf {
