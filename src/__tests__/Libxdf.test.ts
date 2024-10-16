@@ -33,6 +33,7 @@ export default class LibxdfTest extends AbstractSpruceTest {
 		MangledNameExtractorImpl.Class = FakeMangledNameExtractor
 
 		FakeMangledNameExtractor.clearTestDouble()
+		this.setFakeExtractResult()
 
 		this.libxdfPath = generateId()
 		this.path = generateId()
@@ -81,10 +82,15 @@ export default class LibxdfTest extends AbstractSpruceTest {
 
 	@test()
 	protected static async callsFfiRsDefineWithRequiredOptions() {
+		const mangledLoadXdfName = `${generateId()}load_xdf${generateId()}`
+		this.setFakeExtractResult(mangledLoadXdfName)
+
+		await this.Libxdf()
+
 		assert.isEqualDeep(
 			this.ffiRsDefineOptions,
 			{
-				load_xdf: {
+				[mangledLoadXdfName]: {
 					library: 'libxdf',
 					retType: DataType.I32,
 					paramsType: [DataType.String],
@@ -116,6 +122,14 @@ export default class LibxdfTest extends AbstractSpruceTest {
 			libPath: this.libxdfPath,
 			unmangledNames: ['load_xdf'],
 		})
+	}
+
+	private static setFakeExtractResult(
+		mangledLoadXdfName = `${generateId()}load_xdf${generateId()}`
+	) {
+		FakeMangledNameExtractor.fakeResult = {
+			load_xdf: mangledLoadXdfName,
+		}
 	}
 
 	private static clearAndFakeFfi() {

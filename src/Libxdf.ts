@@ -1,5 +1,8 @@
 import { assertOptions } from '@sprucelabs/schema'
-import { MangledNameExtractorImpl } from '@neurodevs/node-mangled-names'
+import {
+	MangledNameExtractorImpl,
+	MangledNameMap,
+} from '@neurodevs/node-mangled-names'
 import { DataType, define, FieldType, FuncObj, open } from 'ffi-rs'
 import SpruceError from './errors/SpruceError'
 
@@ -7,20 +10,27 @@ export default class LibxdfImpl implements Libxdf {
 	public static Class?: LibxdfConstructor
 	public static ffiRsOpen = open
 	public static ffiRsDefine = define
+	private static unmangledNames = ['load_xdf']
 
 	protected bindings!: LibxdfBindings
 	private libxdfPath: string
+	private mangledNameMap: MangledNameMap
 
-	protected constructor(libxdfPath: string) {
+	protected constructor(libxdfPath: string, mangledNameMap: MangledNameMap) {
 		this.libxdfPath = libxdfPath
+		this.mangledNameMap = mangledNameMap
+
 		this.tryToLoadBindings()
 	}
 
 	public static async Create(libxdfPath: string) {
 		assertOptions({ libxdfPath }, ['libxdfPath'])
 		const extractor = MangledNameExtractorImpl.Create()
-		extractor.extract(libxdfPath, ['load_xdf'])
-		return new (this.Class ?? this)(libxdfPath)
+		const mangledNameMap = await extractor.extract(
+			libxdfPath,
+			this.unmangledNames
+		)
+		return new (this.Class ?? this)(libxdfPath, mangledNameMap)
 	}
 
 	private tryToLoadBindings() {
@@ -48,17 +58,27 @@ export default class LibxdfImpl implements Libxdf {
 	}
 
 	private defineBindings() {
-		return LibxdfImpl.ffiRsDefine({
-			load_xdf: {
+		const funcs = this.unmangledNames.reduce((acc, name) => {
+			const mangledName = this.mangledNameMap[name]
+
+			// @ts-ignore
+			acc[mangledName] = {
 				library: 'libxdf',
 				retType: DataType.I32,
 				paramsType: [DataType.String],
-			},
-		})
+			}
+			return acc
+		}, {})
+
+		return LibxdfImpl.ffiRsDefine(funcs)
 	}
 
 	public loadXdf(path: string) {
 		return this.bindings.load_xdf([path])
+	}
+
+	private get unmangledNames() {
+		return LibxdfImpl.unmangledNames
 	}
 }
 
@@ -66,10 +86,13 @@ export interface Libxdf {
 	loadXdf(path: string): XdfFile
 }
 
-export type LibxdfConstructor = new (libxdfPath: string) => Libxdf
+export type LibxdfConstructor = new (
+	libxdfPath: string,
+	mangledNameMap: MangledNameMap
+) => Libxdf
 
 export interface LibxdfBindings {
-	load_xdf(path: string[]): LibxdfStatusCode
+	[mangledLoadXdfName: string]: (path: string[]) => LibxdfStatusCode
 }
 
 export type LibxdfStatusCode = 0 | Exclude<number, 0>
