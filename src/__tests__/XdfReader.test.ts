@@ -22,7 +22,7 @@ export default class XdfReaderTest extends AbstractSpruceTest {
 		FakeLibxdf.resetTestDouble()
 
 		this.filePath = generateId()
-		this.instance = this.XdfReader()
+		this.instance = await this.XdfReader()
 	}
 
 	@test()
@@ -79,8 +79,8 @@ export default class XdfReaderTest extends AbstractSpruceTest {
 	private static readonly defaultLibxdfPath =
 		'/usr/local/lib/libxdf/libxdf.dylib'
 
-	private static XdfReader() {
-		return XdfReaderImpl.Create() as SpyXdfReader
+	private static async XdfReader() {
+		return (await XdfReaderImpl.Create()) as SpyXdfReader
 	}
 }
 

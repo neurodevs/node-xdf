@@ -41,7 +41,7 @@ export default class LibxdfTest extends AbstractSpruceTest {
 
 		this.clearAndFakeFfi()
 
-		this.instance = this.Libxdf()
+		this.instance = await this.Libxdf()
 	}
 
 	@test()
@@ -51,8 +51,10 @@ export default class LibxdfTest extends AbstractSpruceTest {
 
 	@test()
 	protected static async throwsWithMissingRequiredOptions() {
-		// @ts-ignore
-		const err = assert.doesThrow(() => LibxdfImpl.Create())
+		const err = await assert.doesThrowAsync(
+			// @ts-ignore
+			async () => await LibxdfImpl.Create()
+		)
 
 		errorAssert.assertError(err, 'MISSING_PARAMETERS', {
 			parameters: ['libxdfPath'],
@@ -62,7 +64,7 @@ export default class LibxdfTest extends AbstractSpruceTest {
 	@test()
 	protected static async throwsWhenBindingsFailToLoad() {
 		this.shouldThrowWhenLoadingBindings = true
-		const err = assert.doesThrow(() => this.Libxdf())
+		const err = await assert.doesThrowAsync(async () => await this.Libxdf())
 
 		errorAssert.assertError(err, 'FAILED_TO_LOAD_LIBXDF', {
 			libxdfPath: this.libxdfPath,
@@ -142,7 +144,7 @@ export default class LibxdfTest extends AbstractSpruceTest {
 		}
 	}
 
-	private static Libxdf(libxdfPath?: string) {
-		return LibxdfImpl.Create(libxdfPath ?? this.libxdfPath) as SpyLibxdf
+	private static async Libxdf(libxdfPath?: string) {
+		return (await LibxdfImpl.Create(libxdfPath ?? this.libxdfPath)) as SpyLibxdf
 	}
 }

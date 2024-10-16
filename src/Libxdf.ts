@@ -16,7 +16,7 @@ export default class LibxdfImpl implements Libxdf {
 		this.tryToLoadBindings()
 	}
 
-	public static Create(libxdfPath: string) {
+	public static async Create(libxdfPath: string) {
 		assertOptions({ libxdfPath }, ['libxdfPath'])
 		MangledNameExtractorImpl.Create()
 		return new (this.Class ?? this)(libxdfPath)
