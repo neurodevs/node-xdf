@@ -18,7 +18,8 @@ export default class LibxdfImpl implements Libxdf {
 
 	public static async Create(libxdfPath: string) {
 		assertOptions({ libxdfPath }, ['libxdfPath'])
-		MangledNameExtractorImpl.Create()
+		const extractor = MangledNameExtractorImpl.Create()
+		extractor.extract(libxdfPath, ['load_xdf'])
 		return new (this.Class ?? this)(libxdfPath)
 	}
 

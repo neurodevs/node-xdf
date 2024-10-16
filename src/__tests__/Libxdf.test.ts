@@ -110,6 +110,14 @@ export default class LibxdfTest extends AbstractSpruceTest {
 		assert.isEqual(FakeMangledNameExtractor.numConstructorCalls, 1)
 	}
 
+	@test()
+	protected static async callsExtractorWithCorrectParams() {
+		assert.isEqualDeep(FakeMangledNameExtractor.extractCalls[0], {
+			libPath: this.libxdfPath,
+			unmangledNames: ['load_xdf'],
+		})
+	}
+
 	private static clearAndFakeFfi() {
 		delete this.ffiRsOpenOptions
 		delete this.ffiRsDefineOptions
