@@ -67,6 +67,7 @@
     }
   },
   "dependencies": {
+    "@neurodevs/node-mangled-names": "^0.0.4",
     "@sprucelabs/error": "^5.1.94",
     "@sprucelabs/schema": "^29.4.43",
     "@sprucelabs/spruce-core-schemas": "^39.0.277",
