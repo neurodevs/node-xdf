@@ -4,6 +4,10 @@ import AbstractSpruceTest, {
 	errorAssert,
 	generateId,
 } from '@sprucelabs/test-utils'
+import {
+	MangledNameExtractorImpl,
+	FakeMangledNameExtractor,
+} from '@neurodevs/node-mangled-names'
 import { DataType, OpenParams } from 'ffi-rs'
 import LibxdfImpl, {
 	FfiRsDefineOptions,
@@ -26,6 +30,9 @@ export default class LibxdfTest extends AbstractSpruceTest {
 		await super.beforeEach()
 
 		LibxdfImpl.Class = SpyLibxdf
+		MangledNameExtractorImpl.Class = FakeMangledNameExtractor
+
+		FakeMangledNameExtractor.clearTestDouble()
 
 		this.libxdfPath = generateId()
 		this.path = generateId()
@@ -94,6 +101,11 @@ export default class LibxdfTest extends AbstractSpruceTest {
 			[this.path],
 			'Should have called load_xdf(path)!'
 		)
+	}
+
+	@test()
+	protected static async createsMangledNameExtractor() {
+		assert.isEqual(FakeMangledNameExtractor.numConstructorCalls, 1)
 	}
 
 	private static clearAndFakeFfi() {

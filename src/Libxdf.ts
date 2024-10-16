@@ -1,4 +1,5 @@
 import { assertOptions } from '@sprucelabs/schema'
+import { MangledNameExtractorImpl } from '@neurodevs/node-mangled-names'
 import { DataType, define, FieldType, FuncObj, open } from 'ffi-rs'
 import SpruceError from './errors/SpruceError'
 
@@ -17,6 +18,7 @@ export default class LibxdfImpl implements Libxdf {
 
 	public static Create(libxdfPath: string) {
 		assertOptions({ libxdfPath }, ['libxdfPath'])
+		MangledNameExtractorImpl.Create()
 		return new (this.Class ?? this)(libxdfPath)
 	}
 
