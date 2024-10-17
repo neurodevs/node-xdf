@@ -5,6 +5,7 @@ export default class FakeLibxdf implements Libxdf {
 	public static libxdfPath?: string
 	public static loadXdfCalls: string[] = []
 	public static mangledNameMap: MangledNameMap
+	public static fakeXdfFile: XdfFile = {}
 
 	public constructor(libxdfPath: string, mangledNameMap: MangledNameMap) {
 		FakeLibxdf.libxdfPath = libxdfPath
@@ -13,11 +14,15 @@ export default class FakeLibxdf implements Libxdf {
 
 	public loadXdf(path: string) {
 		FakeLibxdf.loadXdfCalls.push(path)
-		return {} as XdfFile
+		return this.fakeXdfFile
 	}
 
 	public get mangledNameMap() {
 		return FakeLibxdf.mangledNameMap
+	}
+
+	public get fakeXdfFile() {
+		return FakeLibxdf.fakeXdfFile
 	}
 
 	public static resetTestDouble() {

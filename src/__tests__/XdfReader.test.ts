@@ -63,9 +63,17 @@ export default class XdfReaderTest extends AbstractSpruceTest {
 		assert.isEqual(FakeLibxdf.loadXdfCalls[0], this.filePath)
 	}
 
+	@test()
+	protected static async returnsXdfFile() {
+		const fakeXdf = generateId()
+		FakeLibxdf.fakeXdfFile = fakeXdf
+		const result = await this.load()
+		assert.isEqual(result, fakeXdf)
+	}
+
 	private static async load(options?: TestXdfReaderLoadOptions) {
 		const { filePath = this.filePath, ...loadOptions } = options ?? {}
-		await this.instance.load(filePath, loadOptions)
+		return await this.instance.load(filePath, loadOptions)
 	}
 
 	private static async assertInvalidTimeout(timeoutMs: number) {

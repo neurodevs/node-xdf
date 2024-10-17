@@ -10,7 +10,7 @@ export default class SpyXdfReader extends XdfReaderImpl {
 
 	public async load(filePath: string, options?: XdfReaderLoadOptions) {
 		this.loadCalls.push({ filePath, options })
-		await super.load(filePath, options)
+		return await super.load(filePath, options)
 	}
 }
 
