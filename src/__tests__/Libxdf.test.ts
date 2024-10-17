@@ -9,11 +9,7 @@ import {
 	FakeMangledNameExtractor,
 } from '@neurodevs/node-mangled-names'
 import { DataType, OpenParams } from 'ffi-rs'
-import LibxdfImpl, {
-	FfiRsDefineOptions,
-	LibxdfBindings,
-	XdfFile,
-} from '../Libxdf'
+import LibxdfImpl, { FfiRsDefineOptions, LibxdfBindings } from '../Libxdf'
 import SpyLibxdf from '../testDoubles/SpyLibxdf'
 
 export default class LibxdfTest extends AbstractSpruceTest {
@@ -104,7 +100,7 @@ export default class LibxdfTest extends AbstractSpruceTest {
 
 	@test()
 	protected static async loadXdfCallsBindings() {
-		this.instance.loadXdf(this.path)
+		this.loadXdf()
 
 		assert.isEqualDeep(
 			this.loadXdfCalls[0],
@@ -124,6 +120,12 @@ export default class LibxdfTest extends AbstractSpruceTest {
 			libPath: this.libxdfPath,
 			unmangledNames: [this.loadXdfName],
 		})
+	}
+
+	@test()
+	protected static async returnsResultInJson() {
+		const result = this.loadXdf()
+		assert.isEqualDeep(result, JSON.parse(this.fakeXdf))
 	}
 
 	private static setFakeExtractResult(
@@ -163,13 +165,19 @@ export default class LibxdfTest extends AbstractSpruceTest {
 		}
 	}
 
+	private static loadXdf() {
+		return this.instance.loadXdf(this.path)
+	}
+
 	private static readonly loadXdfName = 'load_xdf_to_json'
+
+	private static readonly fakeXdf = '{"stream_counts": 1}'
 
 	private static FakeBindings(mangledLoadXdfName = this.mangledLoadXdfName) {
 		return {
 			[mangledLoadXdfName.slice(1)]: (path: string[]) => {
 				this.loadXdfCalls.push(path)
-				return {} as XdfFile
+				return this.fakeXdf
 			},
 		}
 	}

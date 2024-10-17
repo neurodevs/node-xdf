@@ -79,7 +79,8 @@ export default class LibxdfImpl implements Libxdf {
 		const mangledName = this.mangledNameMap[this.loadXdfName].slice(1)
 		const mangledFunc = this.bindings[mangledName]
 		const serializedData = mangledFunc([path])
-		return serializedData
+		const parsedData = JSON.parse(serializedData)
+		return parsedData
 	}
 
 	private get unmangledNames() {
