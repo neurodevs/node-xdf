@@ -10,7 +10,8 @@ export default class LibxdfImpl implements Libxdf {
 	public static Class?: LibxdfConstructor
 	public static ffiRsOpen = open
 	public static ffiRsDefine = define
-	private static unmangledNames = ['load_xdf']
+	private static readonly loadXdfName = 'load_xdf_u8array'
+	private static unmangledNames = [this.loadXdfName]
 
 	protected bindings!: LibxdfBindings
 	private libxdfPath: string
@@ -25,12 +26,13 @@ export default class LibxdfImpl implements Libxdf {
 
 	public static async Create(libxdfPath: string) {
 		assertOptions({ libxdfPath }, ['libxdfPath'])
-		const extractor = MangledNameExtractorImpl.Create()
-		const mangledNameMap = await extractor.extract(
-			libxdfPath,
-			this.unmangledNames
-		)
+		const mangledNameMap = await this.loadMangledNameMap(libxdfPath)
 		return new (this.Class ?? this)(libxdfPath, mangledNameMap)
+	}
+
+	private static async loadMangledNameMap(libxdfPath: string) {
+		const extractor = MangledNameExtractorImpl.Create()
+		return await extractor.extract(libxdfPath, this.unmangledNames)
 	}
 
 	private tryToLoadBindings() {
@@ -52,18 +54,18 @@ export default class LibxdfImpl implements Libxdf {
 
 	private openLibxdf() {
 		LibxdfImpl.ffiRsOpen({
-			library: 'libxdf',
+			library: 'xdf',
 			path: this.libxdfPath,
 		})
 	}
 
 	private defineBindings() {
 		const funcs = this.unmangledNames.reduce((acc, name) => {
-			const mangledName = this.mangledNameMap[name]
+			const mangledName = this.mangledNameMap[name].slice(1)
 
 			// @ts-ignore
 			acc[mangledName] = {
-				library: 'libxdf',
+				library: 'xdf',
 				retType: DataType.I32,
 				paramsType: [DataType.String],
 			}
@@ -74,11 +76,17 @@ export default class LibxdfImpl implements Libxdf {
 	}
 
 	public loadXdf(path: string) {
-		return this.bindings.load_xdf([path])
+		const mangledName = this.mangledNameMap[this.loadXdfName].slice(1)
+		const mangledFunc = this.bindings[mangledName]
+		return mangledFunc([path])
 	}
 
 	private get unmangledNames() {
 		return LibxdfImpl.unmangledNames
+	}
+
+	private get loadXdfName() {
+		return LibxdfImpl.loadXdfName
 	}
 }
 
