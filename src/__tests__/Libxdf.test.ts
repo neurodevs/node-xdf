@@ -12,7 +12,7 @@ import { DataType, OpenParams } from 'ffi-rs'
 import LibxdfImpl, {
 	FfiRsDefineOptions,
 	LibxdfBindings,
-	LibxdfStatusCode,
+	XdfFile,
 } from '../Libxdf'
 import SpyLibxdf from '../testDoubles/SpyLibxdf'
 
@@ -94,7 +94,7 @@ export default class LibxdfTest extends AbstractSpruceTest {
 			{
 				[mangledLoadXdfName.slice(1)]: {
 					library: 'xdf',
-					retType: DataType.I32,
+					retType: DataType.String,
 					paramsType: [DataType.String],
 				},
 			},
@@ -109,7 +109,7 @@ export default class LibxdfTest extends AbstractSpruceTest {
 		assert.isEqualDeep(
 			this.loadXdfCalls[0],
 			[this.path],
-			'Should have called load_xdf_u8array(path)!'
+			'Should have called load_xdf_to_json(path)!'
 		)
 	}
 
@@ -130,7 +130,7 @@ export default class LibxdfTest extends AbstractSpruceTest {
 		mangledLoadXdfName = this.mangledLoadXdfName
 	) {
 		FakeMangledNameExtractor.fakeResult = {
-			load_xdf_u8array: mangledLoadXdfName,
+			load_xdf_to_json: mangledLoadXdfName,
 		}
 	}
 
@@ -163,13 +163,13 @@ export default class LibxdfTest extends AbstractSpruceTest {
 		}
 	}
 
-	private static readonly loadXdfName = 'load_xdf_u8array'
+	private static readonly loadXdfName = 'load_xdf_to_json'
 
 	private static FakeBindings(mangledLoadXdfName = this.mangledLoadXdfName) {
 		return {
 			[mangledLoadXdfName.slice(1)]: (path: string[]) => {
 				this.loadXdfCalls.push(path)
-				return {} as LibxdfStatusCode
+				return {} as XdfFile
 			},
 		}
 	}

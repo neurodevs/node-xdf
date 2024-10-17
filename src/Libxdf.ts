@@ -10,7 +10,7 @@ export default class LibxdfImpl implements Libxdf {
 	public static Class?: LibxdfConstructor
 	public static ffiRsOpen = open
 	public static ffiRsDefine = define
-	private static readonly loadXdfName = 'load_xdf_u8array'
+	private static readonly loadXdfName = 'load_xdf_to_json'
 	private static unmangledNames = [this.loadXdfName]
 
 	protected bindings!: LibxdfBindings
@@ -66,7 +66,7 @@ export default class LibxdfImpl implements Libxdf {
 			// @ts-ignore
 			acc[mangledName] = {
 				library: 'xdf',
-				retType: DataType.I32,
+				retType: DataType.String,
 				paramsType: [DataType.String],
 			}
 			return acc
@@ -78,7 +78,8 @@ export default class LibxdfImpl implements Libxdf {
 	public loadXdf(path: string) {
 		const mangledName = this.mangledNameMap[this.loadXdfName].slice(1)
 		const mangledFunc = this.bindings[mangledName]
-		return mangledFunc([path])
+		const serializedData = mangledFunc([path])
+		return serializedData
 	}
 
 	private get unmangledNames() {
@@ -100,7 +101,7 @@ export type LibxdfConstructor = new (
 ) => Libxdf
 
 export interface LibxdfBindings {
-	[mangledLoadXdfName: string]: (path: string[]) => LibxdfStatusCode
+	[mangledLoadXdfName: string]: (path: string[]) => string
 }
 
 export type LibxdfStatusCode = 0 | Exclude<number, 0>
