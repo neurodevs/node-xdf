@@ -4,7 +4,7 @@ import LibxdfImpl, { Libxdf } from './Libxdf'
 
 export default class XdfReaderImpl implements XdfReader {
 	public static Class?: XdfReaderConstructor
-	private static readonly libxdfPath = '/usr/local/lib/libxdf/libxdf.dylib'
+	private static readonly libxdfPath = '/usr/local/lib/libxdf.dylib'
 
 	private readonly libxdf: Libxdf
 

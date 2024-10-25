@@ -12,7 +12,27 @@ export default class SpruceError extends BaseSpruceError<ErrorOptions> {
 				break
 
 			case 'FAILED_TO_LOAD_LIBXDF':
-				message = `Failed to load libxdf bindings from: ${options?.libxdfPath}!`
+				message = `
+\nFailed to load libxdf bindings! Tried to load from: 
+
+  ${options?.libxdfPath}
+
+Setup instructions to save your day (on MacOS):
+
+  1. git clone https://github.com/neurodevs/libxdf.git
+
+  2. cd libxdf && cmake -S . -B build && cmake --build build
+
+  3. sudo cp build/libxdf.dylib /usr/local/lib/
+  
+  4. Try whatever you were doing again!
+
+Modify step 3 for your OS if you are not on MacOS.
+
+If you're unsure how, ask an LLM with this error and your OS.
+
+Good luck!\n
+					`
 				break
 
 			default:
