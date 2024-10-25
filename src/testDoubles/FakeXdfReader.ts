@@ -24,6 +24,7 @@ export default class FakeXdfReader implements XdfReader {
 	}
 
 	public static resetTestDouble() {
+		FakeXdfReader.numCallsToConstructor = 0
 		FakeXdfReader.callsToLoad = []
 		FakeXdfReader.fakeResponse = {} as XdfFile
 	}
