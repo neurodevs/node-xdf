@@ -7,6 +7,9 @@ export * from './Libxdf'
 export { default as SpyXdfReader } from './testDoubles/SpyXdfReader'
 export * from './testDoubles/SpyXdfReader'
 
+export { default as FakeXdfReader } from './testDoubles/FakeXdfReader'
+export * from './testDoubles/FakeXdfReader'
+
 export { default as SpyLibxdf } from './testDoubles/SpyLibxdf'
 export * from './testDoubles/SpyLibxdf'
 
