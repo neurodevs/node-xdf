@@ -7,7 +7,7 @@ import AbstractSpruceTest, {
 import LibxdfImpl from '../Libxdf'
 import FakeLibxdf from '../testDoubles/FakeLibxdf'
 import SpyXdfReader from '../testDoubles/SpyXdfReader'
-import XdfReaderImpl from '../XdfReader'
+import XdfReaderImpl, { XdfStream } from '../XdfReader'
 
 export default class XdfReaderTest extends AbstractSpruceTest {
 	private static instance: SpyXdfReader
@@ -65,9 +65,11 @@ export default class XdfReaderTest extends AbstractSpruceTest {
 
 	@test()
 	protected static async returnsXdfFile() {
-		const fakeXdf = generateId()
+		const fakeXdf = { streams: [{} as XdfStream], events: [] }
 		FakeLibxdf.fakeXdfFile = fakeXdf
+
 		const result = await this.load()
+
 		assert.isEqual(result, fakeXdf)
 	}
 

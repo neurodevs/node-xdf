@@ -11,6 +11,7 @@ import {
 import { DataType, OpenParams } from 'ffi-rs'
 import LibxdfImpl, { FfiRsDefineOptions, LibxdfBindings } from '../Libxdf'
 import SpyLibxdf from '../testDoubles/SpyLibxdf'
+import { XdfFile } from '../XdfReader'
 
 export default class LibxdfTest extends AbstractSpruceTest {
 	private static instance: SpyLibxdf
@@ -125,7 +126,7 @@ export default class LibxdfTest extends AbstractSpruceTest {
 	@test()
 	protected static async returnsResultInJson() {
 		const result = this.loadXdf()
-		assert.isEqualDeep(result, JSON.parse(this.fakeXdf))
+		assert.isEqualDeep(result, this.fakeParsedXdf)
 	}
 
 	private static setFakeExtractResult(
@@ -171,13 +172,44 @@ export default class LibxdfTest extends AbstractSpruceTest {
 
 	private static readonly loadXdfName = 'load_xdf_to_json'
 
-	private static readonly fakeXdf = '{"stream_counts": 1}'
+	private static readonly fakeStreamId = 0
+	private static readonly fakeStreamName = generateId()
+	private static readonly fakeStreamType = generateId()
+	private static readonly fakeChannelCount = 0
+	private static readonly fakeChannelFormat = generateId()
+	private static readonly fakeNominalSampleRate = 0
+	private static readonly fakeEventName = generateId()
+	private static readonly fakeEventTimestamp = 0
+
+	private static readonly fakeSerializedXdf = `{"streams": [{"stream_id": ${this.fakeStreamId}, "time_series": [], "time_stamps": [], "stream_info": {"channel_count": ${this.fakeChannelCount}, "channel_format": "${this.fakeChannelFormat}", "nominal_srate": ${this.fakeNominalSampleRate}, "stream_name": "${this.fakeStreamName}", "stream_type": "${this.fakeStreamType}"}}], "events": [{"stream_id": ${this.fakeStreamId}, "event_name": "${this.fakeEventName}", "event_timestamp": ${this.fakeEventTimestamp}}]}`
+
+	private static readonly fakeParsedXdf: XdfFile = {
+		streams: [
+			{
+				id: this.fakeStreamId,
+				name: this.fakeStreamName,
+				type: this.fakeStreamType,
+				channelCount: this.fakeChannelCount,
+				channelFormat: this.fakeChannelFormat,
+				nominalSampleRateHz: this.fakeNominalSampleRate,
+				data: [],
+				timestamps: [],
+			},
+		],
+		events: [
+			{
+				name: this.fakeEventName,
+				timestamp: this.fakeEventTimestamp,
+				streamId: this.fakeStreamId,
+			},
+		],
+	}
 
 	private static FakeBindings(mangledLoadXdfName = this.mangledLoadXdfName) {
 		return {
 			[mangledLoadXdfName.slice(1)]: (path: string[]) => {
 				this.loadXdfCalls.push(path)
-				return this.fakeXdf
+				return this.fakeSerializedXdf
 			},
 		}
 	}

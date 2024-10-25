@@ -1,11 +1,12 @@
 import { MangledNameMap } from '@neurodevs/node-mangled-names'
-import { Libxdf, XdfFile } from '../Libxdf'
+import { Libxdf } from '../Libxdf'
+import { XdfFile } from '../XdfReader'
 
 export default class FakeLibxdf implements Libxdf {
 	public static libxdfPath?: string
 	public static loadXdfCalls: string[] = []
 	public static mangledNameMap: MangledNameMap
-	public static fakeXdfFile: XdfFile = {}
+	public static fakeXdfFile: XdfFile = { streams: [], events: [] }
 
 	public constructor(libxdfPath: string, mangledNameMap: MangledNameMap) {
 		FakeLibxdf.libxdfPath = libxdfPath

@@ -1,10 +1,10 @@
-import { XdfFile } from '../Libxdf'
-import { XdfReader, XdfReaderLoadOptions } from '../XdfReader'
+import { XdfFile, XdfReader, XdfReaderLoadOptions } from '../XdfReader'
 
 export default class FakeXdfReader implements XdfReader {
 	public static numConstructorCalls = 0
 	public static callsToLoad: FakeLoadCall[] = []
-	public static fakeResponse: XdfFile = {} as XdfFile
+	public static fakeResponse: XdfFile = { streams: [], events: [] }
+	public static fakePath?: string
 
 	public constructor() {
 		FakeXdfReader.numConstructorCalls++

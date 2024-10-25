@@ -1,9 +1,10 @@
 import { assertOptions } from '@sprucelabs/schema'
 import SpruceError from './errors/SpruceError'
-import LibxdfImpl, { Libxdf, XdfFile } from './Libxdf'
+import LibxdfImpl, { Libxdf } from './Libxdf'
 
 export default class XdfReaderImpl implements XdfReader {
 	public static Class?: XdfReaderConstructor
+	private static readonly libxdfPath = '/usr/local/lib/libxdf/libxdf.dylib'
 
 	private readonly libxdf: Libxdf
 
@@ -11,9 +12,7 @@ export default class XdfReaderImpl implements XdfReader {
 		this.libxdf = libxdf
 	}
 
-	public static async Create(
-		libxdfPath = '/usr/local/lib/libxdf/libxdf.dylib'
-	) {
+	public static async Create(libxdfPath = this.libxdfPath) {
 		const libxdf = await LibxdfImpl.Create(libxdfPath)
 		return new (this.Class ?? this)(libxdf)
 	}
@@ -23,7 +22,7 @@ export default class XdfReaderImpl implements XdfReader {
 		const { timeoutMs = 0 } = options ?? {}
 
 		this.assertValidTimeout(timeoutMs)
-		return await this.libxdf.loadXdf(filePath)
+		return this.libxdf.loadXdf(filePath)
 	}
 
 	protected assertValidTimeout(timeoutMs: number) {
@@ -48,4 +47,26 @@ export type XdfReaderConstructor = new (libxdf: Libxdf) => XdfReader
 
 export interface XdfReaderLoadOptions {
 	timeoutMs?: number
+}
+
+export interface XdfFile {
+	streams: XdfStream[]
+	events: XdfEvent[]
+}
+
+export interface XdfStream {
+	id: number
+	name: string
+	type: string
+	channelCount: number
+	channelFormat: string
+	nominalSampleRateHz: number
+	data: number[]
+	timestamps: number[]
+}
+
+export interface XdfEvent {
+	name: string
+	timestamp: number
+	streamId: number
 }
