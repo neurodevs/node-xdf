@@ -127,6 +127,19 @@ export default class LibxdfTest extends AbstractSpruceTest {
 		assert.isEqualDeep(result, this.fakeParsedXdf)
 	}
 
+	@test()
+	protected static async throwsIfLibxdfPathDoesNotExist() {
+		const libxdfPath = generateId()
+
+		const err = await assert.doesThrowAsync(
+			async () => await this.Libxdf(libxdfPath, true)
+		)
+
+		errorAssert.assertError(err, 'FAILED_TO_LOAD_LIBXDF', {
+			libxdfPath,
+		})
+	}
+
 	private static setFakeExtractResult(
 		mangledLoadXdfName = this.mangledLoadXdfName
 	) {
@@ -213,7 +226,14 @@ export default class LibxdfTest extends AbstractSpruceTest {
 		}
 	}
 
-	private static async Libxdf(libxdfPath?: string) {
-		return (await LibxdfImpl.Create(libxdfPath ?? this.libxdfPath)) as SpyLibxdf
+	private static async Libxdf(
+		libxdfPath?: string,
+		throwIfPathNotExists = false
+	) {
+		const libxdf = await LibxdfImpl.Create(
+			libxdfPath ?? this.libxdfPath,
+			throwIfPathNotExists
+		)
+		return libxdf as SpyLibxdf
 	}
 }

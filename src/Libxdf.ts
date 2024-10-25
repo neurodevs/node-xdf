@@ -1,3 +1,4 @@
+import fs from 'fs'
 import { assertOptions } from '@sprucelabs/schema'
 import {
 	MangledNameExtractorImpl,
@@ -25,26 +26,11 @@ export default class LibxdfImpl implements Libxdf {
 		this.tryToLoadBindings()
 	}
 
-	public static async Create(libxdfPath: string) {
-		assertOptions({ libxdfPath }, ['libxdfPath'])
-		const mangledNameMap = await this.loadMangledNameMap(libxdfPath)
-		return new (this.Class ?? this)(libxdfPath, mangledNameMap)
-	}
-
-	private static async loadMangledNameMap(libxdfPath: string) {
-		const extractor = MangledNameExtractorImpl.Create()
-		return await extractor.extract(libxdfPath, this.unmangledNames)
-	}
-
 	private tryToLoadBindings() {
 		try {
 			this.bindings = this.loadBindings()
 		} catch (err: any) {
-			throw new SpruceError({
-				code: 'FAILED_TO_LOAD_LIBXDF',
-				libxdfPath: this.libxdfPath,
-				originalError: err,
-			})
+			this.throwFailedToLoadLiblsl(err)
 		}
 	}
 
@@ -74,6 +60,33 @@ export default class LibxdfImpl implements Libxdf {
 		}, {})
 
 		return LibxdfImpl.ffiRsDefine(funcs)
+	}
+
+	private throwFailedToLoadLiblsl(err: any) {
+		throw new SpruceError({
+			code: 'FAILED_TO_LOAD_LIBXDF',
+			libxdfPath: this.libxdfPath,
+			originalError: err,
+		})
+	}
+
+	public static async Create(libxdfPath: string, throwIfPathNotExists = true) {
+		assertOptions({ libxdfPath }, ['libxdfPath'])
+
+		if (throwIfPathNotExists && !fs.existsSync(libxdfPath)) {
+			throw new SpruceError({
+				code: 'FAILED_TO_LOAD_LIBXDF',
+				libxdfPath,
+			})
+		}
+
+		const mangledNameMap = await this.loadMangledNameMap(libxdfPath)
+		return new (this.Class ?? this)(libxdfPath, mangledNameMap)
+	}
+
+	private static async loadMangledNameMap(libxdfPath: string) {
+		const extractor = MangledNameExtractorImpl.Create()
+		return await extractor.extract(libxdfPath, this.unmangledNames)
 	}
 
 	public loadXdf(path: string) {
