@@ -2,12 +2,12 @@ import { XdfFile } from '../Libxdf'
 import { XdfReader, XdfReaderLoadOptions } from '../XdfReader'
 
 export default class FakeXdfReader implements XdfReader {
-	public static numCallsToConstructor = 0
+	public static numConstructorCalls = 0
 	public static callsToLoad: FakeLoadCall[] = []
 	public static fakeResponse: XdfFile = {} as XdfFile
 
 	public constructor() {
-		FakeXdfReader.numCallsToConstructor++
+		FakeXdfReader.numConstructorCalls++
 	}
 
 	public async load(filePath: string, options?: XdfReaderLoadOptions) {
@@ -24,7 +24,7 @@ export default class FakeXdfReader implements XdfReader {
 	}
 
 	public static resetTestDouble() {
-		FakeXdfReader.numCallsToConstructor = 0
+		FakeXdfReader.numConstructorCalls = 0
 		FakeXdfReader.callsToLoad = []
 		FakeXdfReader.fakeResponse = {} as XdfFile
 	}
