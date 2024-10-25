@@ -62,7 +62,7 @@ export interface XdfStream {
 	channelCount: number
 	channelFormat: string
 	nominalSampleRateHz: number
-	data: number[]
+	data: number[][]
 	timestamps: number[]
 }
 

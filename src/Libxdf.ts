@@ -141,7 +141,7 @@ export interface LibxdfFile {
 export interface LibxdfStream {
 	stream_id: number
 	stream_info: LibxdfStreamInfo
-	time_series: number[]
+	time_series: number[][]
 	time_stamps: number[]
 }
 
