@@ -65,7 +65,7 @@ export default class XdfReaderTest extends AbstractSpruceTest {
 
 	@test()
 	protected static async returnsXdfFile() {
-		const fakeXdf = { streams: [{} as XdfStream], events: [] }
+		const fakeXdf = { path: '', streams: [{} as XdfStream], events: [] }
 		FakeLibxdf.fakeXdfFile = fakeXdf
 
 		const result = await this.load()

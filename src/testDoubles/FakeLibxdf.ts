@@ -6,7 +6,7 @@ export default class FakeLibxdf implements Libxdf {
 	public static libxdfPath?: string
 	public static loadXdfCalls: string[] = []
 	public static mangledNameMap: MangledNameMap
-	public static fakeXdfFile: XdfFile = { streams: [], events: [] }
+	public static fakeXdfFile: XdfFile = { path: '', streams: [], events: [] }
 
 	public constructor(libxdfPath: string, mangledNameMap: MangledNameMap) {
 		FakeLibxdf.libxdfPath = libxdfPath

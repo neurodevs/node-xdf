@@ -3,8 +3,7 @@ import { XdfFile, XdfReader, XdfReaderLoadOptions } from '../XdfReader'
 export default class FakeXdfReader implements XdfReader {
 	public static numConstructorCalls = 0
 	public static callsToLoad: FakeLoadCall[] = []
-	public static fakeResponse: XdfFile = { streams: [], events: [] }
-	public static fakePath?: string
+	public static fakeResponse: XdfFile = { path: '', streams: [], events: [] }
 
 	public constructor() {
 		FakeXdfReader.numConstructorCalls++

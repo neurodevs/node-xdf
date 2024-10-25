@@ -50,6 +50,7 @@ export interface XdfReaderLoadOptions {
 }
 
 export interface XdfFile {
+	path: string
 	streams: XdfStream[]
 	events: XdfEvent[]
 }

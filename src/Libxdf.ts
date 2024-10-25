@@ -101,6 +101,7 @@ export default class LibxdfImpl implements Libxdf {
 		}))
 
 		return {
+			path,
 			streams: mappedStreams,
 			events: mappedEvents,
 		}
