@@ -86,7 +86,7 @@ export default class XdfReaderTest extends AbstractSpruceTest {
 		})
 	}
 
-	private static readonly defaultLibxdfPath = '/usr/local/lib/libxdf.dylib'
+	private static readonly defaultLibxdfPath = '/opt/local/lib/libxdf.dylib'
 
 	private static async XdfReader() {
 		return (await XdfReaderImpl.Create()) as SpyXdfReader

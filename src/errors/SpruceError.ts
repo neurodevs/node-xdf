@@ -46,7 +46,7 @@ export default class SpruceError extends BaseSpruceError<ErrorOptions> {
 			\n Instructions to save your day (on MacOS):
 			\n     1. git clone https://github.com/neurodevs/libxdf.git
 			\n     2. cd libxdf && cmake -S . -B build && cmake --build build
-			\n     3. sudo cp build/libxdf.dylib /usr/local/lib/
+			\n     3. sudo cp build/libxdf.dylib /opt/local/lib/
 			\n     4. Try whatever you were doing again!
 			\n Modify step 3 for your OS if you are not on MacOS.
 			\n Check the official repo for OS-specific instructions:
