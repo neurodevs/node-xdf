@@ -1,8 +1,8 @@
 import AbstractSpruceTest, {
-	test,
-	assert,
-	errorAssert,
-	generateId,
+    test,
+    assert,
+    errorAssert,
+    generateId,
 } from '@sprucelabs/test-utils'
 import LibxdfImpl from '../Libxdf'
 import FakeLibxdf from '../testDoubles/FakeLibxdf'
@@ -10,90 +10,90 @@ import SpyXdfReader from '../testDoubles/SpyXdfReader'
 import XdfReaderImpl, { XdfStream } from '../XdfReader'
 
 export default class XdfReaderTest extends AbstractSpruceTest {
-	private static instance: SpyXdfReader
-	private static filePath: string
+    private static instance: SpyXdfReader
+    private static filePath: string
 
-	protected static async beforeEach() {
-		await super.beforeEach()
+    protected static async beforeEach() {
+        await super.beforeEach()
 
-		XdfReaderImpl.Class = SpyXdfReader
-		LibxdfImpl.Class = FakeLibxdf
+        XdfReaderImpl.Class = SpyXdfReader
+        LibxdfImpl.Class = FakeLibxdf
 
-		FakeLibxdf.resetTestDouble()
+        FakeLibxdf.resetTestDouble()
 
-		this.filePath = generateId()
-		this.instance = await this.XdfReader()
-	}
+        this.filePath = generateId()
+        this.instance = await this.XdfReader()
+    }
 
-	@test()
-	protected static async canCreateInstance() {
-		assert.isTruthy(this.instance, 'Should have created an instance!')
-	}
+    @test()
+    protected static async canCreateInstance() {
+        assert.isTruthy(this.instance, 'Should have created an instance!')
+    }
 
-	@test()
-	protected static async loadThrowsWithMissingRequiredOptions() {
-		const err = await assert.doesThrowAsync(
-			//@ts-ignore
-			async () => await this.instance.load()
-		)
+    @test()
+    protected static async loadThrowsWithMissingRequiredOptions() {
+        const err = await assert.doesThrowAsync(
+            //@ts-ignore
+            async () => await this.instance.load()
+        )
 
-		errorAssert.assertError(err, 'MISSING_PARAMETERS', {
-			parameters: ['filePath'],
-		})
-	}
+        errorAssert.assertError(err, 'MISSING_PARAMETERS', {
+            parameters: ['filePath'],
+        })
+    }
 
-	@test()
-	protected static async loadThrowsWithInvalidTimeout() {
-		await this.assertInvalidTimeout(-1)
-		await this.assertInvalidTimeout(-1.5)
-	}
+    @test()
+    protected static async loadThrowsWithInvalidTimeout() {
+        await this.assertInvalidTimeout(-1)
+        await this.assertInvalidTimeout(-1.5)
+    }
 
-	@test()
-	protected static async createsLibxdfInstance() {
-		assert.isEqual(
-			FakeLibxdf.libxdfPath,
-			this.defaultLibxdfPath,
-			`Should create libxdf with path: ${this.defaultLibxdfPath}!\n`
-		)
-	}
+    @test()
+    protected static async createsLibxdfInstance() {
+        assert.isEqual(
+            FakeLibxdf.libxdfPath,
+            this.defaultLibxdfPath,
+            `Should create libxdf with path: ${this.defaultLibxdfPath}!\n`
+        )
+    }
 
-	@test()
-	protected static async callsLoadXdfWithFilePath() {
-		await this.load()
-		assert.isEqual(FakeLibxdf.loadXdfCalls[0], this.filePath)
-	}
+    @test()
+    protected static async callsLoadXdfWithFilePath() {
+        await this.load()
+        assert.isEqual(FakeLibxdf.loadXdfCalls[0], this.filePath)
+    }
 
-	@test()
-	protected static async returnsXdfFile() {
-		const fakeXdf = { path: '', streams: [{} as XdfStream], events: [] }
-		FakeLibxdf.fakeXdfFile = fakeXdf
+    @test()
+    protected static async returnsXdfFile() {
+        const fakeXdf = { path: '', streams: [{} as XdfStream], events: [] }
+        FakeLibxdf.fakeXdfFile = fakeXdf
 
-		const result = await this.load()
+        const result = await this.load()
 
-		assert.isEqual(result, fakeXdf)
-	}
+        assert.isEqual(result, fakeXdf)
+    }
 
-	private static async load(options?: TestXdfReaderLoadOptions) {
-		const { filePath = this.filePath, ...loadOptions } = options ?? {}
-		return await this.instance.load(filePath, loadOptions)
-	}
+    private static async load(options?: TestXdfReaderLoadOptions) {
+        const { filePath = this.filePath, ...loadOptions } = options ?? {}
+        return await this.instance.load(filePath, loadOptions)
+    }
 
-	private static async assertInvalidTimeout(timeoutMs: number) {
-		const err = await assert.doesThrowAsync(() => this.load({ timeoutMs }))
+    private static async assertInvalidTimeout(timeoutMs: number) {
+        const err = await assert.doesThrowAsync(() => this.load({ timeoutMs }))
 
-		errorAssert.assertError(err, 'INVALID_TIMEOUT_MS', {
-			timeoutMs,
-		})
-	}
+        errorAssert.assertError(err, 'INVALID_TIMEOUT_MS', {
+            timeoutMs,
+        })
+    }
 
-	private static readonly defaultLibxdfPath = '/opt/local/lib/libxdf.dylib'
+    private static readonly defaultLibxdfPath = '/opt/local/lib/libxdf.dylib'
 
-	private static async XdfReader() {
-		return (await XdfReaderImpl.Create()) as SpyXdfReader
-	}
+    private static async XdfReader() {
+        return (await XdfReaderImpl.Create()) as SpyXdfReader
+    }
 }
 
 interface TestXdfReaderLoadOptions {
-	filePath?: string
-	timeoutMs?: number
+    filePath?: string
+    timeoutMs?: number
 }

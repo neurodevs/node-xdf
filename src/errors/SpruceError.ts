@@ -1,45 +1,45 @@
 import BaseSpruceError from '@sprucelabs/error'
 import ErrorOptions, {
-	FailedToLoadLibxdfErrorOptions,
-	InvalidTimeoutMsErrorOptions,
+    FailedToLoadLibxdfErrorOptions,
+    InvalidTimeoutMsErrorOptions,
 } from '#spruce/errors/options.types'
 
 export default class SpruceError extends BaseSpruceError<ErrorOptions> {
-	/** an easy to understand version of the errors */
-	public friendlyMessage(): string {
-		const { options } = this
-		let message
-		switch (options?.code) {
-			case 'INVALID_TIMEOUT_MS':
-				message = this.generatedInvalidMessage(options)
-				break
+    /** an easy to understand version of the errors */
+    public friendlyMessage(): string {
+        const { options } = this
+        let message
+        switch (options?.code) {
+            case 'INVALID_TIMEOUT_MS':
+                message = this.generatedInvalidMessage(options)
+                break
 
-			case 'FAILED_TO_LOAD_LIBXDF':
-				message = this.generateFailedMessage(options)
-				break
+            case 'FAILED_TO_LOAD_LIBXDF':
+                message = this.generateFailedMessage(options)
+                break
 
-			default:
-				message = super.friendlyMessage()
-		}
+            default:
+                message = super.friendlyMessage()
+        }
 
-		const fullMessage = options.friendlyMessage
-			? options.friendlyMessage
-			: message
+        const fullMessage = options.friendlyMessage
+            ? options.friendlyMessage
+            : message
 
-		return fullMessage
-	}
+        return fullMessage
+    }
 
-	private generatedInvalidMessage(options: InvalidTimeoutMsErrorOptions) {
-		return `
+    private generatedInvalidMessage(options: InvalidTimeoutMsErrorOptions) {
+        return `
 			\n -----------------------------------
 			\n You set an invalid timeout! 
 			\n It must be a positive number in milliseconds, not "${options?.timeoutMs}".
 			\n -----------------------------------
 		`
-	}
+    }
 
-	private generateFailedMessage(options: FailedToLoadLibxdfErrorOptions) {
-		return `
+    private generateFailedMessage(options: FailedToLoadLibxdfErrorOptions) {
+        return `
 			\n -----------------------------------
 			\n Failed to load libxdf! Tried to load from: 
 			\n     ${options?.libxdfPath}
@@ -58,5 +58,5 @@ export default class SpruceError extends BaseSpruceError<ErrorOptions> {
 			\n @ericthecurious
 			\n -----------------------------------
 		`
-	}
+    }
 }
