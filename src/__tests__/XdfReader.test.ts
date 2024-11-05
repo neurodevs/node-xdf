@@ -4,6 +4,10 @@ import AbstractSpruceTest, {
     errorAssert,
     generateId,
 } from '@sprucelabs/test-utils'
+import {
+    FakeMangledNameExtractor,
+    MangledNameExtractorImpl,
+} from '@neurodevs/node-mangled-names'
 import LibxdfImpl from '../Libxdf'
 import FakeLibxdf from '../testDoubles/FakeLibxdf'
 import SpyXdfReader from '../testDoubles/SpyXdfReader'
@@ -16,10 +20,12 @@ export default class XdfReaderTest extends AbstractSpruceTest {
     protected static async beforeEach() {
         await super.beforeEach()
 
-        XdfReaderImpl.Class = SpyXdfReader
         LibxdfImpl.Class = FakeLibxdf
-
         FakeLibxdf.resetTestDouble()
+
+        MangledNameExtractorImpl.Class = FakeMangledNameExtractor
+
+        XdfReaderImpl.Class = SpyXdfReader
 
         this.filePath = generateId()
         this.instance = await this.XdfReader()
@@ -89,11 +95,15 @@ export default class XdfReaderTest extends AbstractSpruceTest {
     private static readonly defaultLibxdfPath = '/opt/local/lib/libxdf.dylib'
 
     private static async XdfReader() {
-        return (await XdfReaderImpl.Create()) as SpyXdfReader
+        const instance = await XdfReaderImpl.Create(this.defaultLibxdfPath, {
+            throwIfLibxdfDoesNotExist: false,
+        })
+        return instance as SpyXdfReader
     }
 }
 
 interface TestXdfReaderLoadOptions {
     filePath?: string
     timeoutMs?: number
+    throwIfLibxdfDoesNotExist?: boolean
 }

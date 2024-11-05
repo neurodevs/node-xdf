@@ -12,8 +12,17 @@ export default class XdfReaderImpl implements XdfReader {
         this.libxdf = libxdf
     }
 
-    public static async Create(libxdfPath = this.libxdfPath) {
-        const libxdf = await LibxdfImpl.Create(libxdfPath)
+    public static async Create(
+        libxdfPath = this.libxdfPath,
+        options?: XdfReaderOptions
+    ) {
+        const { throwIfLibxdfDoesNotExist = true } = options ?? {}
+
+        const libxdf = await LibxdfImpl.Create(
+            libxdfPath,
+            throwIfLibxdfDoesNotExist
+        )
+
         return new (this.Class ?? this)(libxdf)
     }
 
@@ -43,7 +52,14 @@ export interface XdfReader {
     load(filePath: string, options?: XdfReaderLoadOptions): Promise<XdfFile>
 }
 
-export type XdfReaderConstructor = new (libxdf: Libxdf) => XdfReader
+export type XdfReaderConstructor = new (
+    libxdf: Libxdf,
+    options?: XdfReaderOptions
+) => XdfReader
+
+export interface XdfReaderOptions {
+    throwIfLibxdfDoesNotExist?: boolean
+}
 
 export interface XdfReaderLoadOptions {
     timeoutMs?: number

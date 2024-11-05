@@ -28,8 +28,8 @@ export default class LibxdfTest extends AbstractSpruceTest {
         await super.beforeEach()
 
         LibxdfImpl.Class = SpyLibxdf
-        MangledNameExtractorImpl.Class = FakeMangledNameExtractor
 
+        MangledNameExtractorImpl.Class = FakeMangledNameExtractor
         FakeMangledNameExtractor.clearTestDouble()
 
         this.shouldThrowWhenLoadingBindings = false
