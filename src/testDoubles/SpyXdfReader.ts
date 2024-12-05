@@ -1,5 +1,5 @@
-import { Libxdf } from '../Libxdf'
-import XdfReaderImpl, { XdfReaderLoadOptions } from '../XdfReader'
+import { Libxdf } from '../components/Libxdf'
+import XdfReaderImpl, { XdfReaderLoadOptions } from '../components/XdfReader'
 
 export default class SpyXdfReader extends XdfReaderImpl {
     public loadCalls: SpyLoadCall[] = []

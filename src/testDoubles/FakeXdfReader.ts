@@ -1,4 +1,4 @@
-import { XdfFile, XdfReader, XdfReaderLoadOptions } from '../XdfReader'
+import { XdfFile, XdfReader, XdfReaderLoadOptions } from '../components/XdfReader'
 
 export default class FakeXdfReader implements XdfReader {
     public static numConstructorCalls = 0

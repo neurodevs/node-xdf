@@ -1,8 +1,8 @@
-export { default as XdfReaderImpl } from './XdfReader'
-export * from './XdfReader'
+export { default as XdfReaderImpl } from './components/XdfReader'
+export * from './components/XdfReader'
 
-export { default as LibxdfImpl } from './Libxdf'
-export * from './Libxdf'
+export { default as LibxdfImpl } from './components/Libxdf'
+export * from './components/Libxdf'
 
 export { default as SpyXdfReader } from './testDoubles/SpyXdfReader'
 export * from './testDoubles/SpyXdfReader'

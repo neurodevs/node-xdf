@@ -9,9 +9,9 @@ import {
     FakeMangledNameExtractor,
 } from '@neurodevs/node-mangled-names'
 import { DataType, OpenParams } from 'ffi-rs'
-import LibxdfImpl, { FfiRsDefineOptions, LibxdfBindings } from '../Libxdf'
+import LibxdfImpl, { FfiRsDefineOptions, LibxdfBindings } from '../components/Libxdf'
 import SpyLibxdf from '../testDoubles/SpyLibxdf'
-import { XdfFile } from '../XdfReader'
+import { XdfFile } from '../components/XdfReader'
 
 export default class LibxdfTest extends AbstractSpruceTest {
     private static instance: SpyLibxdf

@@ -1,5 +1,5 @@
 import { assertOptions } from '@sprucelabs/schema'
-import SpruceError from './errors/SpruceError'
+import SpruceError from '../errors/SpruceError'
 import LibxdfImpl, { Libxdf } from './Libxdf'
 
 export default class XdfReaderImpl implements XdfReader {

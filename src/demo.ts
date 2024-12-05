@@ -1,4 +1,4 @@
-import XdfReaderImpl from './XdfReader'
+import XdfReaderImpl from './components/XdfReader'
 
 async function loadXdfFile() {
     console.log('Loading XDF file...')
