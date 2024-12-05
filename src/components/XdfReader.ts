@@ -6,6 +6,9 @@ export default class XdfReaderImpl implements XdfReader {
     public static Class?: XdfReaderConstructor
     private static readonly libxdfPath = '/opt/local/lib/libxdf.dylib'
 
+    private filePath!: string
+    private timeoutMs!: number
+
     private readonly libxdf: Libxdf
 
     protected constructor(libxdf: Libxdf) {
@@ -30,17 +33,25 @@ export default class XdfReaderImpl implements XdfReader {
         assertOptions({ filePath }, ['filePath'])
         const { timeoutMs = 0 } = options ?? {}
 
-        this.assertValidTimeout(timeoutMs)
-        return this.libxdf.loadXdf(filePath)
+        this.filePath = filePath
+        this.timeoutMs = timeoutMs
+
+        this.assertValidTimeout()
+
+        return this.loadXdf()
     }
 
-    protected assertValidTimeout(timeoutMs: number) {
-        if (timeoutMs < 0) {
+    protected assertValidTimeout() {
+        if (this.timeoutMs < 0) {
             throw new SpruceError({
                 code: 'INVALID_TIMEOUT_MS',
-                timeoutMs,
+                timeoutMs: this.timeoutMs,
             })
         }
+    }
+
+    private loadXdf() {
+        return this.libxdf.loadXdf(this.filePath)
     }
 
     protected async wait(ms: number) {
