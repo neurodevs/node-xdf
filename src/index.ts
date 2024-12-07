@@ -16,5 +16,5 @@ export * from './testDoubles/SpyXdfReader'
 export { default as FakeXdfReader } from './testDoubles/FakeXdfReader'
 export * from './testDoubles/FakeXdfReader'
 
-export { default as XdfRecorder } from './components/XdfRecorder'
-export * from './components/XdfRecorder'
+export { default as XdfStreamRecorder } from './components/XdfStreamRecorder'
+export * from './components/XdfStreamRecorder'
