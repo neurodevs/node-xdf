@@ -14,7 +14,7 @@ import LibxdfAdapter, {
     LibxdfBindings,
 } from '../components/LibxdfAdapter'
 import { XdfFile } from '../components/XdfFileLoader'
-import SpyLibxdf from '../testDoubles/SpyLibxdf'
+import SpyLibxdf from '../testDoubles/Libxdf/SpyLibxdf'
 
 export default class LibxdfTest extends AbstractSpruceTest {
     private static instance: SpyLibxdf

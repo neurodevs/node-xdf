@@ -10,8 +10,8 @@ import {
 } from '@neurodevs/node-mangled-names'
 import LibxdfAdapter from '../components/LibxdfAdapter'
 import XdfFileLoader, { XdfStream } from '../components/XdfFileLoader'
-import FakeLibxdf from '../testDoubles/FakeLibxdf'
-import SpyXdfLoader from '../testDoubles/SpyXdfLoader'
+import FakeLibxdf from '../testDoubles/Libxdf/FakeLibxdf'
+import SpyXdfLoader from '../testDoubles/XdfLoader/SpyXdfLoader'
 
 export default class XdfFileLoaderTest extends AbstractSpruceTest {
     private static instance: SpyXdfLoader
