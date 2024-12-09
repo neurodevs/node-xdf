@@ -1,5 +1,5 @@
-export default class XdfStreamRecorder implements StreamRecorder {
-    public static Class?: StreamRecorderConstructor
+export default class XdfStreamRecorder implements XdfRecorder {
+    public static Class?: XdfRecorderConstructor
 
     protected constructor() {}
 
@@ -8,6 +8,6 @@ export default class XdfStreamRecorder implements StreamRecorder {
     }
 }
 
-export interface StreamRecorder {}
+export interface XdfRecorder {}
 
-export type StreamRecorderConstructor = new () => StreamRecorder
+export type XdfRecorderConstructor = new () => XdfRecorder

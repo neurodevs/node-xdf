@@ -8,27 +8,27 @@ import {
     FakeMangledNameExtractor,
     MangledNameExtractorImpl,
 } from '@neurodevs/node-mangled-names'
-import LibxdfImpl from '../components/Libxdf'
+import LibxdfAdapter from '../components/LibxdfAdapter'
+import XdfFileLoader, { XdfStream } from '../components/XdfFileLoader'
 import FakeLibxdf from '../testDoubles/FakeLibxdf'
-import SpyXdfReader from '../testDoubles/SpyXdfReader'
-import XdfReaderImpl, { XdfStream } from '../components/XdfReader'
+import SpyXdfLoader from '../testDoubles/SpyXdfLoader'
 
-export default class XdfReaderTest extends AbstractSpruceTest {
-    private static instance: SpyXdfReader
+export default class XdfFileLoaderTest extends AbstractSpruceTest {
+    private static instance: SpyXdfLoader
     private static filePath: string
 
     protected static async beforeEach() {
         await super.beforeEach()
 
-        LibxdfImpl.Class = FakeLibxdf
+        LibxdfAdapter.Class = FakeLibxdf
         FakeLibxdf.resetTestDouble()
 
         MangledNameExtractorImpl.Class = FakeMangledNameExtractor
 
-        XdfReaderImpl.Class = SpyXdfReader
+        XdfFileLoader.Class = SpyXdfLoader
 
         this.filePath = generateId()
-        this.instance = await this.XdfReader()
+        this.instance = await this.XdfFileLoader()
     }
 
     @test()
@@ -79,7 +79,7 @@ export default class XdfReaderTest extends AbstractSpruceTest {
         assert.isEqual(result, fakeXdf)
     }
 
-    private static async load(options?: TestXdfReaderLoadOptions) {
+    private static async load(options?: TestXdfLoaderLoadOptions) {
         const { filePath = this.filePath, ...loadOptions } = options ?? {}
         return await this.instance.load(filePath, loadOptions)
     }
@@ -94,15 +94,15 @@ export default class XdfReaderTest extends AbstractSpruceTest {
 
     private static readonly defaultLibxdfPath = '/opt/local/lib/libxdf.dylib'
 
-    private static async XdfReader() {
-        const instance = await XdfReaderImpl.Create(this.defaultLibxdfPath, {
+    private static async XdfFileLoader() {
+        const instance = await XdfFileLoader.Create(this.defaultLibxdfPath, {
             throwIfLibxdfDoesNotExist: false,
         })
-        return instance as SpyXdfReader
+        return instance as SpyXdfLoader
     }
 }
 
-interface TestXdfReaderLoadOptions {
+interface TestXdfLoaderLoadOptions {
     filePath?: string
     timeoutMs?: number
     throwIfLibxdfDoesNotExist?: boolean

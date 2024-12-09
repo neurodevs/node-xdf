@@ -1,9 +1,9 @@
 import { assertOptions } from '@sprucelabs/schema'
 import SpruceError from '../errors/SpruceError'
-import LibxdfImpl, { Libxdf } from './Libxdf'
+import LibxdfAdapter, { Libxdf } from './LibxdfAdapter'
 
-export default class XdfReaderImpl implements XdfReader {
-    public static Class?: XdfReaderConstructor
+export default class XdfFileLoader implements XdfLoader {
+    public static Class?: XdfLoaderConstructor
     private static readonly libxdfPath = '/opt/local/lib/libxdf.dylib'
 
     private filePath!: string
@@ -17,11 +17,11 @@ export default class XdfReaderImpl implements XdfReader {
 
     public static async Create(
         libxdfPath = this.libxdfPath,
-        options?: XdfReaderOptions
+        options?: XdfLoaderConstructorOptions
     ) {
         const { throwIfLibxdfDoesNotExist = true } = options ?? {}
 
-        const libxdf = await LibxdfImpl.Create(
+        const libxdf = await LibxdfAdapter.Create(
             libxdfPath,
             throwIfLibxdfDoesNotExist
         )
@@ -29,7 +29,7 @@ export default class XdfReaderImpl implements XdfReader {
         return new (this.Class ?? this)(libxdf)
     }
 
-    public async load(filePath: string, options?: XdfReaderLoadOptions) {
+    public async load(filePath: string, options?: XdfLoaderLoadOptions) {
         assertOptions({ filePath }, ['filePath'])
         const { timeoutMs = 0 } = options ?? {}
 
@@ -59,20 +59,20 @@ export default class XdfReaderImpl implements XdfReader {
     }
 }
 
-export interface XdfReader {
-    load(filePath: string, options?: XdfReaderLoadOptions): Promise<XdfFile>
+export interface XdfLoader {
+    load(filePath: string, options?: XdfLoaderLoadOptions): Promise<XdfFile>
 }
 
-export type XdfReaderConstructor = new (
+export type XdfLoaderConstructor = new (
     libxdf: Libxdf,
-    options?: XdfReaderOptions
-) => XdfReader
+    options?: XdfLoaderConstructorOptions
+) => XdfLoader
 
-export interface XdfReaderOptions {
+export interface XdfLoaderConstructorOptions {
     throwIfLibxdfDoesNotExist?: boolean
 }
 
-export interface XdfReaderLoadOptions {
+export interface XdfLoaderLoadOptions {
     timeoutMs?: number
 }
 

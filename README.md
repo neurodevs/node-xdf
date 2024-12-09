@@ -5,7 +5,7 @@ Extensible Data Format (XDF) for persisting multi-modal, time-series data with m
 - [Overview](#overview)
 - [Installation](#installation)
 - [Usage](#usage)
-  - [XdfReader](#xdfreader)
+  - [XdfFileLoader](#xdffileloader)
 - [Test Doubles](#test-doubles)
 
 ## Overview
@@ -33,15 +33,15 @@ or
 
 ## Usage
 
-### XdfReader
+### XdfFileLoader
 
 ```typescript
-import { XdfReaderImpl } from '@neurodevs/node-xdf'
+import { XdfFileLoader } from '@neurodevs/node-xdf'
 
 async function loadXdf() {
-    const reader = await XdfReaderImpl.Create()
+    const loader = await XdfFileLoader.Create()
 
-    const data = await reader.load('/path/to/xdf')
+    const data = await loader.load('/path/to/file.xdf')
     console.log('XDF Data:', data)
 }
 ```
@@ -51,10 +51,10 @@ async function loadXdf() {
 This package was developed using test-driven development (TDD). If you also follow TDD, you'll likely want test doubles to fake, mock, or spy certain behaviors for these classes.
 
 ```typescript
-import { XdfReaderImpl, FakeXdfReader } from '@neurodevs/node-lsl'
+import { XdfFileLoader, FakeXdfLoader } from '@neurodevs/node-lsl'
 
 async function someTestFunction() {
-    XdfReaderImpl.Class = FakeXdfReader
-    const fake = await XdfReaderImpl.Create()
+    XdfFileLoader.Class = FakeXdfLoader
+    const fake = await XdfFileLoader.Create()
 }
 ```

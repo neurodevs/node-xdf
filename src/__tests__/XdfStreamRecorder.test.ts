@@ -1,10 +1,8 @@
 import AbstractSpruceTest, { test, assert } from '@sprucelabs/test-utils'
-import XdfStreamRecorder, {
-    StreamRecorder,
-} from '../components/XdfStreamRecorder'
+import XdfStreamRecorder, { XdfRecorder } from '../components/XdfStreamRecorder'
 
 export default class XdfStreamRecorderTest extends AbstractSpruceTest {
-    private static instance: StreamRecorder
+    private static instance: XdfRecorder
 
     protected static async beforeEach() {
         await super.beforeEach()

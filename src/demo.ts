@@ -1,11 +1,11 @@
-import XdfReaderImpl from './components/XdfReader'
+import XdfFileLoader from './components/XdfFileLoader'
 
 async function loadXdfFile() {
     console.log('Loading XDF file...')
 
-    const reader = await XdfReaderImpl.Create()
+    const loader = await XdfFileLoader.Create()
 
-    const result = await reader.load(
+    const result = await loader.load(
         '/Users/ericyates/Downloads/sttr-iacs/session_474/session_474.xdf'
     )
 

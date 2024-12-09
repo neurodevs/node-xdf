@@ -9,9 +9,12 @@ import {
     FakeMangledNameExtractor,
 } from '@neurodevs/node-mangled-names'
 import { DataType, OpenParams } from 'ffi-rs'
-import LibxdfImpl, { FfiRsDefineOptions, LibxdfBindings } from '../components/Libxdf'
+import LibxdfAdapter, {
+    FfiRsDefineOptions,
+    LibxdfBindings,
+} from '../components/LibxdfAdapter'
+import { XdfFile } from '../components/XdfFileLoader'
 import SpyLibxdf from '../testDoubles/SpyLibxdf'
-import { XdfFile } from '../components/XdfReader'
 
 export default class LibxdfTest extends AbstractSpruceTest {
     private static instance: SpyLibxdf
@@ -27,7 +30,7 @@ export default class LibxdfTest extends AbstractSpruceTest {
     protected static async beforeEach() {
         await super.beforeEach()
 
-        LibxdfImpl.Class = SpyLibxdf
+        LibxdfAdapter.Class = SpyLibxdf
 
         MangledNameExtractorImpl.Class = FakeMangledNameExtractor
         FakeMangledNameExtractor.clearTestDouble()
@@ -39,7 +42,7 @@ export default class LibxdfTest extends AbstractSpruceTest {
         this.setFakeExtractResult()
         this.clearAndFakeFfi()
 
-        this.instance = await this.Libxdf()
+        this.instance = await this.LibxdfAdapter()
     }
 
     @test()
@@ -51,7 +54,7 @@ export default class LibxdfTest extends AbstractSpruceTest {
     protected static async throwsWithMissingRequiredOptions() {
         const err = await assert.doesThrowAsync(
             // @ts-ignore
-            async () => await LibxdfImpl.Create()
+            async () => await LibxdfAdapter.Create()
         )
 
         errorAssert.assertError(err, 'MISSING_PARAMETERS', {
@@ -62,7 +65,9 @@ export default class LibxdfTest extends AbstractSpruceTest {
     @test()
     protected static async throwsWhenBindingsFailToLoad() {
         this.shouldThrowWhenLoadingBindings = true
-        const err = await assert.doesThrowAsync(async () => await this.Libxdf())
+        const err = await assert.doesThrowAsync(
+            async () => await this.LibxdfAdapter()
+        )
 
         errorAssert.assertError(err, 'FAILED_TO_LOAD_LIBXDF', {
             libxdfPath: this.libxdfPath,
@@ -82,7 +87,7 @@ export default class LibxdfTest extends AbstractSpruceTest {
         const mangledLoadXdfName = generateId()
         this.setFakeExtractResult(mangledLoadXdfName)
 
-        await this.Libxdf()
+        await this.LibxdfAdapter()
 
         assert.isEqualDeep(
             this.ffiRsDefineOptions,
@@ -132,7 +137,7 @@ export default class LibxdfTest extends AbstractSpruceTest {
         const libxdfPath = generateId()
 
         const err = await assert.doesThrowAsync(
-            async () => await this.Libxdf(libxdfPath, true)
+            async () => await this.LibxdfAdapter(libxdfPath, true)
         )
 
         errorAssert.assertError(err, 'FAILED_TO_LOAD_LIBXDF', {
@@ -160,13 +165,13 @@ export default class LibxdfTest extends AbstractSpruceTest {
     }
 
     private static fakeFfiRsOpen() {
-        LibxdfImpl.ffiRsOpen = (options) => {
+        LibxdfAdapter.ffiRsOpen = (options) => {
             this.ffiRsOpenOptions = options
         }
     }
 
     private static fakeFfiRsDefine() {
-        LibxdfImpl.ffiRsDefine = (options) => {
+        LibxdfAdapter.ffiRsDefine = (options) => {
             this.ffiRsDefineOptions = options
 
             if (this.shouldThrowWhenLoadingBindings) {
@@ -226,11 +231,11 @@ export default class LibxdfTest extends AbstractSpruceTest {
         }
     }
 
-    private static async Libxdf(
+    private static async LibxdfAdapter(
         libxdfPath?: string,
         throwIfPathNotExists = false
     ) {
-        const libxdf = await LibxdfImpl.Create(
+        const libxdf = await LibxdfAdapter.Create(
             libxdfPath ?? this.libxdfPath,
             throwIfPathNotExists
         )

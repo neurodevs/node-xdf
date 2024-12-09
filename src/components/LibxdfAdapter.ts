@@ -6,9 +6,9 @@ import {
 } from '@neurodevs/node-mangled-names'
 import { DataType, define, FieldType, FuncObj, open } from 'ffi-rs'
 import SpruceError from '../errors/SpruceError'
-import { XdfFile } from './XdfReader'
+import { XdfFile } from './XdfFileLoader'
 
-export default class LibxdfImpl implements Libxdf {
+export default class LibxdfAdapter implements Libxdf {
     public static Class?: LibxdfConstructor
     public static ffiRsOpen = open
     public static ffiRsDefine = define
@@ -40,7 +40,7 @@ export default class LibxdfImpl implements Libxdf {
     }
 
     private openLibxdf() {
-        LibxdfImpl.ffiRsOpen({
+        LibxdfAdapter.ffiRsOpen({
             library: 'xdf',
             path: this.libxdfPath,
         })
@@ -59,7 +59,7 @@ export default class LibxdfImpl implements Libxdf {
             return acc
         }, {})
 
-        return LibxdfImpl.ffiRsDefine(funcs)
+        return LibxdfAdapter.ffiRsDefine(funcs)
     }
 
     private throwFailedToLoadLiblsl(err: any) {
@@ -124,11 +124,11 @@ export default class LibxdfImpl implements Libxdf {
     }
 
     private get unmangledNames() {
-        return LibxdfImpl.unmangledNames
+        return LibxdfAdapter.unmangledNames
     }
 
     private get loadXdfName() {
-        return LibxdfImpl.loadXdfName
+        return LibxdfAdapter.loadXdfName
     }
 }
 
