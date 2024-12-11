@@ -15,11 +15,8 @@ export default class XdfFileLoader implements XdfLoader {
         this.libxdf = libxdf
     }
 
-    public static async Create(
-        libxdfPath = this.libxdfPath,
-        options?: XdfLoaderConstructorOptions
-    ) {
-        const { throwIfLibxdfDoesNotExist = true } = options ?? {}
+    public static async Create(libxdfPath = this.libxdfPath) {
+        const throwIfLibxdfDoesNotExist = this.Class ? false : true
 
         const libxdf = await LibxdfAdapter.Create(
             libxdfPath,

@@ -95,9 +95,7 @@ export default class XdfFileLoaderTest extends AbstractSpruceTest {
     private static readonly defaultLibxdfPath = '/opt/local/lib/libxdf.dylib'
 
     private static async XdfFileLoader() {
-        const instance = await XdfFileLoader.Create(this.defaultLibxdfPath, {
-            throwIfLibxdfDoesNotExist: false,
-        })
+        const instance = await XdfFileLoader.Create(this.defaultLibxdfPath)
         return instance as SpyXdfLoader
     }
 }
