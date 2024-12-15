@@ -25,7 +25,7 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
     protected static async throwsWithMissingRequiredOptions() {
         const err = await assert.doesThrowAsync(
             // @ts-ignore
-            async () => LabrecorderAdapter.Create()
+            async () => await LabrecorderAdapter.Create()
         )
 
         errorAssert.assertError(err, 'MISSING_PARAMETERS', {

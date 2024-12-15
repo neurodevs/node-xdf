@@ -5,7 +5,7 @@ export default class LabrecorderAdapter implements Labrecorder {
 
     protected constructor() {}
 
-    public static Create(labrecorderPath: string) {
+    public static async Create(labrecorderPath: string) {
         assertOptions({ labrecorderPath }, ['labrecorderPath'])
         return new (this.Class ?? this)()
     }
