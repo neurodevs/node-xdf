@@ -1,4 +1,9 @@
-import AbstractSpruceTest, { test, assert } from '@sprucelabs/test-utils'
+import AbstractSpruceTest, {
+    test,
+    assert,
+    errorAssert,
+    generateId,
+} from '@sprucelabs/test-utils'
 import LabrecorderAdapter, {
     Labrecorder,
 } from '../components/LabrecorderAdapter'
@@ -13,10 +18,26 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
 
     @test()
     protected static async canCreateLabrecorderAdapter() {
-        assert.isTruthy(this.instance)
+        assert.isTruthy(this.instance, 'Should create an instance!')
     }
 
-    private static LabrecorderAdapter() {
-        return LabrecorderAdapter.Create()
+    @test()
+    protected static async throwsWithMissingRequiredOptions() {
+        const err = await assert.doesThrowAsync(
+            // @ts-ignore
+            async () => LabrecorderAdapter.Create()
+        )
+
+        errorAssert.assertError(err, 'MISSING_PARAMETERS', {
+            parameters: ['labrecorderPath'],
+        })
+    }
+
+    private static readonly labrecorderPath = generateId()
+
+    private static LabrecorderAdapter(labrecorderPath?: string) {
+        return LabrecorderAdapter.Create(
+            labrecorderPath ?? this.labrecorderPath
+        )
     }
 }
