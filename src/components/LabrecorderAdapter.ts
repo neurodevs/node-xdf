@@ -1,5 +1,6 @@
 import { assertOptions } from '@sprucelabs/schema'
-import { DataType, define, open } from 'ffi-rs'
+import { DataType, define, JsExternal, open } from 'ffi-rs'
+import { LibxdfStreamInfo } from './LibxdfAdapter'
 
 export default class LabrecorderAdapter implements Labrecorder {
     public static Class?: LabrecorderAdapterConstructor
@@ -7,6 +8,7 @@ export default class LabrecorderAdapter implements Labrecorder {
     public static ffiRsDefine = define
 
     private labrecorderPath: string
+    private bindings!: LabrecorderBindings
 
     protected constructor(labrecorderPath: string) {
         this.labrecorderPath = labrecorderPath
@@ -25,7 +27,23 @@ export default class LabrecorderAdapter implements Labrecorder {
     }
 
     private registerFunctions() {
-        this.ffiRsDefine(this.functions)
+        this.bindings = this.ffiRsDefine(this.functions)
+    }
+
+    public createRecording(
+        filename: string,
+        streams: LibxdfStreamInfo[],
+        watchFor: string[],
+        syncOptions: Map<string, string>,
+        collectOffsets: boolean
+    ) {
+        return this.bindings.recording_create(
+            filename as unknown as DataType.String,
+            streams as unknown as DataType.External,
+            watchFor as unknown as DataType.External,
+            syncOptions as unknown as DataType.External,
+            collectOffsets as unknown as DataType.Boolean
+        ) as unknown as JsExternal
     }
 
     private get libraryOptions() {
@@ -90,6 +108,34 @@ export default class LabrecorderAdapter implements Labrecorder {
     }
 }
 
-export interface Labrecorder {}
+export interface Labrecorder {
+    createRecording(
+        filename: string,
+        streams: LibxdfStreamInfo[],
+        watchFor: string[],
+        syncOptions: Map<string, string>,
+        collectOffsets: boolean
+    ): JsExternal
+}
 
 export type LabrecorderAdapterConstructor = new () => Labrecorder
+
+export interface LabrecorderBindings {
+    recording_create: RecordingCreateFunction
+    recording_stop: RecordingStopFunction
+    recording_delete: RecordingDeleteFunction
+}
+
+export type RecordingCreateFunction = (
+    filename: DataType.String,
+    streams: DataType.External,
+    watchfor: DataType.External,
+    syncOptions: DataType.External,
+    collectOffsets: DataType.Boolean
+) => any
+
+export type RecordingStopFunction = (recording: BoundRecording) => void
+
+export type RecordingDeleteFunction = (recording: BoundRecording) => void
+
+export type BoundRecording = JsExternal
