@@ -63,7 +63,7 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
                         DataType.External, // streams
                         DataType.External, // watchfor
                         DataType.External, // syncOptions
-                        DataType.Boolean, //  `collect_offsets
+                        DataType.Boolean, //  collect_offsets
                     ],
                 },
                 recording_stop: {
