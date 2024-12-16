@@ -1,6 +1,6 @@
 import { assertOptions } from '@sprucelabs/schema'
-import { DataType, define, JsExternal, open } from 'ffi-rs'
-import { LibxdfStreamInfo } from './LibxdfAdapter'
+import { BoundStreamInfo, StreamInfo } from '@neurodevs/node-lsl'
+import { DataType, define, open } from 'ffi-rs'
 
 export default class LabrecorderAdapter implements Labrecorder {
     public static Class?: LabrecorderAdapterConstructor
@@ -32,18 +32,10 @@ export default class LabrecorderAdapter implements Labrecorder {
 
     public createRecording(
         filename: string,
-        streams: LibxdfStreamInfo[],
-        watchFor: string[],
-        syncOptions: Map<string, string>,
-        collectOffsets: boolean
+        streams: StreamInfo[],
+        watchFor: string[]
     ) {
-        return this.bindings.recording_create(
-            filename as unknown as DataType.String,
-            streams as unknown as DataType.External,
-            watchFor as unknown as DataType.External,
-            syncOptions as unknown as DataType.External,
-            collectOffsets as unknown as DataType.Boolean
-        ) as unknown as JsExternal
+        return this.bindings.recording_create([filename, streams, watchFor])
     }
 
     private get libraryOptions() {
@@ -67,11 +59,9 @@ export default class LabrecorderAdapter implements Labrecorder {
                 library: 'labrecorder',
                 retType: DataType.External, // Pointer to the recording object
                 paramsType: [
-                    DataType.String, //    filename
-                    DataType.External, //  streams
-                    DataType.External, //  watchfor
-                    DataType.External, //  syncOptions
-                    DataType.Boolean, //   collect_offsets
+                    DataType.String, //       filename
+                    DataType.External, //     streams
+                    DataType.StringArray, //  watchfor
                 ],
             },
         }
@@ -111,31 +101,23 @@ export default class LabrecorderAdapter implements Labrecorder {
 export interface Labrecorder {
     createRecording(
         filename: string,
-        streams: LibxdfStreamInfo[],
-        watchFor: string[],
-        syncOptions: Map<string, string>,
-        collectOffsets: boolean
-    ): JsExternal
+        streams: BoundStreamInfo[],
+        watchFor: string[]
+    ): BoundRecording
 }
 
-export type LabrecorderAdapterConstructor = new () => Labrecorder
+export type LabrecorderAdapterConstructor = new (
+    labrecorderPath: string
+) => Labrecorder
 
 export interface LabrecorderBindings {
-    recording_create: RecordingCreateFunction
-    recording_stop: RecordingStopFunction
-    recording_delete: RecordingDeleteFunction
+    recording_create(
+        args: [string, BoundStreamInfo[], string[]]
+    ): BoundRecording
+
+    recording_stop(args: [BoundRecording]): void
+
+    recording_delete(args: [BoundRecording]): void
 }
 
-export type RecordingCreateFunction = (
-    filename: DataType.String,
-    streams: DataType.External,
-    watchfor: DataType.External,
-    syncOptions: DataType.External,
-    collectOffsets: DataType.Boolean
-) => any
-
-export type RecordingStopFunction = (recording: BoundRecording) => void
-
-export type RecordingDeleteFunction = (recording: BoundRecording) => void
-
-export type BoundRecording = JsExternal
+export type BoundRecording = any

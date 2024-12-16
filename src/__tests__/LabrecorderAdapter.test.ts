@@ -21,10 +21,6 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
     private static readonly filename = generateId()
     private static readonly streams = [{}, {}] as LibxdfStreamInfo[]
     private static readonly watchFor = [generateId(), generateId()]
-    private static readonly syncOptions = {
-        [generateId()]: generateId(),
-    } as unknown as Map<string, string>
-    private static readonly collectOffsets = true
 
     protected static async beforeEach() {
         await super.beforeEach()
@@ -72,11 +68,9 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
                     library: 'labrecorder',
                     retType: DataType.External, // Pointer to the recording object
                     paramsType: [
-                        DataType.String, //   filename
+                        DataType.String, // filename
                         DataType.External, // streams
-                        DataType.External, // watchfor
-                        DataType.External, // syncOptions
-                        DataType.Boolean, //  collect_offsets
+                        DataType.StringArray, // watchfor
                     ],
                 },
                 recording_stop: {
@@ -103,9 +97,7 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
         this.instance.createRecording(
             this.filename,
             this.streams,
-            this.watchFor,
-            this.syncOptions,
-            this.collectOffsets
+            this.watchFor
         )
 
         assert.isEqualDeep(
@@ -114,8 +106,6 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
                 filename: this.filename,
                 streams: this.streams,
                 watchFor: this.watchFor,
-                syncOptions: this.syncOptions,
-                collectOffsets: this.collectOffsets,
             },
             'Should create a recording!'
         )
@@ -142,19 +132,11 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
 
     private static FakeBindings() {
         return {
-            recording_create: (
-                filename: DataType.String,
-                streams: DataType.External,
-                watchFor: DataType.External,
-                syncOptions: DataType.External,
-                collectOffsets: DataType.Boolean
-            ) => {
+            recording_create: ([filename, streams, watchFor]: any[]) => {
                 this.recordingCreateCalls.push({
                     filename,
                     streams,
                     watchFor,
-                    syncOptions,
-                    collectOffsets,
                 })
                 return {} as any
             },
