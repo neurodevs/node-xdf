@@ -21,14 +21,30 @@ export default class LabrecorderAdapter implements Labrecorder {
     }
 
     private loadLibrary() {
-        this.ffiRsOpen({
-            library: 'labrecorder',
-            path: this.labrecorderPath,
-        })
+        this.ffiRsOpen(this.libraryOptions)
     }
 
     private registerFunctions() {
-        this.ffiRsDefine({
+        this.ffiRsDefine(this.functions)
+    }
+
+    private get libraryOptions() {
+        return {
+            library: 'labrecorder',
+            path: this.labrecorderPath,
+        }
+    }
+
+    private get functions() {
+        return {
+            ...this.recordingCreateFunction,
+            ...this.recordingStopFunction,
+            ...this.recordingDeleteFunction,
+        }
+    }
+
+    private get recordingCreateFunction() {
+        return {
             recording_create: {
                 library: 'labrecorder',
                 retType: DataType.External, // Pointer to the recording object
@@ -40,6 +56,11 @@ export default class LabrecorderAdapter implements Labrecorder {
                     DataType.Boolean, //   collect_offsets
                 ],
             },
+        }
+    }
+
+    private get recordingStopFunction() {
+        return {
             recording_stop: {
                 library: 'labrecorder',
                 retType: DataType.Void,
@@ -47,12 +68,17 @@ export default class LabrecorderAdapter implements Labrecorder {
                     DataType.External, // Pointer to the recording object
                 ],
             },
+        }
+    }
+
+    private get recordingDeleteFunction() {
+        return {
             recording_delete: {
                 library: 'labrecorder',
                 retType: DataType.Void,
                 paramsType: [DataType.External],
             },
-        })
+        }
     }
 
     private get ffiRsOpen() {
