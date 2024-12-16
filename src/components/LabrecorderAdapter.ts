@@ -52,11 +52,8 @@ export default class LabrecorderAdapter implements Labrecorder {
         return {
             recording_create: {
                 library: 'labrecorder',
-                retType: DataType.External, // Pointer to the recording object
-                paramsType: [
-                    DataType.String, // filename
-                    DataType.StringArray, // watchfor
-                ],
+                retType: this.RecordingInstanceType,
+                paramsType: [this.FilenameType, this.WatchForType],
             },
         }
     }
@@ -66,9 +63,7 @@ export default class LabrecorderAdapter implements Labrecorder {
             recording_stop: {
                 library: 'labrecorder',
                 retType: DataType.Void,
-                paramsType: [
-                    DataType.External, // Pointer to the recording object
-                ],
+                paramsType: [this.RecordingInstanceType],
             },
         }
     }
@@ -78,7 +73,7 @@ export default class LabrecorderAdapter implements Labrecorder {
             recording_delete: {
                 library: 'labrecorder',
                 retType: DataType.Void,
-                paramsType: [DataType.External], // Pointer to the recording object
+                paramsType: [this.RecordingInstanceType],
             },
         }
     }
@@ -90,6 +85,10 @@ export default class LabrecorderAdapter implements Labrecorder {
     private get ffiRsDefine() {
         return LabrecorderAdapter.ffiRsDefine
     }
+
+    private readonly FilenameType = DataType.String
+    private readonly WatchForType = DataType.StringArray
+    private readonly RecordingInstanceType = DataType.External
 }
 
 export interface Labrecorder {
