@@ -11,11 +11,23 @@ export default class LabrecorderAdapter implements Labrecorder {
     protected constructor(labrecorderPath: string) {
         this.labrecorderPath = labrecorderPath
 
+        this.loadLibrary()
+        this.registerFunctions()
+    }
+
+    public static async Create(labrecorderPath: string) {
+        assertOptions({ labrecorderPath }, ['labrecorderPath'])
+        return new (this.Class ?? this)(labrecorderPath)
+    }
+
+    private loadLibrary() {
         this.ffiRsOpen({
             library: 'labrecorder',
             path: this.labrecorderPath,
         })
+    }
 
+    private registerFunctions() {
         this.ffiRsDefine({
             recording_create: {
                 library: 'labrecorder',
@@ -38,16 +50,9 @@ export default class LabrecorderAdapter implements Labrecorder {
             recording_delete: {
                 library: 'labrecorder',
                 retType: DataType.Void,
-                paramsType: [
-                    DataType.External, // Pointer to the recording object
-                ],
+                paramsType: [DataType.External],
             },
         })
-    }
-
-    public static async Create(labrecorderPath: string) {
-        assertOptions({ labrecorderPath }, ['labrecorderPath'])
-        return new (this.Class ?? this)(labrecorderPath)
     }
 
     private get ffiRsOpen() {
