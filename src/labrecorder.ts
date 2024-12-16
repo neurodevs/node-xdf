@@ -3,7 +3,7 @@ import LabrecorderAdapter from './components/LabrecorderAdapter'
 export async function startRecording() {
     console.log('Starting recording...')
 
-    const adapter = await LabrecorderAdapter.Create(
+    const adapter = LabrecorderAdapter.Create(
         '/opt/local/lib/liblabrecorder.dylib'
     )
 
