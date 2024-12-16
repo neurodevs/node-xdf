@@ -1,4 +1,8 @@
-import AbstractSpruceTest, { test, assert } from '@sprucelabs/test-utils'
+import AbstractSpruceTest, {
+    test,
+    assert,
+    errorAssert,
+} from '@sprucelabs/test-utils'
 import LabrecorderAdapter from '../components/LabrecorderAdapter'
 import XdfStreamRecorder, { XdfRecorder } from '../components/XdfStreamRecorder'
 import FakeLabrecorder from '../testDoubles/Labrecorder/FakeLabrecorder'
@@ -21,6 +25,18 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
     }
 
     @test()
+    protected static async throwsWithMissingRequiredOptions() {
+        const err = await assert.doesThrowAsync(() =>
+            // @ts-ignore
+            XdfStreamRecorder.Create()
+        )
+
+        errorAssert.assertError(err, 'MISSING_PARAMETERS', {
+            parameters: ['recordingPath', 'streamQueries'],
+        })
+    }
+
+    @test()
     protected static async createsLabrecorderAdapterInstance() {
         assert.isEqual(
             FakeLabrecorder.constructorCalls.length,
@@ -30,6 +46,6 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
     }
 
     private static XdfStreamRecorder() {
-        return XdfStreamRecorder.Create()
+        return XdfStreamRecorder.Create('oajsdo', [])
     }
 }

@@ -1,3 +1,4 @@
+import { assertOptions } from '@sprucelabs/schema'
 import LabrecorderAdapter from './LabrecorderAdapter'
 
 export default class XdfStreamRecorder implements XdfRecorder {
@@ -5,8 +6,13 @@ export default class XdfStreamRecorder implements XdfRecorder {
 
     protected constructor() {}
 
-    public static async Create() {
-        await LabrecorderAdapter.Create()
+    public static Create(recordingPath: string, streamQueries: any) {
+        assertOptions({ recordingPath, streamQueries }, [
+            'recordingPath',
+            'streamQueries',
+        ])
+
+        LabrecorderAdapter.Create()
         return new (this.Class ?? this)()
     }
 }

@@ -26,7 +26,7 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
         this.fakeFfiRsOpen()
         this.fakeFfiRsDefine()
 
-        this.instance = await this.LabrecorderAdapter()
+        this.instance = this.LabrecorderAdapter()
     }
 
     @test()
@@ -133,8 +133,8 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
         }
     }
 
-    private static async LabrecorderAdapter(labrecorderPath?: string) {
-        return await LabrecorderAdapter.Create(
+    private static LabrecorderAdapter(labrecorderPath?: string) {
+        return LabrecorderAdapter.Create(
             labrecorderPath ?? this.labrecorderPath
         )
     }

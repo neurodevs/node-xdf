@@ -15,7 +15,7 @@ export default class LabrecorderAdapter implements Labrecorder {
         this.registerFunctions()
     }
 
-    public static async Create(labrecorderPath?: string) {
+    public static Create(labrecorderPath?: string) {
         const path = labrecorderPath ?? '/opt/local/lib/liblabrecorder.dylib'
         return new (this.Class ?? this)(path)
     }
