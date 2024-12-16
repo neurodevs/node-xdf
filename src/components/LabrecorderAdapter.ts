@@ -1,5 +1,4 @@
 import { assertOptions } from '@sprucelabs/schema'
-import { BoundStreamInfo, StreamInfo } from '@neurodevs/node-lsl'
 import { DataType, define, open } from 'ffi-rs'
 
 export default class LabrecorderAdapter implements Labrecorder {
@@ -30,12 +29,8 @@ export default class LabrecorderAdapter implements Labrecorder {
         this.bindings = this.ffiRsDefine(this.functions)
     }
 
-    public createRecording(
-        filename: string,
-        streams: StreamInfo[],
-        watchFor: string[]
-    ) {
-        return this.bindings.recording_create([filename, streams, watchFor])
+    public createRecording(filename: string, watchFor: string[]) {
+        return this.bindings.recording_create([filename, watchFor])
     }
 
     private get libraryOptions() {
@@ -59,9 +54,8 @@ export default class LabrecorderAdapter implements Labrecorder {
                 library: 'labrecorder',
                 retType: DataType.External, // Pointer to the recording object
                 paramsType: [
-                    DataType.String, //       filename
-                    DataType.External, //     streams
-                    DataType.StringArray, //  watchfor
+                    DataType.String, // filename
+                    DataType.StringArray, // watchfor
                 ],
             },
         }
@@ -84,7 +78,7 @@ export default class LabrecorderAdapter implements Labrecorder {
             recording_delete: {
                 library: 'labrecorder',
                 retType: DataType.Void,
-                paramsType: [DataType.External],
+                paramsType: [DataType.External], // Pointer to the recording object
             },
         }
     }
@@ -99,11 +93,7 @@ export default class LabrecorderAdapter implements Labrecorder {
 }
 
 export interface Labrecorder {
-    createRecording(
-        filename: string,
-        streams: BoundStreamInfo[],
-        watchFor: string[]
-    ): BoundRecording
+    createRecording(filename: string, watchFor: string[]): BoundRecording
 }
 
 export type LabrecorderAdapterConstructor = new (
@@ -111,12 +101,8 @@ export type LabrecorderAdapterConstructor = new (
 ) => Labrecorder
 
 export interface LabrecorderBindings {
-    recording_create(
-        args: [string, BoundStreamInfo[], string[]]
-    ): BoundRecording
-
+    recording_create(args: [string, string[]]): BoundRecording
     recording_stop(args: [BoundRecording]): void
-
     recording_delete(args: [BoundRecording]): void
 }
 

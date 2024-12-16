@@ -9,7 +9,6 @@ import LabrecorderAdapter, {
     Labrecorder,
     LabrecorderBindings,
 } from '../components/LabrecorderAdapter'
-import { LibxdfStreamInfo } from '../components/LibxdfAdapter'
 
 export default class LabrecorderAdapterTest extends AbstractSpruceTest {
     private static instance: Labrecorder
@@ -19,7 +18,6 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
     private static recordingCreateCalls: any[] = []
 
     private static readonly filename = generateId()
-    private static readonly streams = [{}, {}] as LibxdfStreamInfo[]
     private static readonly watchFor = [generateId(), generateId()]
 
     protected static async beforeEach() {
@@ -69,7 +67,6 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
                     retType: DataType.External, // Pointer to the recording object
                     paramsType: [
                         DataType.String, // filename
-                        DataType.External, // streams
                         DataType.StringArray, // watchfor
                     ],
                 },
@@ -94,17 +91,12 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
 
     @test()
     protected static async createRecordingCallsBindings() {
-        this.instance.createRecording(
-            this.filename,
-            this.streams,
-            this.watchFor
-        )
+        this.instance.createRecording(this.filename, this.watchFor)
 
         assert.isEqualDeep(
             this.recordingCreateCalls[0],
             {
                 filename: this.filename,
-                streams: this.streams,
                 watchFor: this.watchFor,
             },
             'Should create a recording!'
@@ -132,10 +124,9 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
 
     private static FakeBindings() {
         return {
-            recording_create: ([filename, streams, watchFor]: any[]) => {
+            recording_create: ([filename, watchFor]: any[]) => {
                 this.recordingCreateCalls.push({
                     filename,
-                    streams,
                     watchFor,
                 })
                 return {} as any
