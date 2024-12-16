@@ -1,7 +1,6 @@
 import AbstractSpruceTest, {
     test,
     assert,
-    errorAssert,
     generateId,
 } from '@sprucelabs/test-utils'
 import { DataType, OpenParams } from 'ffi-rs'
@@ -33,18 +32,6 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
     @test()
     protected static async canCreateLabrecorderAdapter() {
         assert.isTruthy(this.instance, 'Should create an instance!')
-    }
-
-    @test()
-    protected static async throwsWithMissingRequiredOptions() {
-        const err = await assert.doesThrowAsync(
-            // @ts-ignore
-            async () => await LabrecorderAdapter.Create()
-        )
-
-        errorAssert.assertError(err, 'MISSING_PARAMETERS', {
-            parameters: ['labrecorderPath'],
-        })
     }
 
     @test()
@@ -101,6 +88,16 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
             },
             'Should create a recording!'
         )
+    }
+
+    @test()
+    protected static async defaultsToMacOsPath() {
+        const defaultLabrecorderPath = '/opt/local/lib/liblabrecorder.dylib'
+        await LabrecorderAdapter.Create()
+
+        const { path } = this.ffiRsOpenOptions as any
+
+        assert.isEqual(path, defaultLabrecorderPath)
     }
 
     private static setupFakeBindings() {

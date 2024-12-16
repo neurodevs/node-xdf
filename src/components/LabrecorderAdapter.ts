@@ -1,8 +1,7 @@
-import { assertOptions } from '@sprucelabs/schema'
 import { DataType, define, open } from 'ffi-rs'
 
 export default class LabrecorderAdapter implements Labrecorder {
-    public static Class?: LabrecorderAdapterConstructor
+    public static Class?: LabrecorderConstructor
     public static ffiRsOpen = open
     public static ffiRsDefine = define
 
@@ -16,9 +15,9 @@ export default class LabrecorderAdapter implements Labrecorder {
         this.registerFunctions()
     }
 
-    public static async Create(labrecorderPath: string) {
-        assertOptions({ labrecorderPath }, ['labrecorderPath'])
-        return new (this.Class ?? this)(labrecorderPath)
+    public static async Create(labrecorderPath?: string) {
+        const path = labrecorderPath ?? '/opt/local/lib/liblabrecorder.dylib'
+        return new (this.Class ?? this)(path)
     }
 
     private loadLibrary() {
@@ -95,7 +94,7 @@ export interface Labrecorder {
     createRecording(filename: string, watchFor: string[]): BoundRecording
 }
 
-export type LabrecorderAdapterConstructor = new (
+export type LabrecorderConstructor = new (
     labrecorderPath: string
 ) => Labrecorder
 

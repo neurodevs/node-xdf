@@ -24,6 +24,7 @@ export default class XdfFileLoaderTest extends AbstractSpruceTest {
         FakeLibxdf.resetTestDouble()
 
         MangledNameExtractorImpl.Class = FakeMangledNameExtractor
+        FakeMangledNameExtractor.clearTestDouble()
 
         XdfFileLoader.Class = SpyXdfLoader
 
