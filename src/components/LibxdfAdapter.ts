@@ -88,7 +88,7 @@ export default class LibxdfAdapter implements Libxdf {
     }
 
     private static async loadMangledNameMap(libxdfPath: string) {
-        const extractor = MangledNameExtractorImpl.Create()
+        const extractor = this.MangledNameExtractor()
         return await extractor.extract(libxdfPath, this.unmangledNames)
     }
 
@@ -129,6 +129,10 @@ export default class LibxdfAdapter implements Libxdf {
 
     private get loadXdfName() {
         return LibxdfAdapter.loadXdfName
+    }
+
+    private static MangledNameExtractor() {
+        return MangledNameExtractorImpl.Create()
     }
 }
 
