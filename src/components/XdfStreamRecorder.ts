@@ -6,7 +6,7 @@ export default class XdfStreamRecorder implements XdfRecorder {
     protected constructor() {}
 
     public static async Create() {
-        await LabrecorderAdapter.Create('oiaushdoua')
+        await LabrecorderAdapter.Create()
         return new (this.Class ?? this)()
     }
 }
