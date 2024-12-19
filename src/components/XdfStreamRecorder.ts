@@ -32,6 +32,10 @@ export default class XdfStreamRecorder implements XdfRecorder {
     }
 
     public start() {
+        this.createLabrecorderRecording()
+    }
+
+    private createLabrecorderRecording() {
         this.labrecorder.createRecording(this.recordingPath, this.streamQueries)
     }
 }
