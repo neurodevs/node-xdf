@@ -4,14 +4,20 @@ import AbstractSpruceTest, {
     errorAssert,
     generateId,
 } from '@sprucelabs/test-utils'
+import XdfFileLoader from '../components/XdfFileLoader'
 import XdfStreamReplayer, { XdfReplayer } from '../components/XdfStreamReplayer'
+import FakeXdfLoader from '../testDoubles/XdfLoader/FakeXdfLoader'
 
 export default class XdfStreamReplayerTest extends AbstractSpruceTest {
     private static instance: XdfReplayer
 
     protected static async beforeEach() {
         await super.beforeEach()
-        this.instance = this.XdfStreamReplayer()
+
+        XdfFileLoader.Class = FakeXdfLoader
+        FakeXdfLoader.resetTestDouble()
+
+        this.instance = await this.XdfStreamReplayer()
     }
 
     @test()
@@ -21,18 +27,27 @@ export default class XdfStreamReplayerTest extends AbstractSpruceTest {
 
     @test()
     protected static async throwsWithMissingRequiredOptions() {
-        const err = assert.doesThrow(() => {
+        const err = await assert.doesThrowAsync(async () => {
             // @ts-ignore
-            XdfStreamReplayer.Create()
+            await XdfStreamReplayer.Create()
         })
         errorAssert.assertError(err, 'MISSING_PARAMETERS', {
             parameters: ['filePath'],
         })
     }
 
+    @test()
+    protected static async createsXdfFileLoader() {
+        assert.isEqual(
+            FakeXdfLoader.numConstructorCalls,
+            1,
+            'Should create an XdfFileLoader!'
+        )
+    }
+
     private static readonly filePath = generateId()
 
-    private static XdfStreamReplayer(filePath = this.filePath) {
+    private static async XdfStreamReplayer(filePath = this.filePath) {
         return XdfStreamReplayer.Create(filePath)
     }
 }
