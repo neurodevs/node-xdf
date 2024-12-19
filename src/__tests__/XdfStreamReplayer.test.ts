@@ -45,6 +45,15 @@ export default class XdfStreamReplayerTest extends AbstractSpruceTest {
         )
     }
 
+    @test()
+    protected static async callsLoadWithFilePath() {
+        assert.isEqual(
+            FakeXdfLoader.callsToLoad[0]?.filePath,
+            this.filePath,
+            'Should call load with the file path!'
+        )
+    }
+
     private static readonly filePath = generateId()
 
     private static async XdfStreamReplayer(filePath = this.filePath) {

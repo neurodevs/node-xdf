@@ -9,7 +9,8 @@ export default class XdfStreamReplayer implements XdfReplayer {
     public static async Create(filePath: string) {
         assertOptions({ filePath }, ['filePath'])
 
-        await XdfFileLoader.Create()
+        const loader = await XdfFileLoader.Create()
+        await loader.load(filePath)
 
         return new (this.Class ?? this)()
     }
