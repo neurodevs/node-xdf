@@ -2,6 +2,7 @@ import AbstractSpruceTest, {
     test,
     assert,
     errorAssert,
+    generateId,
 } from '@sprucelabs/test-utils'
 import LabrecorderAdapter from '../components/LabrecorderAdapter'
 import XdfStreamRecorder, { XdfRecorder } from '../components/XdfStreamRecorder'
@@ -45,7 +46,24 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
         )
     }
 
+    @test()
+    protected static async callingStartCallsCreateRecording() {
+        this.instance.start()
+
+        assert.isEqualDeep(
+            FakeLabrecorder.createRecordingCalls[0],
+            {
+                filename: this.recordingPath,
+                watchFor: this.streamQueries,
+            },
+            'Should have called createRecording!'
+        )
+    }
+
+    private static readonly recordingPath = generateId()
+    private static readonly streamQueries = [generateId(), generateId()]
+
     private static XdfStreamRecorder() {
-        return XdfStreamRecorder.Create('oajsdo', [])
+        return XdfStreamRecorder.Create(this.recordingPath, this.streamQueries)
     }
 }
