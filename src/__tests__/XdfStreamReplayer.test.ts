@@ -70,17 +70,34 @@ export default class XdfStreamReplayerTest extends AbstractSpruceTest {
         await this.instance.replay()
     }
 
-    private static readonly filePath = generateId()
+    private static generateFakeStreams(numStreams = 2) {
+        return Array.from({ length: numStreams }, () =>
+            this.generateFakeStream()
+        )
+    }
 
-    private static readonly fakeStreams = [
-        this.generateFakeStream(),
-        this.generateFakeStream(),
-    ]
+    private static generateFakeStream() {
+        return {
+            type: generateId(),
+            nominalSampleRateHz: 100 * Math.random(),
+            data: this.generateRandomData(),
+        } as XdfStream
+    }
+
+    private static generateRandomData(numChannels = 2) {
+        return Array.from({ length: numChannels }, () =>
+            this.generateRandomChannelData()
+        )
+    }
+
+    private static generateRandomChannelData(numSamplesPerChannel = 3) {
+        return Array.from({ length: numSamplesPerChannel }, () => Math.random())
+    }
 
     private static fakeXdfLoader() {
         XdfFileLoader.Class = FakeXdfLoader
-
         FakeXdfLoader.resetTestDouble()
+
         FakeXdfLoader.fakeResponse = {
             path: this.filePath,
             streams: this.fakeStreams,
@@ -88,17 +105,13 @@ export default class XdfStreamReplayerTest extends AbstractSpruceTest {
         }
     }
 
-    private static generateFakeStream() {
-        return {
-            type: generateId(),
-            nominalSampleRateHz: 100 * Math.random(),
-        } as XdfStream
-    }
-
     private static fakeLslOutlet() {
         LslOutletImpl.Class = FakeLslOutlet
         FakeLslOutlet.resetTestDouble()
     }
+
+    private static readonly filePath = generateId()
+    private static readonly fakeStreams = this.generateFakeStreams()
 
     private static async XdfStreamReplayer(filePath = this.filePath) {
         return XdfStreamReplayer.Create(filePath)
