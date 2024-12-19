@@ -36,7 +36,7 @@ export default class XdfStreamReplayer implements XdfReplayer {
             unit: generateId(),
             channelFormat: 'float32',
             chunkSize: 1,
-            maxBuffered: 1,
+            maxBuffered: 0,
         })
     }
 }
