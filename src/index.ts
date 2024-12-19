@@ -18,3 +18,6 @@ export * from './testDoubles/XdfLoader/FakeXdfLoader'
 
 export { default as XdfStreamRecorder } from './components/XdfStreamRecorder'
 export * from './components/XdfStreamRecorder'
+
+export { default as XdfStreamReplayer } from './components/XdfStreamReplayer'
+export * from './components/XdfStreamReplayer'
