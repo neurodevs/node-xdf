@@ -11,17 +11,22 @@ export default class XdfStreamReplayer implements XdfReplayer {
     public static async Create(filePath: string) {
         assertOptions({ filePath }, ['filePath'])
 
-        const loader = await XdfFileLoader.Create()
-        const { streams } = await loader.load(filePath)
-
-        for (const stream of streams) {
-            await this.LslOutlet(stream)
-        }
+        const { streams } = await this.loadXdfFile(filePath)
+        await this.createLslOutlets(streams)
 
         return new (this.Class ?? this)()
     }
 
     public async replay() {}
+
+    private static async loadXdfFile(filePath: string) {
+        const loader = await XdfFileLoader.Create()
+        return await loader.load(filePath)
+    }
+
+    private static createLslOutlets(streams: XdfStream[]) {
+        return Promise.all(streams.map((stream) => this.LslOutlet(stream)))
+    }
 
     private static async LslOutlet(stream: XdfStream) {
         const { type, nominalSampleRateHz } = stream

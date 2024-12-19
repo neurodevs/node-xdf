@@ -79,6 +79,7 @@ export default class XdfStreamReplayerTest extends AbstractSpruceTest {
 
     private static fakeXdfLoader() {
         XdfFileLoader.Class = FakeXdfLoader
+
         FakeXdfLoader.resetTestDouble()
         FakeXdfLoader.fakeResponse = {
             path: this.filePath,
