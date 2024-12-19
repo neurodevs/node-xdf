@@ -4,7 +4,8 @@ import AbstractSpruceTest, {
     errorAssert,
     generateId,
 } from '@sprucelabs/test-utils'
-import XdfFileLoader from '../components/XdfFileLoader'
+import { FakeLslOutlet, LslOutletImpl } from '@neurodevs/node-lsl'
+import XdfFileLoader, { XdfStream } from '../components/XdfFileLoader'
 import XdfStreamReplayer, { XdfReplayer } from '../components/XdfStreamReplayer'
 import FakeXdfLoader from '../testDoubles/XdfLoader/FakeXdfLoader'
 
@@ -14,8 +15,8 @@ export default class XdfStreamReplayerTest extends AbstractSpruceTest {
     protected static async beforeEach() {
         await super.beforeEach()
 
-        XdfFileLoader.Class = FakeXdfLoader
-        FakeXdfLoader.resetTestDouble()
+        this.fakeXdfLoader()
+        this.fakeLslOutlet()
 
         this.instance = await this.XdfStreamReplayer()
     }
@@ -37,17 +38,6 @@ export default class XdfStreamReplayerTest extends AbstractSpruceTest {
     }
 
     @test()
-    protected static async replayThrowsWithMissingRequiredOptions() {
-        const err = await assert.doesThrowAsync(async () => {
-            // @ts-ignore
-            await this.instance.replay()
-        })
-        errorAssert.assertError(err, 'MISSING_PARAMETERS', {
-            parameters: ['streamQueries'],
-        })
-    }
-
-    @test()
     protected static async createsXdfFileLoader() {
         assert.isEqual(
             FakeXdfLoader.numConstructorCalls,
@@ -65,7 +55,49 @@ export default class XdfStreamReplayerTest extends AbstractSpruceTest {
         )
     }
 
+    @test()
+    protected static async createsLslOutletForEachStream() {
+        await this.replay()
+
+        assert.isEqual(
+            FakeLslOutlet.callsToConstructor.length,
+            this.fakeStreams.length,
+            'Should create an LSL outlet for each stream!'
+        )
+    }
+
+    private static async replay() {
+        await this.instance.replay()
+    }
+
     private static readonly filePath = generateId()
+
+    private static readonly fakeStreams = [
+        this.generateFakeStream(),
+        this.generateFakeStream(),
+    ]
+
+    private static fakeXdfLoader() {
+        XdfFileLoader.Class = FakeXdfLoader
+        FakeXdfLoader.resetTestDouble()
+        FakeXdfLoader.fakeResponse = {
+            path: this.filePath,
+            streams: this.fakeStreams,
+            events: [],
+        }
+    }
+
+    private static generateFakeStream() {
+        return {
+            type: generateId(),
+            nominalSampleRateHz: 100 * Math.random(),
+        } as XdfStream
+    }
+
+    private static fakeLslOutlet() {
+        LslOutletImpl.Class = FakeLslOutlet
+        FakeLslOutlet.resetTestDouble()
+    }
 
     private static async XdfStreamReplayer(filePath = this.filePath) {
         return XdfStreamReplayer.Create(filePath)

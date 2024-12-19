@@ -1,5 +1,7 @@
 import { assertOptions } from '@sprucelabs/schema'
-import XdfFileLoader from './XdfFileLoader'
+import { generateId } from '@sprucelabs/test-utils'
+import { LslOutletImpl } from '@neurodevs/node-lsl'
+import XdfFileLoader, { XdfStream } from './XdfFileLoader'
 
 export default class XdfStreamReplayer implements XdfReplayer {
     public static Class?: XdfReplayerConstructor
@@ -10,18 +12,37 @@ export default class XdfStreamReplayer implements XdfReplayer {
         assertOptions({ filePath }, ['filePath'])
 
         const loader = await XdfFileLoader.Create()
-        await loader.load(filePath)
+        const { streams } = await loader.load(filePath)
+
+        for (const stream of streams) {
+            await this.LslOutlet(stream)
+        }
 
         return new (this.Class ?? this)()
     }
 
-    public async replay(streamQueries: string[]) {
-        assertOptions({ streamQueries }, ['streamQueries'])
+    public async replay() {}
+
+    private static async LslOutlet(stream: XdfStream) {
+        const { type, nominalSampleRateHz } = stream
+
+        await LslOutletImpl.Create({
+            type,
+            sampleRate: nominalSampleRateHz,
+            channelNames: [],
+            name: generateId(),
+            sourceId: generateId(),
+            manufacturer: generateId(),
+            unit: generateId(),
+            channelFormat: 'float32',
+            chunkSize: 1,
+            maxBuffered: 1,
+        })
     }
 }
 
 export interface XdfReplayer {
-    replay(streamQueries: string[]): Promise<void>
+    replay(): Promise<void>
 }
 
 export type XdfReplayerConstructor = new () => XdfReplayer
