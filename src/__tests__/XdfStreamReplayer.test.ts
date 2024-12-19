@@ -1,4 +1,9 @@
-import AbstractSpruceTest, { test, assert } from '@sprucelabs/test-utils'
+import AbstractSpruceTest, {
+    test,
+    assert,
+    errorAssert,
+    generateId,
+} from '@sprucelabs/test-utils'
 import XdfStreamReplayer, { XdfReplayer } from '../components/XdfStreamReplayer'
 
 export default class XdfStreamReplayerTest extends AbstractSpruceTest {
@@ -14,7 +19,20 @@ export default class XdfStreamReplayerTest extends AbstractSpruceTest {
         assert.isTruthy(this.instance, 'Should create an instance!')
     }
 
-    private static XdfStreamReplayer() {
-        return XdfStreamReplayer.Create()
+    @test()
+    protected static async throwsWithMissingRequiredOptions() {
+        const err = assert.doesThrow(() => {
+            // @ts-ignore
+            XdfStreamReplayer.Create()
+        })
+        errorAssert.assertError(err, 'MISSING_PARAMETERS', {
+            parameters: ['filePath'],
+        })
+    }
+
+    private static readonly filePath = generateId()
+
+    private static XdfStreamReplayer(filePath = this.filePath) {
+        return XdfStreamReplayer.Create(filePath)
     }
 }

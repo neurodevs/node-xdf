@@ -1,9 +1,12 @@
+import { assertOptions } from '@sprucelabs/schema'
+
 export default class XdfStreamReplayer implements XdfReplayer {
     public static Class?: XdfReplayerConstructor
 
     protected constructor() {}
 
-    public static Create() {
+    public static Create(filePath: string) {
+        assertOptions({ filePath }, ['filePath'])
         return new (this.Class ?? this)()
     }
 }
