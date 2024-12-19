@@ -22,7 +22,7 @@ export default class XdfStreamRecorder implements XdfRecorder {
             'streamQueries',
         ])
 
-        const labrecorder = LabrecorderAdapter.Create()
+        const labrecorder = this.LabrecorderAdapter()
 
         return new (this.Class ?? this)({
             labrecorder,
@@ -37,6 +37,10 @@ export default class XdfStreamRecorder implements XdfRecorder {
 
     private createLabrecorderRecording() {
         this.labrecorder.createRecording(this.recordingPath, this.streamQueries)
+    }
+
+    private static LabrecorderAdapter() {
+        return LabrecorderAdapter.Create()
     }
 }
 
