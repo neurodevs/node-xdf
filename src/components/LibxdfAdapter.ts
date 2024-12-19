@@ -99,6 +99,10 @@ export default class LibxdfAdapter implements Libxdf {
         const serializedData = mangledFunc([path])
         const parsedData = JSON.parse(serializedData) as LibxdfFile
 
+        if (!parsedData.events) {
+            parsedData.events = []
+        }
+
         const mappedStreams = parsedData.streams.map((stream) => ({
             id: stream.stream_id,
             name: stream.stream_info.stream_name,

@@ -145,6 +145,12 @@ export default class LibxdfTest extends AbstractSpruceTest {
         })
     }
 
+    @test()
+    protected static async doesNotThrowIfEventsUndefined() {
+        this.fakeSerializedXdf = `{"streams": [{"stream_id": ${this.fakeStreamId}, "time_series": [], "time_stamps": [], "stream_info": {"channel_count": ${this.fakeChannelCount}, "channel_format": "${this.fakeChannelFormat}", "nominal_srate": ${this.fakeNominalSampleRate}, "stream_name": "${this.fakeStreamName}", "stream_type": "${this.fakeStreamType}"}}]}`
+        this.loadXdf()
+    }
+
     private static setFakeExtractResult(
         mangledLoadXdfName = this.mangledLoadXdfName
     ) {
@@ -197,7 +203,7 @@ export default class LibxdfTest extends AbstractSpruceTest {
     private static readonly fakeEventName = generateId()
     private static readonly fakeEventTimestamp = 0
 
-    private static readonly fakeSerializedXdf = `{"streams": [{"stream_id": ${this.fakeStreamId}, "time_series": [], "time_stamps": [], "stream_info": {"channel_count": ${this.fakeChannelCount}, "channel_format": "${this.fakeChannelFormat}", "nominal_srate": ${this.fakeNominalSampleRate}, "stream_name": "${this.fakeStreamName}", "stream_type": "${this.fakeStreamType}"}}], "events": [{"stream_id": ${this.fakeStreamId}, "event_name": "${this.fakeEventName}", "event_timestamp": ${this.fakeEventTimestamp}}]}`
+    private static fakeSerializedXdf = `{"streams": [{"stream_id": ${this.fakeStreamId}, "time_series": [], "time_stamps": [], "stream_info": {"channel_count": ${this.fakeChannelCount}, "channel_format": "${this.fakeChannelFormat}", "nominal_srate": ${this.fakeNominalSampleRate}, "stream_name": "${this.fakeStreamName}", "stream_type": "${this.fakeStreamType}"}}], "events": [{"stream_id": ${this.fakeStreamId}, "event_name": "${this.fakeEventName}", "event_timestamp": ${this.fakeEventTimestamp}}]}`
 
     private static readonly fakeParsedXdf: XdfFile = {
         path: this.path,
