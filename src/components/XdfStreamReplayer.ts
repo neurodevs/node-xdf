@@ -1,40 +1,75 @@
 import { assertOptions } from '@sprucelabs/schema'
 import { generateId } from '@sprucelabs/test-utils'
-import { LslOutletImpl } from '@neurodevs/node-lsl'
-import XdfFileLoader, { XdfStream } from './XdfFileLoader'
+import { LslOutlet, LslOutletImpl } from '@neurodevs/node-lsl'
+import XdfFileLoader, { XdfFile, XdfStream } from './XdfFileLoader'
 
 export default class XdfStreamReplayer implements XdfReplayer {
     public static Class?: XdfReplayerConstructor
 
-    protected constructor() {}
+    private xdfFile: XdfFile
+    private outlets: LslOutlet[]
+
+    protected constructor(xdfFile: XdfFile, outlets: LslOutlet[]) {
+        this.xdfFile = xdfFile
+        this.outlets = outlets
+    }
 
     public static async Create(filePath: string) {
         assertOptions({ filePath }, ['filePath'])
 
-        const { streams } = await this.loadXdfFile(filePath)
-        await this.createLslOutlets(streams)
+        const xdfFile = await this.loadXdfFile(filePath)
+        const outlets = await this.createLslOutlets(xdfFile)
 
-        return new (this.Class ?? this)()
+        return new (this.Class ?? this)(xdfFile, outlets)
     }
 
-    public async replay() {}
+    public async replay() {
+        await Promise.all(this.streamReplayTasks)
+    }
+
+    private get streamReplayTasks() {
+        return this.streams.map((stream, streamIdx) =>
+            this.replayFor(stream, streamIdx)
+        )
+    }
+
+    private replayFor(stream: XdfStream, streamIdx: number) {
+        const samples = this.generateSamplesFrom(stream)
+
+        return samples.map((sample) =>
+            this.outlets[streamIdx].pushSample(sample)
+        )
+    }
+
+    private generateSamplesFrom(stream: XdfStream) {
+        const firstChannelLength = stream.data[0]?.length
+
+        return Array.from({ length: firstChannelLength }, (_, i) =>
+            stream.data.map((channel) => channel[i])
+        )
+    }
+
+    private get streams() {
+        return this.xdfFile.streams
+    }
 
     private static async loadXdfFile(filePath: string) {
         const loader = await XdfFileLoader.Create()
         return await loader.load(filePath)
     }
 
-    private static createLslOutlets(streams: XdfStream[]) {
+    private static createLslOutlets(xdfFile: XdfFile) {
+        const { streams } = xdfFile
         return Promise.all(streams.map((stream) => this.LslOutlet(stream)))
     }
 
     private static async LslOutlet(stream: XdfStream) {
         const { type, nominalSampleRateHz } = stream
 
-        await LslOutletImpl.Create({
+        return await LslOutletImpl.Create({
             type,
             sampleRate: nominalSampleRateHz,
-            channelNames: [],
+            channelNames: [generateId()],
             name: generateId(),
             sourceId: generateId(),
             manufacturer: generateId(),

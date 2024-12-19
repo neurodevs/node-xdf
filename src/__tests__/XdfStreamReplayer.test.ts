@@ -66,11 +66,22 @@ export default class XdfStreamReplayerTest extends AbstractSpruceTest {
         )
     }
 
+    @test()
+    protected static async callsPushSampleCorrectTotalTimes() {
+        await this.replay()
+
+        assert.isEqual(
+            FakeLslOutlet.callsToPushSample.length,
+            this.numStreams * this.numSamplesPerChannel,
+            'Should call pushSample the correct number of times!'
+        )
+    }
+
     private static async replay() {
         await this.instance.replay()
     }
 
-    private static generateFakeStreams(numStreams = 2) {
+    private static generateFakeStreams(numStreams = this.numStreams) {
         return Array.from({ length: numStreams }, () =>
             this.generateFakeStream()
         )
@@ -84,13 +95,15 @@ export default class XdfStreamReplayerTest extends AbstractSpruceTest {
         } as XdfStream
     }
 
-    private static generateRandomData(numChannels = 2) {
+    private static generateRandomData(numChannels = this.numChannelsPerStream) {
         return Array.from({ length: numChannels }, () =>
             this.generateRandomChannelData()
         )
     }
 
-    private static generateRandomChannelData(numSamplesPerChannel = 3) {
+    private static generateRandomChannelData(
+        numSamplesPerChannel = this.numSamplesPerChannel
+    ) {
         return Array.from({ length: numSamplesPerChannel }, () => Math.random())
     }
 
@@ -111,6 +124,9 @@ export default class XdfStreamReplayerTest extends AbstractSpruceTest {
     }
 
     private static readonly filePath = generateId()
+    private static readonly numStreams = 2
+    private static readonly numChannelsPerStream = 3
+    private static readonly numSamplesPerChannel = 4
     private static readonly fakeStreams = this.generateFakeStreams()
 
     private static async XdfStreamReplayer(filePath = this.filePath) {
