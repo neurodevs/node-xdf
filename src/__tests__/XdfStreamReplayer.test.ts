@@ -26,13 +26,24 @@ export default class XdfStreamReplayerTest extends AbstractSpruceTest {
     }
 
     @test()
-    protected static async throwsWithMissingRequiredOptions() {
+    protected static async createThrowsWithMissingRequiredOptions() {
         const err = await assert.doesThrowAsync(async () => {
             // @ts-ignore
             await XdfStreamReplayer.Create()
         })
         errorAssert.assertError(err, 'MISSING_PARAMETERS', {
             parameters: ['filePath'],
+        })
+    }
+
+    @test()
+    protected static async replayThrowsWithMissingRequiredOptions() {
+        const err = await assert.doesThrowAsync(async () => {
+            // @ts-ignore
+            await this.instance.replay()
+        })
+        errorAssert.assertError(err, 'MISSING_PARAMETERS', {
+            parameters: ['streamQueries'],
         })
     }
 

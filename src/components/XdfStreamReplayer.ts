@@ -14,8 +14,14 @@ export default class XdfStreamReplayer implements XdfReplayer {
 
         return new (this.Class ?? this)()
     }
+
+    public async replay(streamQueries: string[]) {
+        assertOptions({ streamQueries }, ['streamQueries'])
+    }
 }
 
-export interface XdfReplayer {}
+export interface XdfReplayer {
+    replay(streamQueries: string[]): Promise<void>
+}
 
 export type XdfReplayerConstructor = new () => XdfReplayer
