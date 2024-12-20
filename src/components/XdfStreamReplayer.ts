@@ -37,11 +37,12 @@ export default class XdfStreamReplayer implements XdfReplayer {
         const samples = this.generateSamplesFrom(stream)
         const outlet = this.outlets[streamIdx]
 
-        const { nominalSampleRateHz: hz } = stream
+        const { nominalSampleRateHz } = stream
+        const msBetweenSamples = 1000 / nominalSampleRateHz
 
         for (const sample of samples) {
             outlet.pushSample(sample)
-            await this.waitFor(1000 / hz)
+            await this.waitFor(msBetweenSamples)
         }
     }
 
