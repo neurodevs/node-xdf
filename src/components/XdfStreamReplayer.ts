@@ -54,7 +54,7 @@ export default class XdfStreamReplayer implements XdfReplayer {
     }
 
     private generateSamplesFrom(stream: XdfStream) {
-        const firstChannelLength = stream.data[0]?.length
+        const firstChannelLength = stream.data?.[0]?.length
 
         return Array.from({ length: firstChannelLength }, (_, i) =>
             stream.data.map((channel) => channel[i])
