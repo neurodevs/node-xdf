@@ -93,8 +93,24 @@ export default class XdfStreamReplayerTest extends AbstractSpruceTest {
         )
     }
 
-    private static async replay() {
-        await this.instance.replay()
+    @test()
+    protected static async exitsEarlyWithOptionalArg() {
+        const replayForMs = 10
+
+        const startMs = Date.now()
+        await this.replay(replayForMs)
+        const endMs = Date.now()
+
+        assert.isBetween(
+            endMs - startMs,
+            0.7 * replayForMs,
+            1.3 * replayForMs,
+            'Should exit early with optional argument!'
+        )
+    }
+
+    private static async replay(forMs?: number) {
+        await this.instance.replay(forMs)
     }
 
     private static generateFakeStreams(numStreams = this.numStreams) {
