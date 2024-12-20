@@ -28,17 +28,21 @@ export default class XdfStreamReplayer implements XdfReplayer {
     }
 
     private get streamReplayTasks() {
-        return this.streams.map((stream, streamIdx) =>
-            this.replayFor(stream, streamIdx)
+        return this.streams.map(
+            async (stream, streamIdx) => await this.replayFor(stream, streamIdx)
         )
     }
 
-    private replayFor(stream: XdfStream, streamIdx: number) {
+    private async replayFor(stream: XdfStream, streamIdx: number) {
         const samples = this.generateSamplesFrom(stream)
+        const outlet = this.outlets[streamIdx]
 
-        return samples.map((sample) =>
-            this.outlets[streamIdx].pushSample(sample)
-        )
+        const { nominalSampleRateHz: hz } = stream
+
+        for (const sample of samples) {
+            outlet.pushSample(sample)
+            await this.waitFor(1000 / hz)
+        }
     }
 
     private generateSamplesFrom(stream: XdfStream) {
@@ -47,6 +51,10 @@ export default class XdfStreamReplayer implements XdfReplayer {
         return Array.from({ length: firstChannelLength }, (_, i) =>
             stream.data.map((channel) => channel[i])
         )
+    }
+
+    private async waitFor(ms: number) {
+        await new Promise((resolve) => setTimeout(resolve, 1000 / ms))
     }
 
     private get streams() {
@@ -85,4 +93,7 @@ export interface XdfReplayer {
     replay(): Promise<void>
 }
 
-export type XdfReplayerConstructor = new () => XdfReplayer
+export type XdfReplayerConstructor = new (
+    xdfFile: XdfFile,
+    outlets: LslOutlet[]
+) => XdfReplayer

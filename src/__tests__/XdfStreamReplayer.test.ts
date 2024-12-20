@@ -77,6 +77,22 @@ export default class XdfStreamReplayerTest extends AbstractSpruceTest {
         )
     }
 
+    @test()
+    protected static async waitsBetweenSamplesAtNominalSampleRate() {
+        const startMs = Date.now()
+        await this.replay()
+        const endMs = Date.now()
+
+        const expectedMs = this.msBetweenSamples * this.numSamplesPerChannel
+        const actualMs = endMs - startMs
+
+        assert.isAbove(
+            actualMs,
+            expectedMs,
+            'Should wait between samples at nominal sample rate!'
+        )
+    }
+
     private static async replay() {
         await this.instance.replay()
     }
@@ -90,7 +106,7 @@ export default class XdfStreamReplayerTest extends AbstractSpruceTest {
     private static generateFakeStream() {
         return {
             type: generateId(),
-            nominalSampleRateHz: 100 * Math.random(),
+            nominalSampleRateHz: this.nominalSampleRateHz,
             data: this.generateRandomData(),
         } as XdfStream
     }
@@ -127,6 +143,8 @@ export default class XdfStreamReplayerTest extends AbstractSpruceTest {
     private static readonly numStreams = 2
     private static readonly numChannelsPerStream = 3
     private static readonly numSamplesPerChannel = 4
+    private static readonly nominalSampleRateHz = 200
+    private static readonly msBetweenSamples = 1000 / this.nominalSampleRateHz
     private static readonly fakeStreams = this.generateFakeStreams()
 
     private static async XdfStreamReplayer(filePath = this.filePath) {
