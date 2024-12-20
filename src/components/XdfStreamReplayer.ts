@@ -55,7 +55,7 @@ export default class XdfStreamReplayer implements XdfReplayer {
     }
 
     private async waitFor(ms: number) {
-        await new Promise((resolve) => setTimeout(resolve, 1000 / ms))
+        await new Promise((resolve) => setTimeout(resolve, ms))
     }
 
     private get streams() {
