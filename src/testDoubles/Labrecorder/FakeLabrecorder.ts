@@ -1,4 +1,7 @@
-import { Labrecorder } from '../../components/LabrecorderAdapter'
+import {
+    BoundRecording,
+    Labrecorder,
+} from '../../components/LabrecorderAdapter'
 
 export default class FakeLabrecorder implements Labrecorder {
     public static constructorCalls: string[] = []
@@ -10,6 +13,7 @@ export default class FakeLabrecorder implements Labrecorder {
 
     public createRecording(filename: string, watchFor: string[]) {
         this.createRecordingCalls.push({ filename, watchFor })
+        return {} as BoundRecording
     }
 
     private get constructorCalls() {
