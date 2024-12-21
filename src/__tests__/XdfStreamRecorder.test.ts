@@ -48,7 +48,7 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
 
     @test()
     protected static async callingStartCallsCreateRecording() {
-        this.instance.start()
+        this.start()
 
         assert.isEqualDeep(
             FakeLabrecorder.createRecordingCalls[0],
@@ -58,6 +58,10 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
             },
             'Should have called createRecording!'
         )
+    }
+
+    private static start() {
+        this.instance.start()
     }
 
     private static readonly recordingPath = generateId()
