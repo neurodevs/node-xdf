@@ -67,6 +67,35 @@ export default class XdfStreamReplayerTest extends AbstractSpruceTest {
     }
 
     @test()
+    protected static async createsLslOutletsWithCorrectOptions() {
+        await this.replay()
+
+        this.fakeStreams.forEach((stream, i) => {
+            const expected = {
+                type: stream.type,
+                name: stream.type,
+                sourceId: stream.type,
+                sampleRate: stream.nominalSampleRateHz,
+                channelNames: Array.from(
+                    { length: stream.channelCount },
+                    (_, i) => `${stream.type}_channel_${i}`
+                ),
+                channelFormat: 'float32',
+                chunkSize: 1,
+                maxBuffered: 0,
+            }
+
+            const actual = FakeLslOutlet.callsToConstructor[i].options
+
+            assert.doesInclude(
+                actual,
+                expected,
+                'Should create LSL outlets with correct options!'
+            )
+        })
+    }
+
+    @test()
     protected static async callsPushSampleCorrectTotalTimes() {
         await this.replay()
 
@@ -121,7 +150,7 @@ export default class XdfStreamReplayerTest extends AbstractSpruceTest {
 
     private static generateFakeStream() {
         return {
-            type: generateId(),
+            type: this.streamType,
             nominalSampleRateHz: this.nominalSampleRateHz,
             data: this.generateRandomData(),
         } as XdfStream
@@ -156,6 +185,7 @@ export default class XdfStreamReplayerTest extends AbstractSpruceTest {
     }
 
     private static readonly filePath = generateId()
+    private static readonly streamType = generateId()
     private static readonly numStreams = 2
     private static readonly numChannelsPerStream = 3
     private static readonly numSamplesPerChannel = 4
