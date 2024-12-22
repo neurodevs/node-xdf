@@ -37,6 +37,7 @@ export default class LabrecorderAdapter implements Labrecorder {
     }
 
     public deleteRecording(recording: BoundRecording) {
+        this.bindings.recording_stop([recording])
         this.bindings.recording_delete([recording])
     }
 

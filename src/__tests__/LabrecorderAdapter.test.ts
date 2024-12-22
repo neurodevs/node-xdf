@@ -106,21 +106,41 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
     @test()
     protected static async stopRecordingCallsBindings() {
         const recording = this.createRecording()
-        this.instance.stopRecording(recording)
+        this.stopRecording(recording)
 
         assert.isEqualDeep(this.callsToRecordingStop[0], { recording })
     }
 
     @test()
     protected static async deleteRecordingCallsBindings() {
-        const recording = this.createRecording()
-        this.instance.deleteRecording(recording)
+        const recording = this.createAndDeleteRecording()
 
         assert.isEqualDeep(this.callsToRecordingDelete[0], { recording })
     }
 
+    @test()
+    protected static async callingDeleteFirstCallsStop() {
+        const recording = this.createAndDeleteRecording()
+
+        assert.isEqualDeep(this.callsToRecordingStop[0], { recording })
+    }
+
+    private static createAndDeleteRecording() {
+        const recording = this.createRecording()
+        this.deleteRecording(recording)
+        return recording
+    }
+
     private static createRecording() {
         this.instance.createRecording(this.filename, this.watchFor)
+    }
+
+    private static stopRecording(recording: BoundRecording) {
+        this.instance.stopRecording(recording)
+    }
+
+    private static deleteRecording(recording: BoundRecording) {
+        this.instance.deleteRecording(recording)
     }
 
     private static setupFakeBindings() {
@@ -143,6 +163,10 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
     private static readonly labrecorderPath = generateId()
 
     private static FakeBindings() {
+        this.callsToRecordingCreate = []
+        this.callsToRecordingStop = []
+        this.callsToRecordingDelete = []
+
         return {
             recording_create: ([filename, watchFor]: any) => {
                 this.callsToRecordingCreate.push({
