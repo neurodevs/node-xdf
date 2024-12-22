@@ -65,18 +65,18 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
     }
 
     @test()
-    protected static async callingStopCallsStopRecording() {
+    protected static async callingStopCallsDeleteRecording() {
         this.startRecorder()
         this.stopRecorder()
 
         const recording = this.instance.getRecording()
 
         assert.isEqualDeep(
-            FakeLabrecorder.stopRecordingCalls[0],
+            FakeLabrecorder.deleteRecordingCalls[0],
             {
                 recording,
             },
-            'Should have called stopRecording!\n'
+            'Should have called deleteRecording!\n'
         )
     }
 
