@@ -5,10 +5,9 @@ import AbstractSpruceTest, {
     generateId,
 } from '@sprucelabs/test-utils'
 import LabrecorderAdapter from '../components/LabrecorderAdapter'
-import XdfStreamRecorder, {
-    XdfRecorderOptions,
-} from '../components/XdfStreamRecorder'
+import XdfStreamRecorder from '../components/XdfStreamRecorder'
 import FakeLabrecorder from '../testDoubles/Labrecorder/FakeLabrecorder'
+import SpyXdfRecorder from '../testDoubles/XdfRecorder/SpyXdfRecorder'
 
 export default class XdfStreamRecorderTest extends AbstractSpruceTest {
     private static instance: SpyXdfRecorder
@@ -96,15 +95,5 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
             this.recordingPath,
             this.streamQueries
         ) as SpyXdfRecorder
-    }
-}
-
-class SpyXdfRecorder extends XdfStreamRecorder {
-    public constructor(options: XdfRecorderOptions) {
-        super(options)
-    }
-
-    public getRecording() {
-        return this.recording
     }
 }

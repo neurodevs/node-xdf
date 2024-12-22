@@ -27,3 +27,6 @@ export * from './testDoubles/Libxdf/SpyLibxdf'
 
 export { default as SpyXdfLoader } from './testDoubles/XdfLoader/SpyXdfLoader'
 export * from './testDoubles/XdfLoader/SpyXdfLoader'
+
+export { default as SpyXdfRecorder } from './testDoubles/XdfRecorder/SpyXdfRecorder'
+export * from './testDoubles/XdfRecorder/SpyXdfRecorder'
