@@ -17,6 +17,7 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
     private static ffiRsDefineOptions?: Record<string, any>
     private static callsToRecordingCreate: any[] = []
     private static callsToRecordingStop: any[] = []
+    private static callsToRecordingDelete: any[] = []
 
     private static readonly filename = generateId()
     private static readonly watchFor = [generateId(), generateId()]
@@ -110,6 +111,14 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
         assert.isEqualDeep(this.callsToRecordingStop[0], { recording })
     }
 
+    @test()
+    protected static async deleteRecordingCallsBindings() {
+        const recording = this.createRecording()
+        this.instance.deleteRecording(recording)
+
+        assert.isEqualDeep(this.callsToRecordingDelete[0], { recording })
+    }
+
     private static createRecording() {
         this.instance.createRecording(this.filename, this.watchFor)
     }
@@ -145,7 +154,9 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
             recording_stop: ([recording]: any) => {
                 this.callsToRecordingStop.push({ recording })
             },
-            recording_delete: () => {},
+            recording_delete: ([recording]: any) => {
+                this.callsToRecordingDelete.push({ recording })
+            },
         }
     }
 
