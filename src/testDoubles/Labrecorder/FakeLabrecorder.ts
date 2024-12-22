@@ -46,5 +46,6 @@ export default class FakeLabrecorder implements Labrecorder {
         this.constructorCalls = []
         this.createRecordingCalls = []
         this.stopRecordingCalls = []
+        this.deleteRecordingCalls = []
     }
 }
