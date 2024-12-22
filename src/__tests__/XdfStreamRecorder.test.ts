@@ -5,17 +5,21 @@ import AbstractSpruceTest, {
     generateId,
 } from '@sprucelabs/test-utils'
 import LabrecorderAdapter from '../components/LabrecorderAdapter'
-import XdfStreamRecorder, { XdfRecorder } from '../components/XdfStreamRecorder'
+import XdfStreamRecorder, {
+    XdfRecorderOptions,
+} from '../components/XdfStreamRecorder'
 import FakeLabrecorder from '../testDoubles/Labrecorder/FakeLabrecorder'
 
 export default class XdfStreamRecorderTest extends AbstractSpruceTest {
-    private static instance: XdfRecorder
+    private static instance: SpyXdfRecorder
 
     protected static async beforeEach() {
         await super.beforeEach()
 
         LabrecorderAdapter.Class = FakeLabrecorder
         FakeLabrecorder.resetTestDouble()
+
+        XdfStreamRecorder.Class = SpyXdfRecorder
 
         this.instance = this.XdfStreamRecorder()
     }
@@ -48,7 +52,7 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
 
     @test()
     protected static async callingStartCallsCreateRecording() {
-        this.start()
+        this.startRecorder()
 
         assert.isEqualDeep(
             FakeLabrecorder.createRecordingCalls[0],
@@ -56,18 +60,51 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
                 filename: this.recordingPath,
                 watchFor: this.streamQueries,
             },
-            'Should have called createRecording!'
+            'Should have called createRecording!\n'
         )
     }
 
-    private static start() {
+    @test()
+    protected static async callingStopCallsStopRecording() {
+        this.startRecorder()
+        this.stopRecorder()
+
+        const recording = this.instance.getRecording()
+
+        assert.isEqualDeep(
+            FakeLabrecorder.stopRecordingCalls[0],
+            {
+                recording,
+            },
+            'Should have called stopRecording!\n'
+        )
+    }
+
+    private static startRecorder() {
         this.instance.start()
+    }
+
+    private static stopRecorder() {
+        this.instance.stop()
     }
 
     private static readonly recordingPath = generateId()
     private static readonly streamQueries = [generateId(), generateId()]
 
     private static XdfStreamRecorder() {
-        return XdfStreamRecorder.Create(this.recordingPath, this.streamQueries)
+        return XdfStreamRecorder.Create(
+            this.recordingPath,
+            this.streamQueries
+        ) as SpyXdfRecorder
+    }
+}
+
+class SpyXdfRecorder extends XdfStreamRecorder {
+    public constructor(options: XdfRecorderOptions) {
+        super(options)
+    }
+
+    public getRecording() {
+        return this.recording
     }
 }

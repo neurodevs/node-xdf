@@ -1,12 +1,16 @@
 import { assertOptions } from '@sprucelabs/schema'
-import LabrecorderAdapter, { Labrecorder } from './LabrecorderAdapter'
+import LabrecorderAdapter, {
+    BoundRecording,
+    Labrecorder,
+} from './LabrecorderAdapter'
 
 export default class XdfStreamRecorder implements XdfRecorder {
     public static Class?: XdfRecorderConstructor
 
+    protected recording: BoundRecording
     private labrecorder: Labrecorder
     private recordingPath: string
-    private streamQueries: any
+    private streamQueries: string[]
 
     protected constructor(options: XdfRecorderOptions) {
         const { labrecorder, recordingPath, streamQueries } = options
@@ -32,11 +36,19 @@ export default class XdfStreamRecorder implements XdfRecorder {
     }
 
     public start() {
-        this.createLabrecorderRecording()
+        this.recording = this.createLabrecorderRecording()
+    }
+
+    public stop() {
+        this.stopLabrecorderRecording()
     }
 
     private createLabrecorderRecording() {
         this.labrecorder.createRecording(this.recordingPath, this.streamQueries)
+    }
+
+    private stopLabrecorderRecording() {
+        this.labrecorder.stopRecording(this.recording)
     }
 
     private static LabrecorderAdapter() {
@@ -46,6 +58,7 @@ export default class XdfStreamRecorder implements XdfRecorder {
 
 export interface XdfRecorder {
     start(): void
+    stop(): void
 }
 
 export type XdfRecorderConstructor = new (
