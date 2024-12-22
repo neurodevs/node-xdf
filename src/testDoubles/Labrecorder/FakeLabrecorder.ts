@@ -6,6 +6,7 @@ import {
 export default class FakeLabrecorder implements Labrecorder {
     public static constructorCalls: string[] = []
     public static createRecordingCalls: any[] = []
+    public static stopRecordingCalls: any[] = []
 
     public constructor(labrecorderPath: string) {
         this.constructorCalls.push(labrecorderPath)
@@ -16,6 +17,10 @@ export default class FakeLabrecorder implements Labrecorder {
         return {} as BoundRecording
     }
 
+    public stopRecording(recording: BoundRecording) {
+        this.stopRecordingCalls.push({ recording })
+    }
+
     private get constructorCalls() {
         return FakeLabrecorder.constructorCalls
     }
@@ -24,8 +29,13 @@ export default class FakeLabrecorder implements Labrecorder {
         return FakeLabrecorder.createRecordingCalls
     }
 
+    private get stopRecordingCalls() {
+        return FakeLabrecorder.stopRecordingCalls
+    }
+
     public static resetTestDouble() {
         this.constructorCalls = []
         this.createRecordingCalls = []
+        this.stopRecordingCalls = []
     }
 }

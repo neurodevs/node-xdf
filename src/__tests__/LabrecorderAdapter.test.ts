@@ -5,6 +5,7 @@ import AbstractSpruceTest, {
 } from '@sprucelabs/test-utils'
 import { DataType, OpenParams } from 'ffi-rs'
 import LabrecorderAdapter, {
+    BoundRecording,
     Labrecorder,
     LabrecorderBindings,
 } from '../components/LabrecorderAdapter'
@@ -14,7 +15,8 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
     private static fakeBindings: LabrecorderBindings
     private static ffiRsOpenOptions?: OpenParams
     private static ffiRsDefineOptions?: Record<string, any>
-    private static recordingCreateCalls: any[] = []
+    private static callsToRecordingCreate: any[] = []
+    private static callsToRecordingStop: any[] = []
 
     private static readonly filename = generateId()
     private static readonly watchFor = [generateId(), generateId()]
@@ -44,7 +46,7 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
 
     @test()
     protected static async callsFfiRsDefineWithRequiredOptions() {
-        await this.LabrecorderAdapter()
+        this.LabrecorderAdapter()
 
         assert.isEqualDeep(
             this.ffiRsDefineOptions,
@@ -78,10 +80,10 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
 
     @test()
     protected static async createRecordingCallsBindings() {
-        this.instance.createRecording(this.filename, this.watchFor)
+        this.createRecording()
 
         assert.isEqualDeep(
-            this.recordingCreateCalls[0],
+            this.callsToRecordingCreate[0],
             {
                 filename: this.filename,
                 watchFor: this.watchFor,
@@ -93,11 +95,23 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
     @test()
     protected static async defaultsToMacOsPath() {
         const defaultLabrecorderPath = '/opt/local/lib/liblabrecorder.dylib'
-        await LabrecorderAdapter.Create()
+        LabrecorderAdapter.Create()
 
         const { path } = this.ffiRsOpenOptions as any
 
         assert.isEqual(path, defaultLabrecorderPath)
+    }
+
+    @test()
+    protected static async stopRecordingCallsBindings() {
+        const recording = this.createRecording()
+        this.instance.stopRecording(recording)
+
+        assert.isEqualDeep(this.callsToRecordingStop[0], { recording })
+    }
+
+    private static createRecording() {
+        this.instance.createRecording(this.filename, this.watchFor)
     }
 
     private static setupFakeBindings() {
@@ -121,14 +135,16 @@ export default class LabrecorderAdapterTest extends AbstractSpruceTest {
 
     private static FakeBindings() {
         return {
-            recording_create: ([filename, watchFor]: any[]) => {
-                this.recordingCreateCalls.push({
+            recording_create: ([filename, watchFor]: any) => {
+                this.callsToRecordingCreate.push({
                     filename,
                     watchFor,
                 })
-                return {} as any
+                return {} as BoundRecording
             },
-            recording_stop: () => {},
+            recording_stop: ([recording]: any) => {
+                this.callsToRecordingStop.push({ recording })
+            },
             recording_delete: () => {},
         }
     }

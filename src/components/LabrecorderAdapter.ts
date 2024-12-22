@@ -32,6 +32,10 @@ export default class LabrecorderAdapter implements Labrecorder {
         return this.bindings.recording_create([filename, watchFor])
     }
 
+    public stopRecording(recording: BoundRecording) {
+        this.bindings.recording_stop([recording])
+    }
+
     private get libraryOptions() {
         return {
             library: 'labrecorder',
@@ -92,6 +96,7 @@ export default class LabrecorderAdapter implements Labrecorder {
 
 export interface Labrecorder {
     createRecording(filename: string, watchFor: string[]): BoundRecording
+    stopRecording(recording: BoundRecording): void
 }
 
 export type LabrecorderConstructor = new (
