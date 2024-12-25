@@ -9,14 +9,14 @@ export default class XdfStreamRecorder implements XdfRecorder {
 
     protected recording: BoundRecording
     private labrecorder: Labrecorder
-    private recordingPath: string
+    private savePath: string
     private streamQueries: string[]
 
     protected constructor(options: XdfRecorderOptions) {
-        const { labrecorder, recordingPath, streamQueries } = options
+        const { labrecorder, savePath: recordingPath, streamQueries } = options
 
         this.labrecorder = labrecorder
-        this.recordingPath = recordingPath
+        this.savePath = recordingPath
         this.streamQueries = streamQueries
     }
 
@@ -30,7 +30,7 @@ export default class XdfStreamRecorder implements XdfRecorder {
 
         return new (this.Class ?? this)({
             labrecorder,
-            recordingPath,
+            savePath: recordingPath,
             streamQueries,
         })
     }
@@ -44,7 +44,7 @@ export default class XdfStreamRecorder implements XdfRecorder {
     }
 
     private createLabrecorderRecording() {
-        this.labrecorder.createRecording(this.recordingPath, this.streamQueries)
+        this.labrecorder.createRecording(this.savePath, this.streamQueries)
     }
 
     private deleteLabrecorderRecording() {
@@ -67,6 +67,6 @@ export type XdfRecorderConstructor = new (
 
 export interface XdfRecorderOptions {
     labrecorder: Labrecorder
-    recordingPath: string
+    savePath: string
     streamQueries: any
 }
