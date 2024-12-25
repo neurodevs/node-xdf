@@ -13,10 +13,10 @@ export default class XdfStreamRecorder implements XdfRecorder {
     private streamQueries: string[]
 
     protected constructor(options: XdfRecorderOptions) {
-        const { labrecorder, savePath: recordingPath, streamQueries } = options
+        const { labrecorder, savePath, streamQueries } = options
 
         this.labrecorder = labrecorder
-        this.savePath = recordingPath
+        this.savePath = savePath
         this.streamQueries = streamQueries
     }
 
