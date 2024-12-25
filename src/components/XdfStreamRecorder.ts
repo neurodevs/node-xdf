@@ -36,18 +36,18 @@ export default class XdfStreamRecorder implements XdfRecorder {
     }
 
     public start() {
-        this.recording = this.createLabrecorderRecording()
+        this.recording = this.createRecordingInstance()
     }
 
     public stop() {
-        this.deleteLabrecorderRecording()
+        this.deleteRecordingInstance()
     }
 
-    private createLabrecorderRecording() {
+    private createRecordingInstance() {
         this.labrecorder.createRecording(this.savePath, this.streamQueries)
     }
 
-    private deleteLabrecorderRecording() {
+    private deleteRecordingInstance() {
         this.labrecorder.deleteRecording(this.recording)
     }
 
