@@ -15,10 +15,8 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
     protected static async beforeEach() {
         await super.beforeEach()
 
-        LabrecorderAdapter.Class = FakeLabrecorder
-        FakeLabrecorder.resetTestDouble()
-
-        XdfStreamRecorder.Class = SpyXdfRecorder
+        this.setFakeLabrecorder()
+        this.setSpyXdfRecorder()
 
         this.instance = this.XdfStreamRecorder()
     }
@@ -94,6 +92,15 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
 
     private static stopRecorder() {
         this.instance.stop()
+    }
+
+    private static setFakeLabrecorder() {
+        LabrecorderAdapter.Class = FakeLabrecorder
+        FakeLabrecorder.resetTestDouble()
+    }
+
+    private static setSpyXdfRecorder() {
+        XdfStreamRecorder.Class = SpyXdfRecorder
     }
 
     private static readonly recordingPath = generateId()
