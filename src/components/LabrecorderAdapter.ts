@@ -7,6 +7,9 @@ export default class LabrecorderAdapter implements Labrecorder {
 
     private labrecorderPath: string
     private bindings!: LabrecorderBindings
+    private filename!: string
+    private watchFor!: string[]
+    private recording!: BoundRecording
 
     protected constructor(labrecorderPath: string) {
         this.labrecorderPath = labrecorderPath
@@ -29,16 +32,32 @@ export default class LabrecorderAdapter implements Labrecorder {
     }
 
     public createRecording(filename: string, watchFor: string[]) {
-        return this.bindings.recording_create([filename, watchFor])
+        this.filename = filename
+        this.watchFor = watchFor
+
+        return this.callRecordingCreate()
+    }
+
+    private callRecordingCreate() {
+        return this.bindings.recording_create([this.filename, this.watchFor])
     }
 
     public stopRecording(recording: BoundRecording) {
-        this.bindings.recording_stop([recording])
+        this.recording = recording
+        this.callRecordingStop()
+    }
+
+    private callRecordingStop() {
+        this.bindings.recording_stop([this.recording])
     }
 
     public deleteRecording(recording: BoundRecording) {
-        this.bindings.recording_stop([recording])
-        this.bindings.recording_delete([recording])
+        this.stopRecording(recording)
+        this.callRecordingDelete()
+    }
+
+    private callRecordingDelete() {
+        this.bindings.recording_delete([this.recording])
     }
 
     private get libraryOptions() {
