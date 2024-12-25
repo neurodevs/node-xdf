@@ -64,6 +64,15 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
     }
 
     @test()
+    protected static async callingStartSetsRecording() {
+        this.startRecorder()
+
+        const recording = this.instance.getRecording()
+
+        assert.isTruthy(recording, 'Should have set recording!\n')
+    }
+
+    @test()
     protected static async callingStopCallsDeleteRecording() {
         this.startRecorder()
         this.stopRecorder()
