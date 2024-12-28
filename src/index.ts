@@ -22,6 +22,9 @@ export * from './testDoubles/Libxdf/FakeLibxdf'
 export { default as FakeXdfLoader } from './testDoubles/XdfLoader/FakeXdfLoader'
 export * from './testDoubles/XdfLoader/FakeXdfLoader'
 
+export { default as FakeXdfRecorder } from './testDoubles/XdfRecorder/FakeXdfRecorder'
+export * from './testDoubles/XdfRecorder/FakeXdfRecorder'
+
 export { default as SpyLibxdf } from './testDoubles/Libxdf/SpyLibxdf'
 export * from './testDoubles/Libxdf/SpyLibxdf'
 
