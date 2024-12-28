@@ -6,6 +6,7 @@ import * as SpruceSchema from '@sprucelabs/schema'
 
 
 
+
 export declare namespace SpruceErrors.NodeXdf {
 
 	
@@ -30,6 +31,34 @@ export declare namespace SpruceErrors.NodeXdf {
 	}
 
 	export type InvalidTimeoutMsEntity = SchemaEntity<SpruceErrors.NodeXdf.InvalidTimeoutMsSchema>
+
+}
+
+
+export declare namespace SpruceErrors.NodeXdf {
+
+	
+	export interface InvalidFileExtension {
+		
+			
+			'savePath': string
+	}
+
+	export interface InvalidFileExtensionSchema extends SpruceSchema.Schema {
+		id: 'invalidFileExtension',
+		namespace: 'NodeXdf',
+		name: 'INVALID_FILE_EXTENSION',
+		    fields: {
+		            /** . */
+		            'savePath': {
+		                type: 'text',
+		                isRequired: true,
+		                options: undefined
+		            },
+		    }
+	}
+
+	export type InvalidFileExtensionEntity = SchemaEntity<SpruceErrors.NodeXdf.InvalidFileExtensionSchema>
 
 }
 

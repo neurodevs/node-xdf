@@ -39,6 +39,19 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
     }
 
     @test()
+    protected static async throwsIfSavePathDoesNotEndInXdf() {
+        const fakeSavePath = generateId()
+
+        const err = await assert.doesThrowAsync(() =>
+            XdfStreamRecorder.Create(fakeSavePath, [])
+        )
+
+        errorAssert.assertError(err, 'INVALID_FILE_EXTENSION', {
+            savePath: fakeSavePath,
+        })
+    }
+
+    @test()
     protected static async createsLabrecorderAdapterInstance() {
         assert.isEqual(
             FakeLabrecorder.constructorCalls.length,
@@ -103,7 +116,7 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
         XdfStreamRecorder.Class = SpyXdfRecorder
     }
 
-    private static readonly recordingPath = generateId()
+    private static readonly recordingPath = `${generateId()}.xdf`
     private static readonly streamQueries = [generateId(), generateId()]
 
     private static XdfStreamRecorder() {

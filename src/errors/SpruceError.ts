@@ -1,6 +1,7 @@
 import BaseSpruceError from '@sprucelabs/error'
 import ErrorOptions, {
     FailedToLoadLibxdfErrorOptions,
+    InvalidFileExtensionErrorOptions,
     InvalidTimeoutMsErrorOptions,
 } from '#spruce/errors/options.types'
 
@@ -16,6 +17,10 @@ export default class SpruceError extends BaseSpruceError<ErrorOptions> {
 
             case 'FAILED_TO_LOAD_LIBXDF':
                 message = this.generateFailedMessage(options)
+                break
+
+            case 'INVALID_FILE_EXTENSION':
+                message = this.generateFileExtensionMessage(options)
                 break
 
             default:
@@ -58,5 +63,16 @@ export default class SpruceError extends BaseSpruceError<ErrorOptions> {
 			\n @ericthecurious
 			\n -----------------------------------
 		`
+    }
+
+    private generateFileExtensionMessage(
+        options: InvalidFileExtensionErrorOptions
+    ) {
+        return `
+            \n -----------------------------------
+            \n Invalid file extension! 
+            \n Must end in ".xdf", not "${options?.savePath}"
+            \n -----------------------------------
+        `
     }
 }

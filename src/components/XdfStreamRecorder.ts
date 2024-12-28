@@ -1,4 +1,5 @@
 import { assertOptions } from '@sprucelabs/schema'
+import SpruceError from '../errors/SpruceError'
 import LabrecorderAdapter, {
     BoundRecording,
     Labrecorder,
@@ -18,6 +19,8 @@ export default class XdfStreamRecorder implements XdfRecorder {
         this.labrecorder = labrecorder
         this.savePath = savePath
         this.streamQueries = streamQueries
+
+        this.throwIfSavePathNotXdf()
     }
 
     public static Create(recordingPath: string, streamQueries: any) {
@@ -35,12 +38,17 @@ export default class XdfStreamRecorder implements XdfRecorder {
         })
     }
 
-    public start() {
-        this.recording = this.createRecordingInstance()
+    private throwIfSavePathNotXdf() {
+        if (!this.hasXdfFileExtension) {
+            throw new SpruceError({
+                code: 'INVALID_FILE_EXTENSION',
+                savePath: this.savePath,
+            })
+        }
     }
 
-    public stop() {
-        this.deleteRecordingInstance()
+    public start() {
+        this.recording = this.createRecordingInstance()
     }
 
     private createRecordingInstance() {
@@ -50,8 +58,16 @@ export default class XdfStreamRecorder implements XdfRecorder {
         )
     }
 
+    public stop() {
+        this.deleteRecordingInstance()
+    }
+
     private deleteRecordingInstance() {
         this.labrecorder.deleteRecording(this.recording)
+    }
+
+    private get hasXdfFileExtension() {
+        return this.savePath.endsWith('.xdf')
     }
 
     private static LabrecorderAdapter() {
