@@ -34,7 +34,7 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
         )
 
         errorAssert.assertError(err, 'MISSING_PARAMETERS', {
-            parameters: ['recordingPath', 'streamQueries'],
+            parameters: ['xdfSavePath', 'streamQueries'],
         })
     }
 
@@ -47,7 +47,7 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
         )
 
         errorAssert.assertError(err, 'INVALID_FILE_EXTENSION', {
-            savePath: fakeSavePath,
+            xdfSavePath: fakeSavePath,
         })
     }
 
@@ -67,7 +67,7 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
         assert.isEqualDeep(
             FakeLabrecorder.createRecordingCalls[0],
             {
-                filename: this.recordingPath,
+                filename: this.xdfSavePath,
                 watchFor: this.streamQueries,
             },
             'Should have called createRecording!\n'
@@ -116,12 +116,12 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
         XdfStreamRecorder.Class = SpyXdfRecorder
     }
 
-    private static readonly recordingPath = `${generateId()}.xdf`
+    private static readonly xdfSavePath = `${generateId()}.xdf`
     private static readonly streamQueries = [generateId(), generateId()]
 
     private static XdfStreamRecorder() {
         return XdfStreamRecorder.Create(
-            this.recordingPath,
+            this.xdfSavePath,
             this.streamQueries
         ) as SpyXdfRecorder
     }

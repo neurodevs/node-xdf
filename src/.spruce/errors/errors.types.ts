@@ -41,7 +41,7 @@ export declare namespace SpruceErrors.NodeXdf {
 	export interface InvalidFileExtension {
 		
 			
-			'savePath': string
+			'xdfSavePath': string
 	}
 
 	export interface InvalidFileExtensionSchema extends SpruceSchema.Schema {
@@ -50,7 +50,7 @@ export declare namespace SpruceErrors.NodeXdf {
 		name: 'INVALID_FILE_EXTENSION',
 		    fields: {
 		            /** . */
-		            'savePath': {
+		            'xdfSavePath': {
 		                type: 'text',
 		                isRequired: true,
 		                options: undefined

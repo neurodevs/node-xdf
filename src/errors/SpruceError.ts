@@ -71,7 +71,7 @@ export default class SpruceError extends BaseSpruceError<ErrorOptions> {
         return `
             \n -----------------------------------
             \n Invalid file extension! 
-            \n Must end in ".xdf", not "${options?.savePath}"
+            \n Must end in ".xdf", not "${options?.xdfSavePath}"
             \n -----------------------------------
         `
     }
