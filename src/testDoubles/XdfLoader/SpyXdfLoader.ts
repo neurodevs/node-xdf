@@ -1,4 +1,4 @@
-import { Libxdf } from '../../components/LibxdfAdapter'
+import { Libxdf } from '../../adapters/LibxdfAdapter'
 import XdfFileLoader, {
     XdfLoaderLoadOptions,
 } from '../../components/XdfFileLoader'

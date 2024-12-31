@@ -3,7 +3,7 @@ import SpruceError from '../errors/SpruceError'
 import LabrecorderAdapter, {
     BoundRecording,
     Labrecorder,
-} from './LabrecorderAdapter'
+} from '../adapters/LabrecorderAdapter'
 
 export default class XdfStreamRecorder implements XdfRecorder {
     public static Class?: XdfRecorderConstructor

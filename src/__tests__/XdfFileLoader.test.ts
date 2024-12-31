@@ -8,7 +8,7 @@ import {
     FakeMangledNameExtractor,
     MangledNameExtractorImpl,
 } from '@neurodevs/node-mangled-names'
-import LibxdfAdapter from '../components/LibxdfAdapter'
+import LibxdfAdapter from '../adapters/LibxdfAdapter'
 import XdfFileLoader, { XdfStream } from '../components/XdfFileLoader'
 import FakeLibxdf from '../testDoubles/Libxdf/FakeLibxdf'
 import SpyXdfLoader from '../testDoubles/XdfLoader/SpyXdfLoader'

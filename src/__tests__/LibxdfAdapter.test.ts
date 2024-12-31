@@ -12,7 +12,7 @@ import { DataType, OpenParams } from 'ffi-rs'
 import LibxdfAdapter, {
     FfiRsDefineOptions,
     LibxdfBindings,
-} from '../components/LibxdfAdapter'
+} from '../adapters/LibxdfAdapter'
 import { XdfFile } from '../components/XdfFileLoader'
 import SpyLibxdf from '../testDoubles/Libxdf/SpyLibxdf'
 

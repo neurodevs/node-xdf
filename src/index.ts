@@ -1,8 +1,8 @@
-export { default as LabrecorderAdapter } from './components/LabrecorderAdapter'
-export * from './components/LabrecorderAdapter'
+export { default as LabrecorderAdapter } from './adapters/LabrecorderAdapter'
+export * from './adapters/LabrecorderAdapter'
 
-export { default as LibxdfAdapter } from './components/LibxdfAdapter'
-export * from './components/LibxdfAdapter'
+export { default as LibxdfAdapter } from './adapters/LibxdfAdapter'
+export * from './adapters/LibxdfAdapter'
 
 export { default as XdfFileLoader } from './components/XdfFileLoader'
 export * from './components/XdfFileLoader'

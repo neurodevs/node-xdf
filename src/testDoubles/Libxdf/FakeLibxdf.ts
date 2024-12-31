@@ -1,5 +1,5 @@
 import { MangledNameMap } from '@neurodevs/node-mangled-names'
-import { Libxdf } from '../../components/LibxdfAdapter'
+import { Libxdf } from '../../adapters/LibxdfAdapter'
 import { XdfFile } from '../../components/XdfFileLoader'
 
 export default class FakeLibxdf implements Libxdf {
