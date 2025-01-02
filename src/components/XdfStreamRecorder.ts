@@ -1,3 +1,4 @@
+import os from 'os'
 import { assertOptions } from '@sprucelabs/schema'
 import LabrecorderAdapter, {
     BoundRecording,
@@ -54,9 +55,17 @@ export default class XdfStreamRecorder implements XdfRecorder {
     private createRecordingInstance() {
         return this.labrecorder.createRecording(
             this.xdfSavePath,
-            this.streamQueries
+            this.queriesWithHostname
         )
     }
+
+    private get queriesWithHostname() {
+        return this.streamQueries.map((query: string) => {
+            return `${query} and hostname="${this.hostname}"`
+        })
+    }
+
+    private readonly hostname = os.hostname()
 
     public stop() {
         this.deleteRecordingInstance()

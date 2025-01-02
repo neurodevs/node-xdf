@@ -1,3 +1,4 @@
+import os from 'os'
 import AbstractSpruceTest, {
     test,
     assert,
@@ -64,14 +65,24 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
     protected static async callingStartCallsCreateRecording() {
         this.startRecorder()
 
-        assert.isEqualDeep(
-            FakeLabrecorder.createRecordingCalls[0],
-            {
-                filename: this.xdfSavePath,
-                watchFor: this.streamQueries,
-            },
-            'Should have called createRecording!\n'
+        const { filename, watchFor } = FakeLabrecorder.createRecordingCalls[0]
+
+        assert.isEqual(
+            filename,
+            this.xdfSavePath,
+            'Should have passed filename!'
         )
+
+        this.streamQueries.forEach((query: string) => {
+            const isQueryIncluded = watchFor.some((actual: string) => {
+                return actual.includes(query)
+            })
+
+            assert.isTrue(
+                isQueryIncluded,
+                `Stream query "${query}" should have matched one of the watchFor queries!`
+            )
+        })
     }
 
     @test()
@@ -85,7 +96,6 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
 
     @test()
     protected static async callingStopCallsDeleteRecording() {
-        this.startRecorder()
         this.stopRecorder()
 
         const recording = this.instance.getRecording()
@@ -97,6 +107,19 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
             },
             'Should have called deleteRecording!\n'
         )
+    }
+
+    @test()
+    protected static async automaticallyPassesHostnameInWatchFor() {
+        this.startRecorder()
+
+        const { watchFor } = FakeLabrecorder.createRecordingCalls[0]
+
+        const hostname = `hostname="${this.hostname}"`
+
+        watchFor.forEach((query: string) => {
+            assert.doesInclude(query, hostname, 'Should have passed hostname!')
+        })
     }
 
     private static startRecorder() {
@@ -117,6 +140,8 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
     }
 
     private static readonly xdfSavePath = `${generateId()}.xdf`
+    private static readonly hostname = os.hostname()
+
     private static readonly streamQueries = [generateId(), generateId()]
 
     private static XdfStreamRecorder() {
