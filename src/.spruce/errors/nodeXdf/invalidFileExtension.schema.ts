@@ -9,7 +9,7 @@ const invalidFileExtensionSchema: SpruceErrors.NodeXdf.InvalidFileExtensionSchem
 	name: 'INVALID_FILE_EXTENSION',
 	    fields: {
 	            /** . */
-	            'xdfSavePath': {
+	            'xdfRecordPath': {
 	                type: 'text',
 	                isRequired: true,
 	                options: undefined

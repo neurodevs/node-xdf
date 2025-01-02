@@ -35,20 +35,20 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
         )
 
         errorAssert.assertError(err, 'MISSING_PARAMETERS', {
-            parameters: ['xdfSavePath', 'streamQueries'],
+            parameters: ['xdfRecordPath', 'streamQueries'],
         })
     }
 
     @test()
-    protected static async throwsIfSavePathDoesNotEndInXdf() {
-        const fakeSavePath = generateId()
+    protected static async throwsIfRecordPathDoesNotEndInXdf() {
+        const invalidPath = generateId()
 
         const err = await assert.doesThrowAsync(() =>
-            XdfStreamRecorder.Create(fakeSavePath, [])
+            XdfStreamRecorder.Create(invalidPath, [])
         )
 
         errorAssert.assertError(err, 'INVALID_FILE_EXTENSION', {
-            xdfSavePath: fakeSavePath,
+            xdfRecordPath: invalidPath,
         })
     }
 
@@ -69,7 +69,7 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
 
         assert.isEqual(
             filename,
-            this.xdfSavePath,
+            this.xdfRecordPath,
             'Should have passed filename!'
         )
 
@@ -139,14 +139,14 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
         XdfStreamRecorder.Class = SpyXdfRecorder
     }
 
-    private static readonly xdfSavePath = `${generateId()}.xdf`
+    private static readonly xdfRecordPath = `${generateId()}.xdf`
     private static readonly hostname = os.hostname()
 
     private static readonly streamQueries = [generateId(), generateId()]
 
     private static XdfStreamRecorder() {
         return XdfStreamRecorder.Create(
-            this.xdfSavePath,
+            this.xdfRecordPath,
             this.streamQueries
         ) as SpyXdfRecorder
     }

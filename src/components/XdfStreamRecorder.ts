@@ -11,22 +11,22 @@ export default class XdfStreamRecorder implements XdfRecorder {
 
     protected recording: BoundRecording
     private labrecorder: Labrecorder
-    private xdfSavePath: string
+    private xdfRecordPath: string
     private streamQueries: string[]
 
     protected constructor(options: XdfRecorderOptions) {
-        const { labrecorder, xdfSavePath: savePath, streamQueries } = options
+        const { labrecorder, xdfRecordPath, streamQueries } = options
 
         this.labrecorder = labrecorder
-        this.xdfSavePath = savePath
+        this.xdfRecordPath = xdfRecordPath
         this.streamQueries = streamQueries
 
-        this.throwIfSavePathNotXdf()
+        this.throwIfPathNotXdf()
     }
 
-    public static Create(xdfSavePath: string, streamQueries: any) {
-        assertOptions({ xdfSavePath, streamQueries }, [
-            'xdfSavePath',
+    public static Create(xdfRecordPath: string, streamQueries: any) {
+        assertOptions({ xdfRecordPath, streamQueries }, [
+            'xdfRecordPath',
             'streamQueries',
         ])
 
@@ -34,27 +34,27 @@ export default class XdfStreamRecorder implements XdfRecorder {
 
         return new (this.Class ?? this)({
             labrecorder,
-            xdfSavePath,
+            xdfRecordPath,
             streamQueries,
         })
     }
 
-    private throwIfSavePathNotXdf() {
+    private throwIfPathNotXdf() {
         if (!this.hasXdfFileExtension) {
             throw new SpruceError({
                 code: 'INVALID_FILE_EXTENSION',
-                xdfSavePath: this.xdfSavePath,
+                xdfRecordPath: this.xdfRecordPath,
             })
         }
     }
 
     public start() {
-        this.recording = this.createRecordingInstance()
+        this.createRecordingInstance()
     }
 
     private createRecordingInstance() {
-        return this.labrecorder.createRecording(
-            this.xdfSavePath,
+        this.recording = this.labrecorder.createRecording(
+            this.xdfRecordPath,
             this.queriesWithHostname
         )
     }
@@ -76,7 +76,7 @@ export default class XdfStreamRecorder implements XdfRecorder {
     }
 
     private get hasXdfFileExtension() {
-        return this.xdfSavePath.endsWith('.xdf')
+        return this.xdfRecordPath.endsWith('.xdf')
     }
 
     private static LabrecorderAdapter() {
@@ -95,6 +95,6 @@ export type XdfRecorderConstructor = new (
 
 export interface XdfRecorderOptions {
     labrecorder: Labrecorder
-    xdfSavePath: string
+    xdfRecordPath: string
     streamQueries: any
 }

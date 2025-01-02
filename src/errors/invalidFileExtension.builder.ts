@@ -4,7 +4,7 @@ export default buildErrorSchema({
     id: 'invalidFileExtension',
     name: 'INVALID_FILE_EXTENSION',
     fields: {
-        xdfSavePath: {
+        xdfRecordPath: {
             type: 'text',
             isRequired: true,
         },
