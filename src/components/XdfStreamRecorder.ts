@@ -1,9 +1,9 @@
 import { assertOptions } from '@sprucelabs/schema'
-import SpruceError from '../errors/SpruceError'
 import LabrecorderAdapter, {
     BoundRecording,
     Labrecorder,
 } from '../adapters/LabrecorderAdapter'
+import SpruceError from '../errors/SpruceError'
 
 export default class XdfStreamRecorder implements XdfRecorder {
     public static Class?: XdfRecorderConstructor
