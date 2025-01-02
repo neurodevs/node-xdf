@@ -5,8 +5,8 @@ import {
     MangledNameMap,
 } from '@neurodevs/node-mangled-names'
 import { DataType, define, FieldType, FuncObj, open } from 'ffi-rs'
-import SpruceError from '../errors/SpruceError'
 import { XdfFile } from '../components/XdfFileLoader'
+import SpruceError from '../errors/SpruceError'
 
 export default class LibxdfAdapter implements Libxdf {
     public static Class?: LibxdfConstructor
@@ -24,6 +24,23 @@ export default class LibxdfAdapter implements Libxdf {
         this.mangledNameMap = mangledNameMap
 
         this.tryToLoadBindings()
+    }
+
+    public static async Create(
+        libxdfPath: string,
+        throwIfPathNotExists = true
+    ) {
+        assertOptions({ libxdfPath }, ['libxdfPath'])
+
+        if (throwIfPathNotExists && !fs.existsSync(libxdfPath)) {
+            throw new SpruceError({
+                code: 'FAILED_TO_LOAD_LIBXDF',
+                libxdfPath,
+            })
+        }
+
+        const mangledNameMap = await this.loadMangledNameMap(libxdfPath)
+        return new (this.Class ?? this)(libxdfPath, mangledNameMap)
     }
 
     private tryToLoadBindings() {
@@ -70,28 +87,6 @@ export default class LibxdfAdapter implements Libxdf {
         })
     }
 
-    public static async Create(
-        libxdfPath: string,
-        throwIfPathNotExists = true
-    ) {
-        assertOptions({ libxdfPath }, ['libxdfPath'])
-
-        if (throwIfPathNotExists && !fs.existsSync(libxdfPath)) {
-            throw new SpruceError({
-                code: 'FAILED_TO_LOAD_LIBXDF',
-                libxdfPath,
-            })
-        }
-
-        const mangledNameMap = await this.loadMangledNameMap(libxdfPath)
-        return new (this.Class ?? this)(libxdfPath, mangledNameMap)
-    }
-
-    private static async loadMangledNameMap(libxdfPath: string) {
-        const extractor = this.MangledNameExtractor()
-        return await extractor.extract(libxdfPath, this.unmangledNames)
-    }
-
     public loadXdf(path: string) {
         const mangledName = this.mangledNameMap[this.loadXdfName].slice(1)
         const mangledFunc = this.bindings[mangledName]
@@ -133,6 +128,11 @@ export default class LibxdfAdapter implements Libxdf {
 
     private get loadXdfName() {
         return LibxdfAdapter.loadXdfName
+    }
+
+    private static async loadMangledNameMap(libxdfPath: string) {
+        const extractor = this.MangledNameExtractor()
+        return await extractor.extract(libxdfPath, this.unmangledNames)
     }
 
     private static MangledNameExtractor() {
