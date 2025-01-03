@@ -122,6 +122,11 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
         })
     }
 
+    @test()
+    protected static async isRunningDefaultsToFalse() {
+        assert.isFalse(this.instance.isRunning, 'Should not be running!')
+    }
+
     private static startRecorder() {
         this.instance.start()
     }

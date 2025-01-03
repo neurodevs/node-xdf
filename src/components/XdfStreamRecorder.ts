@@ -59,6 +59,10 @@ export default class XdfStreamRecorder implements XdfRecorder {
         )
     }
 
+    public get isRunning() {
+        return Boolean(this.recording)
+    }
+
     private get queriesWithHostname() {
         return this.streamQueries.map((query: string) => {
             return `${query} and hostname="${this.hostname}"`
@@ -87,6 +91,7 @@ export default class XdfStreamRecorder implements XdfRecorder {
 export interface XdfRecorder {
     start(): void
     stop(): void
+    isRunning: boolean
 }
 
 export type XdfRecorderConstructor = new (

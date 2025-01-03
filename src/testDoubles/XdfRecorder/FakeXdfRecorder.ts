@@ -14,11 +14,15 @@ export default class FakeXdfRecorder implements XdfRecorder {
 
     public start() {
         FakeXdfRecorder.numCallsToStart++
+        this.isRunning = true
     }
 
     public stop() {
         FakeXdfRecorder.numCallsToStop++
+        this.isRunning = false
     }
+
+    public isRunning = false
 
     private get callsToConstructor() {
         return FakeXdfRecorder.callsToConstructor
