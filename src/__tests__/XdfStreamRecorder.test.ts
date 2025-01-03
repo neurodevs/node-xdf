@@ -126,15 +126,24 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
     @test()
     protected static async isRunningDefaultsToFalse() {
         delete XdfStreamRecorder.Class
-
         this.concrete = this.XdfStreamRecorder()
+
         assert.isFalse(this.concrete.isRunning, 'Should not be running!')
     }
 
     @test()
     protected static async isRunningReturnsTrueAfterStart() {
         this.concrete.start()
+
         assert.isTrue(this.concrete.isRunning, 'Should be running!')
+    }
+
+    @test()
+    protected static async isRunningReturnsFalseAfterStop() {
+        this.concrete.start()
+        this.concrete.stop()
+
+        assert.isFalse(this.concrete.isRunning, 'Should not be running!')
     }
 
     private static startRecorder() {

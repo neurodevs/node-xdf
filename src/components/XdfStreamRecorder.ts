@@ -77,6 +77,7 @@ export default class XdfStreamRecorder implements XdfRecorder {
 
     private deleteRecordingInstance() {
         this.labrecorder.deleteRecording(this.recording)
+        delete this.recording
     }
 
     private get hasXdfFileExtension() {
