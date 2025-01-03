@@ -97,15 +97,11 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
 
     @test()
     protected static async callingStopCallsDeleteRecording() {
-        this.stopRecorder()
+        this.startThenStop()
 
-        const recording = this.instance.getRecording()
-
-        assert.isEqualDeep(
-            FakeLabrecorder.deleteRecordingCalls[0],
-            {
-                recording,
-            },
+        assert.isEqual(
+            FakeLabrecorder.deleteRecordingCalls.length,
+            1,
             'Should have called deleteRecording!\n'
         )
     }
@@ -144,6 +140,35 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
         this.concrete.stop()
 
         assert.isFalse(this.concrete.isRunning, 'Should not be running!')
+    }
+
+    @test()
+    protected static async doesNotCreateRecordingIfAlreadyExists() {
+        this.startRecorder()
+        this.startRecorder()
+
+        assert.isEqual(
+            FakeLabrecorder.createRecordingCalls.length,
+            1,
+            'Should not have created a new recording!'
+        )
+    }
+
+    @test()
+    protected static async doesNotDeleteRecordingIfDoesNotExist() {
+        this.startThenStop()
+        this.stopRecorder()
+
+        assert.isEqual(
+            FakeLabrecorder.deleteRecordingCalls.length,
+            1,
+            'Should not have deleted a recording!'
+        )
+    }
+
+    private static startThenStop() {
+        this.startRecorder()
+        this.stopRecorder()
     }
 
     private static startRecorder() {

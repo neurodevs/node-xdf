@@ -49,7 +49,9 @@ export default class XdfStreamRecorder implements XdfRecorder {
     }
 
     public start() {
-        this.createRecordingInstance()
+        if (!this.isRunning) {
+            this.createRecordingInstance()
+        }
     }
 
     private createRecordingInstance() {
@@ -72,7 +74,9 @@ export default class XdfStreamRecorder implements XdfRecorder {
     private readonly hostname = os.hostname()
 
     public stop() {
-        this.deleteRecordingInstance()
+        if (this.isRunning) {
+            this.deleteRecordingInstance()
+        }
     }
 
     private deleteRecordingInstance() {
