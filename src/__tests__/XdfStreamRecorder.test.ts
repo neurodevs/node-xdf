@@ -12,6 +12,7 @@ import SpyXdfRecorder from '../testDoubles/XdfRecorder/SpyXdfRecorder'
 
 export default class XdfStreamRecorderTest extends AbstractSpruceTest {
     private static instance: SpyXdfRecorder
+    private static concrete: XdfStreamRecorder
 
     protected static async beforeEach() {
         await super.beforeEach()
@@ -124,7 +125,16 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
 
     @test()
     protected static async isRunningDefaultsToFalse() {
-        assert.isFalse(this.instance.isRunning, 'Should not be running!')
+        delete XdfStreamRecorder.Class
+
+        this.concrete = this.XdfStreamRecorder()
+        assert.isFalse(this.concrete.isRunning, 'Should not be running!')
+    }
+
+    @test()
+    protected static async isRunningReturnsTrueAfterStart() {
+        this.concrete.start()
+        assert.isTrue(this.concrete.isRunning, 'Should be running!')
     }
 
     private static startRecorder() {
