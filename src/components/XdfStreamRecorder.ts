@@ -1,4 +1,6 @@
+import fs from 'fs'
 import os from 'os'
+import path from 'path'
 import { assertOptions } from '@sprucelabs/schema'
 import LabrecorderAdapter, {
     BoundRecording,
@@ -8,6 +10,7 @@ import SpruceError from '../errors/SpruceError'
 
 export default class XdfStreamRecorder implements XdfRecorder {
     public static Class?: XdfRecorderConstructor
+    public static mkdir = fs.mkdirSync
 
     protected recording: BoundRecording
     private labrecorder: Labrecorder
@@ -50,8 +53,23 @@ export default class XdfStreamRecorder implements XdfRecorder {
 
     public start() {
         if (!this.isRunning) {
+            this.createDirsRecursively()
             this.createRecordingInstance()
         }
+    }
+
+    private createDirsRecursively() {
+        this.mkdir(this.recordingDir, {
+            recursive: true,
+        })
+    }
+
+    private get recordingDir() {
+        return path.dirname(this.xdfRecordPath)
+    }
+
+    private get mkdir() {
+        return XdfStreamRecorder.mkdir
     }
 
     private createRecordingInstance() {

@@ -13,12 +13,16 @@ import SpyXdfRecorder from '../testDoubles/XdfRecorder/SpyXdfRecorder'
 export default class XdfStreamRecorderTest extends AbstractSpruceTest {
     private static instance: SpyXdfRecorder
     private static concrete: XdfStreamRecorder
+    private static passedDir: string
+    private static passedOptions: any
 
     protected static async beforeEach() {
         await super.beforeEach()
 
         this.setFakeLabrecorder()
         this.setSpyXdfRecorder()
+
+        this.setFakeMkdir()
 
         this.instance = this.XdfStreamRecorder()
     }
@@ -166,6 +170,23 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
         )
     }
 
+    @test()
+    protected static async recursivelyCreatesDirectoriesInXdfRecordPath() {
+        this.startRecorder()
+
+        assert.isEqual(
+            this.passedDir,
+            this.recordDir,
+            'Should have passed recordDir!'
+        )
+
+        assert.isEqualDeep(
+            this.passedOptions,
+            { recursive: true },
+            'Should have passed recursive equals true!'
+        )
+    }
+
     private static startThenStop() {
         this.startRecorder()
         this.stopRecorder()
@@ -188,7 +209,19 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
         XdfStreamRecorder.Class = SpyXdfRecorder
     }
 
-    private static readonly xdfRecordPath = `${generateId()}.xdf`
+    private static setFakeMkdir() {
+        this.passedDir = ''
+        this.passedOptions = {}
+
+        // @ts-ignore
+        XdfStreamRecorder.mkdir = (dir: string, options: any) => {
+            this.passedDir = dir
+            this.passedOptions = options
+        }
+    }
+
+    private static readonly recordDir = generateId()
+    private static readonly xdfRecordPath = `${this.recordDir}/${generateId()}.xdf`
     private static readonly hostname = os.hostname()
 
     private static readonly streamQueries = [generateId(), generateId()]
