@@ -111,15 +111,31 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
     }
 
     @test()
-    protected static async automaticallyPassesHostnameInWatchFor() {
+    protected static async acceptsOptionalHostname() {
+        const hostname = generateId()
+
+        const recorder = this.XdfStreamRecorder(hostname)
+        recorder.start()
+
+        const { watchFor } = FakeLabrecorder.createRecordingCalls[0]
+
+        const expected = `hostname="${hostname}"`
+
+        watchFor.forEach((query: string) => {
+            assert.doesInclude(query, expected, 'Should have passed hostname!')
+        })
+    }
+
+    @test()
+    protected static async defaultsToLocalHostnameInWatchFor() {
         this.startRecorder()
 
         const { watchFor } = FakeLabrecorder.createRecordingCalls[0]
 
-        const hostname = `hostname="${this.hostname}"`
+        const expected = `hostname="${this.hostname}"`
 
         watchFor.forEach((query: string) => {
-            assert.doesInclude(query, hostname, 'Should have passed hostname!')
+            assert.doesInclude(query, expected, 'Should have passed hostname!')
         })
     }
 
@@ -226,10 +242,11 @@ export default class XdfStreamRecorderTest extends AbstractSpruceTest {
 
     private static readonly streamQueries = [generateId(), generateId()]
 
-    private static XdfStreamRecorder() {
+    private static XdfStreamRecorder(hostname?: string) {
         return XdfStreamRecorder.Create(
             this.xdfRecordPath,
-            this.streamQueries
+            this.streamQueries,
+            { hostname }
         ) as SpyXdfRecorder
     }
 }

@@ -16,29 +16,37 @@ export default class XdfStreamRecorder implements XdfRecorder {
     private labrecorder: Labrecorder
     private xdfRecordPath: string
     private streamQueries: string[]
+    private hostname: string
 
     protected constructor(options: XdfRecorderOptions) {
-        const { labrecorder, xdfRecordPath, streamQueries } = options
+        const { labrecorder, xdfRecordPath, streamQueries, hostname } = options
 
         this.labrecorder = labrecorder
         this.xdfRecordPath = xdfRecordPath
         this.streamQueries = streamQueries
+        this.hostname = hostname ?? os.hostname()
 
         this.throwIfPathNotXdf()
     }
 
-    public static Create(xdfRecordPath: string, streamQueries: any) {
+    public static Create(
+        xdfRecordPath: string,
+        streamQueries: any,
+        options?: CreateRecorderOptions
+    ) {
         assertOptions({ xdfRecordPath, streamQueries }, [
             'xdfRecordPath',
             'streamQueries',
         ])
 
         const labrecorder = this.LabrecorderAdapter()
+        const { hostname } = options ?? {}
 
         return new (this.Class ?? this)({
             labrecorder,
             xdfRecordPath,
             streamQueries,
+            hostname,
         })
     }
 
@@ -89,8 +97,6 @@ export default class XdfStreamRecorder implements XdfRecorder {
         })
     }
 
-    private readonly hostname = os.hostname()
-
     public stop() {
         if (this.isRunning) {
             this.deleteRecordingInstance()
@@ -125,4 +131,9 @@ export interface XdfRecorderOptions {
     labrecorder: Labrecorder
     xdfRecordPath: string
     streamQueries: any
+    hostname?: string
+}
+
+export interface CreateRecorderOptions {
+    hostname?: string
 }
