@@ -153,7 +153,11 @@ export type LibxdfBindings = Record<string, (path: string[]) => string>
 
 export type LibxdfStatusCode = 0 | Exclude<number, 0>
 
-export type FfiRsDefineOptions = FuncObj<FieldType, boolean | undefined>
+export type FfiRsDefineOptions = FuncObj<
+    FieldType,
+    boolean | undefined,
+    boolean | undefined
+>
 
 export interface LibxdfFile {
     streams: LibxdfStream[]
