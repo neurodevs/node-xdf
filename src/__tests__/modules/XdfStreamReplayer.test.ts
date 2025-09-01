@@ -1,15 +1,11 @@
-import AbstractSpruceTest, {
-    test,
-    assert,
-    errorAssert,
-    generateId,
-} from '@sprucelabs/test-utils'
+import { test, assert, errorAssert, generateId } from '@sprucelabs/test-utils'
 import { FakeLslOutlet, LslOutletImpl } from '@neurodevs/node-lsl'
 import XdfFileLoader, { XdfStream } from '../../modules/XdfFileLoader'
 import XdfStreamReplayer, { XdfReplayer } from '../../modules/XdfStreamReplayer'
 import FakeXdfLoader from '../../testDoubles/XdfLoader/FakeXdfLoader'
+import AbstractPackageTest from '../AbstractPackageTest'
 
-export default class XdfStreamReplayerTest extends AbstractSpruceTest {
+export default class XdfStreamReplayerTest extends AbstractPackageTest {
     private static instance: XdfReplayer
 
     protected static async beforeEach() {

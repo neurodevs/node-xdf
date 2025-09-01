@@ -1,16 +1,12 @@
 import os from 'os'
-import AbstractSpruceTest, {
-    test,
-    assert,
-    errorAssert,
-    generateId,
-} from '@sprucelabs/test-utils'
+import { test, assert, errorAssert, generateId } from '@sprucelabs/test-utils'
 import LabrecorderAdapter from '../../modules/LabrecorderAdapter'
 import XdfStreamRecorder from '../../modules/XdfStreamRecorder'
 import FakeLabrecorder from '../../testDoubles/Labrecorder/FakeLabrecorder'
 import SpyXdfRecorder from '../../testDoubles/XdfRecorder/SpyXdfRecorder'
+import AbstractPackageTest from '../AbstractPackageTest'
 
-export default class XdfStreamRecorderTest extends AbstractSpruceTest {
+export default class XdfStreamRecorderTest extends AbstractPackageTest {
     private static instance: SpyXdfRecorder
     private static concrete: XdfStreamRecorder
     private static passedDir: string

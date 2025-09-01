@@ -1,16 +1,13 @@
-import AbstractSpruceTest, {
-    test,
-    assert,
-    generateId,
-} from '@sprucelabs/test-utils'
+import { test, assert, generateId } from '@sprucelabs/test-utils'
 import { DataType, OpenParams } from 'ffi-rs'
 import LabrecorderAdapter, {
     BoundRecording,
     Labrecorder,
     LabrecorderBindings,
 } from '../../modules/LabrecorderAdapter'
+import AbstractPackageTest from '../AbstractPackageTest'
 
-export default class LabrecorderAdapterTest extends AbstractSpruceTest {
+export default class LabrecorderAdapterTest extends AbstractPackageTest {
     private static instance: Labrecorder
     private static fakeBindings: LabrecorderBindings
     private static ffiRsOpenOptions?: OpenParams

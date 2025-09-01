@@ -1,9 +1,4 @@
-import AbstractSpruceTest, {
-    test,
-    assert,
-    errorAssert,
-    generateId,
-} from '@sprucelabs/test-utils'
+import { test, assert, errorAssert, generateId } from '@sprucelabs/test-utils'
 import {
     MangledNameExtractorImpl,
     FakeMangledNameExtractor,
@@ -15,8 +10,9 @@ import LibxdfAdapter, {
 } from '../../modules/LibxdfAdapter'
 import { XdfFile } from '../../modules/XdfFileLoader'
 import SpyLibxdf from '../../testDoubles/Libxdf/SpyLibxdf'
+import AbstractPackageTest from '../AbstractPackageTest'
 
-export default class LibxdfTest extends AbstractSpruceTest {
+export default class LibxdfTest extends AbstractPackageTest {
     private static instance: SpyLibxdf
     private static libxdfPath = generateId()
     private static path = generateId()
