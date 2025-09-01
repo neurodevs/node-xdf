@@ -1,5 +1,5 @@
 import { test, assert, errorAssert, generateId } from '@sprucelabs/test-utils'
-import { FakeLslOutlet, LslOutletImpl } from '@neurodevs/node-lsl'
+import { FakeLslOutlet, LslStreamOutlet } from '@neurodevs/node-lsl'
 import XdfFileLoader, { XdfStream } from '../../modules/XdfFileLoader'
 import XdfStreamReplayer, { XdfReplayer } from '../../modules/XdfStreamReplayer'
 import FakeXdfLoader from '../../testDoubles/XdfLoader/FakeXdfLoader'
@@ -176,7 +176,7 @@ export default class XdfStreamReplayerTest extends AbstractPackageTest {
     }
 
     private static fakeLslOutlet() {
-        LslOutletImpl.Class = FakeLslOutlet
+        LslStreamOutlet.Class = FakeLslOutlet
         FakeLslOutlet.resetTestDouble()
     }
 

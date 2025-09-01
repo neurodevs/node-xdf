@@ -3,7 +3,7 @@ import {
     FakeLslOutlet,
     FakeStreamInfo,
     LslStreamInfo,
-    LslOutletImpl,
+    LslStreamOutlet,
 } from '@neurodevs/node-lsl'
 
 export default class AbstractPackageTest extends AbstractSpruceTest {
@@ -20,7 +20,7 @@ export default class AbstractPackageTest extends AbstractSpruceTest {
     }
 
     protected static setFakeLslOutlet() {
-        LslOutletImpl.Class = FakeLslOutlet
+        LslStreamOutlet.Class = FakeLslOutlet
         FakeLslOutlet.resetTestDouble()
     }
 }

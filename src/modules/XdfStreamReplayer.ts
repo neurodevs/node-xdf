@@ -1,6 +1,6 @@
 import { assertOptions } from '@sprucelabs/schema'
 import { generateId } from '@sprucelabs/test-utils'
-import { LslOutlet, LslOutletImpl } from '@neurodevs/node-lsl'
+import { LslOutlet, LslStreamOutlet } from '@neurodevs/node-lsl'
 import XdfFileLoader, { XdfFile, XdfStream } from './XdfFileLoader'
 
 export default class XdfStreamReplayer implements XdfReplayer {
@@ -82,7 +82,7 @@ export default class XdfStreamReplayer implements XdfReplayer {
     private static async LslOutlet(stream: XdfStream) {
         const { type, nominalSampleRateHz } = stream
 
-        return await LslOutletImpl.Create({
+        return await LslStreamOutlet.Create({
             type,
             sampleRate: nominalSampleRateHz,
             channelNames: Array.from(
