@@ -1,6 +1,6 @@
 import XdfStreamRecorder, {
     XdfRecorderOptions,
-} from '../../components/XdfStreamRecorder'
+} from '../../modules/XdfStreamRecorder'
 
 export default class SpyXdfRecorder extends XdfStreamRecorder {
     public constructor(options: XdfRecorderOptions) {

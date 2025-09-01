@@ -1,6 +1,6 @@
 import { assertOptions } from '@sprucelabs/schema'
-import LibxdfAdapter, { Libxdf } from '../adapters/LibxdfAdapter'
 import SpruceError from '../errors/SpruceError'
+import LibxdfAdapter, { Libxdf } from './LibxdfAdapter'
 
 export default class XdfFileLoader implements XdfLoader {
     public static Class?: XdfLoaderConstructor

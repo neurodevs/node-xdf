@@ -8,7 +8,7 @@ import LabrecorderAdapter, {
     BoundRecording,
     Labrecorder,
     LabrecorderBindings,
-} from '../adapters/LabrecorderAdapter'
+} from '../../modules/LabrecorderAdapter'
 
 export default class LabrecorderAdapterTest extends AbstractSpruceTest {
     private static instance: Labrecorder

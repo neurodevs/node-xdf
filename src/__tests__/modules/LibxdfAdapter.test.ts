@@ -12,9 +12,9 @@ import { DataType, OpenParams } from 'ffi-rs'
 import LibxdfAdapter, {
     FfiRsDefineOptions,
     LibxdfBindings,
-} from '../adapters/LibxdfAdapter'
-import { XdfFile } from '../components/XdfFileLoader'
-import SpyLibxdf from '../testDoubles/Libxdf/SpyLibxdf'
+} from '../../modules/LibxdfAdapter'
+import { XdfFile } from '../../modules/XdfFileLoader'
+import SpyLibxdf from '../../testDoubles/Libxdf/SpyLibxdf'
 
 export default class LibxdfTest extends AbstractSpruceTest {
     private static instance: SpyLibxdf

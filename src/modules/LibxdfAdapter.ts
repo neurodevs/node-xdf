@@ -5,8 +5,8 @@ import {
     MangledNameMap,
 } from '@neurodevs/node-mangled-names'
 import { DataType, define, FieldType, FuncObj, open } from 'ffi-rs'
-import { XdfFile } from '../components/XdfFileLoader'
 import SpruceError from '../errors/SpruceError'
+import { XdfFile } from './XdfFileLoader'
 
 export default class LibxdfAdapter implements Libxdf {
     public static Class?: LibxdfConstructor

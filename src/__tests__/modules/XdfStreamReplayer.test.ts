@@ -5,9 +5,9 @@ import AbstractSpruceTest, {
     generateId,
 } from '@sprucelabs/test-utils'
 import { FakeLslOutlet, LslOutletImpl } from '@neurodevs/node-lsl'
-import XdfFileLoader, { XdfStream } from '../components/XdfFileLoader'
-import XdfStreamReplayer, { XdfReplayer } from '../components/XdfStreamReplayer'
-import FakeXdfLoader from '../testDoubles/XdfLoader/FakeXdfLoader'
+import XdfFileLoader, { XdfStream } from '../../modules/XdfFileLoader'
+import XdfStreamReplayer, { XdfReplayer } from '../../modules/XdfStreamReplayer'
+import FakeXdfLoader from '../../testDoubles/XdfLoader/FakeXdfLoader'
 
 export default class XdfStreamReplayerTest extends AbstractSpruceTest {
     private static instance: XdfReplayer

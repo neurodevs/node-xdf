@@ -5,10 +5,10 @@ import AbstractSpruceTest, {
     errorAssert,
     generateId,
 } from '@sprucelabs/test-utils'
-import LabrecorderAdapter from '../adapters/LabrecorderAdapter'
-import XdfStreamRecorder from '../components/XdfStreamRecorder'
-import FakeLabrecorder from '../testDoubles/Labrecorder/FakeLabrecorder'
-import SpyXdfRecorder from '../testDoubles/XdfRecorder/SpyXdfRecorder'
+import LabrecorderAdapter from '../../modules/LabrecorderAdapter'
+import XdfStreamRecorder from '../../modules/XdfStreamRecorder'
+import FakeLabrecorder from '../../testDoubles/Labrecorder/FakeLabrecorder'
+import SpyXdfRecorder from '../../testDoubles/XdfRecorder/SpyXdfRecorder'
 
 export default class XdfStreamRecorderTest extends AbstractSpruceTest {
     private static instance: SpyXdfRecorder

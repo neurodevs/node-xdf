@@ -1,17 +1,17 @@
-export { default as LabrecorderAdapter } from './adapters/LabrecorderAdapter'
-export * from './adapters/LabrecorderAdapter'
+export { default as LabrecorderAdapter } from './modules/LabrecorderAdapter'
+export * from './modules/LabrecorderAdapter'
 
-export { default as LibxdfAdapter } from './adapters/LibxdfAdapter'
-export * from './adapters/LibxdfAdapter'
+export { default as LibxdfAdapter } from './modules/LibxdfAdapter'
+export * from './modules/LibxdfAdapter'
 
-export { default as XdfFileLoader } from './components/XdfFileLoader'
-export * from './components/XdfFileLoader'
+export { default as XdfFileLoader } from './modules/XdfFileLoader'
+export * from './modules/XdfFileLoader'
 
-export { default as XdfStreamRecorder } from './components/XdfStreamRecorder'
-export * from './components/XdfStreamRecorder'
+export { default as XdfStreamRecorder } from './modules/XdfStreamRecorder'
+export * from './modules/XdfStreamRecorder'
 
-export { default as XdfStreamReplayer } from './components/XdfStreamReplayer'
-export * from './components/XdfStreamReplayer'
+export { default as XdfStreamReplayer } from './modules/XdfStreamReplayer'
+export * from './modules/XdfStreamReplayer'
 
 export { default as FakeLabrecorder } from './testDoubles/Labrecorder/FakeLabrecorder'
 export * from './testDoubles/Labrecorder/FakeLabrecorder'

@@ -1,7 +1,7 @@
 import {
     XdfRecorder,
     XdfRecorderOptions,
-} from '../../components/XdfStreamRecorder'
+} from '../../modules/XdfStreamRecorder'
 
 export default class FakeXdfRecorder implements XdfRecorder {
     public static callsToConstructor: XdfRecorderOptions[] = []
