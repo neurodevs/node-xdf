@@ -4,11 +4,11 @@ import {
 } from '../../modules/XdfStreamRecorder'
 
 export default class FakeXdfRecorder implements XdfRecorder {
-    public static callsToConstructor: XdfRecorderOptions[] = []
+    public static callsToConstructor: (XdfRecorderOptions | undefined)[] = []
     public static numCallsToStart = 0
     public static numCallsToStop = 0
 
-    public constructor(options: XdfRecorderOptions) {
+    public constructor(options?: XdfRecorderOptions) {
         this.callsToConstructor.push(options)
     }
 
