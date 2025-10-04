@@ -1,6 +1,6 @@
 import fs from 'fs'
 import {
-    MangledNameExtractorImpl,
+    MangledNameExtractor,
     MangledNameMap,
 } from '@neurodevs/node-mangled-names'
 import { DataType, define, FieldType, FuncObj, open } from 'ffi-rs'
@@ -155,7 +155,7 @@ export default class LibxdfAdapter implements Libxdf {
     }
 
     private static MangledNameExtractor() {
-        return MangledNameExtractorImpl.Create()
+        return MangledNameExtractor.Create()
     }
 }
 

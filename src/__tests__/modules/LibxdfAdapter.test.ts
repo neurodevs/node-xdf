@@ -1,7 +1,7 @@
 import { test, assert, generateId } from '@sprucelabs/test-utils'
 import {
-    MangledNameExtractorImpl,
-    FakeMangledNameExtractor,
+    MangledNameExtractor,
+    FakeNameExtractor,
 } from '@neurodevs/node-mangled-names'
 import { DataType, OpenParams } from 'ffi-rs'
 import LibxdfAdapter, {
@@ -28,8 +28,8 @@ export default class LibxdfTest extends AbstractPackageTest {
 
         LibxdfAdapter.Class = SpyLibxdf
 
-        MangledNameExtractorImpl.Class = FakeMangledNameExtractor
-        FakeMangledNameExtractor.clearTestDouble()
+        MangledNameExtractor.Class = FakeNameExtractor
+        FakeNameExtractor.clearTestDouble()
 
         this.shouldThrowWhenLoadingBindings = false
         this.mangledLoadXdfName = this.generateMangledName()
@@ -105,12 +105,12 @@ export default class LibxdfTest extends AbstractPackageTest {
 
     @test()
     protected static async createsMangledNameExtractor() {
-        assert.isEqual(FakeMangledNameExtractor.numConstructorCalls, 1)
+        assert.isEqual(FakeNameExtractor.numConstructorCalls, 1)
     }
 
     @test()
     protected static async callsExtractorWithCorrectParams() {
-        assert.isEqualDeep(FakeMangledNameExtractor.extractCalls[0], {
+        assert.isEqualDeep(FakeNameExtractor.extractCalls[0], {
             libPath: this.libxdfPath,
             unmangledNames: [this.loadXdfName],
         })
@@ -145,7 +145,7 @@ export default class LibxdfTest extends AbstractPackageTest {
     private static setFakeExtractResult(
         mangledLoadXdfName = this.mangledLoadXdfName
     ) {
-        FakeMangledNameExtractor.fakeResult = {
+        FakeNameExtractor.fakeResult = {
             load_xdf_to_json: mangledLoadXdfName,
         }
     }

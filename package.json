@@ -28,8 +28,8 @@
     "watch.tsc": "tsc -w"
   },
   "dependencies": {
-    "@neurodevs/node-lsl": "^11.2.0",
-    "@neurodevs/node-mangled-names": "^0.0.8",
+    "@neurodevs/node-lsl": "^11.4.2",
+    "@neurodevs/node-mangled-names": "^1.0.0",
     "ffi-rs": "^1.0.98"
   },
   "devDependencies": {

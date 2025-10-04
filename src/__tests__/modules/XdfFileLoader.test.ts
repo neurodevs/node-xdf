@@ -1,7 +1,7 @@
 import { test, assert, generateId } from '@sprucelabs/test-utils'
 import {
-    FakeMangledNameExtractor,
-    MangledNameExtractorImpl,
+    FakeNameExtractor,
+    MangledNameExtractor,
 } from '@neurodevs/node-mangled-names'
 import LibxdfAdapter from '../../modules/LibxdfAdapter'
 import XdfFileLoader, { XdfStream } from '../../modules/XdfFileLoader'
@@ -19,8 +19,8 @@ export default class XdfFileLoaderTest extends AbstractPackageTest {
         LibxdfAdapter.Class = FakeLibxdf
         FakeLibxdf.resetTestDouble()
 
-        MangledNameExtractorImpl.Class = FakeMangledNameExtractor
-        FakeMangledNameExtractor.clearTestDouble()
+        MangledNameExtractor.Class = FakeNameExtractor
+        FakeNameExtractor.clearTestDouble()
 
         XdfFileLoader.Class = SpyXdfLoader
 
