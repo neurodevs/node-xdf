@@ -1,8 +1,6 @@
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
-import { assertOptions } from '@sprucelabs/schema'
-import SpruceError from '../errors/SpruceError'
 import LabrecorderAdapter, {
     BoundRecording,
     Labrecorder,
@@ -34,11 +32,6 @@ export default class XdfStreamRecorder implements XdfRecorder {
         streamQueries: any,
         options?: CreateRecorderOptions
     ) {
-        assertOptions({ xdfRecordPath, streamQueries }, [
-            'xdfRecordPath',
-            'streamQueries',
-        ])
-
         const labrecorder = this.LabrecorderAdapter()
         const { hostname } = options ?? {}
 
@@ -52,11 +45,21 @@ export default class XdfStreamRecorder implements XdfRecorder {
 
     private throwIfPathNotXdf() {
         if (!this.hasXdfFileExtension) {
-            throw new SpruceError({
-                code: 'INVALID_FILE_EXTENSION',
-                xdfRecordPath: this.xdfRecordPath,
-            })
+            throw new Error(this.invalidExtensionMessage)
         }
+    }
+
+    private get hasXdfFileExtension() {
+        return this.xdfRecordPath.endsWith('.xdf')
+    }
+
+    private get invalidExtensionMessage() {
+        return `
+            \n -----------------------------------
+            \n Invalid file extension! 
+            \n Must end in ".xdf", not "${this.xdfRecordPath}"
+            \n -----------------------------------
+        `
     }
 
     public start() {
@@ -106,10 +109,6 @@ export default class XdfStreamRecorder implements XdfRecorder {
     private deleteRecordingInstance() {
         this.labrecorder.deleteRecording(this.recording)
         delete this.recording
-    }
-
-    private get hasXdfFileExtension() {
-        return this.xdfRecordPath.endsWith('.xdf')
     }
 
     private static LabrecorderAdapter() {

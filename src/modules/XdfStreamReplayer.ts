@@ -1,4 +1,3 @@
-import { assertOptions } from '@sprucelabs/schema'
 import { generateId } from '@sprucelabs/test-utils'
 import { LslOutlet, LslStreamOutlet } from '@neurodevs/node-lsl'
 import XdfFileLoader, { XdfFile, XdfStream } from './XdfFileLoader'
@@ -16,8 +15,6 @@ export default class XdfStreamReplayer implements XdfReplayer {
     }
 
     public static async Create(filePath: string) {
-        assertOptions({ filePath }, ['filePath'])
-
         const xdfFile = await this.loadXdfFile(filePath)
         const outlets = await this.createLslOutlets(xdfFile)
 

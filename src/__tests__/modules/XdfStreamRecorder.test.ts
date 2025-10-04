@@ -1,5 +1,5 @@
 import os from 'os'
-import { test, assert, errorAssert, generateId } from '@sprucelabs/test-utils'
+import { test, assert, generateId } from '@sprucelabs/test-utils'
 import LabrecorderAdapter from '../../modules/LabrecorderAdapter'
 import XdfStreamRecorder from '../../modules/XdfStreamRecorder'
 import FakeLabrecorder from '../../testDoubles/Labrecorder/FakeLabrecorder'
@@ -29,18 +29,6 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
     }
 
     @test()
-    protected static async throwsWithMissingRequiredOptions() {
-        const err = await assert.doesThrowAsync(() =>
-            // @ts-ignore
-            XdfStreamRecorder.Create()
-        )
-
-        errorAssert.assertError(err, 'MISSING_PARAMETERS', {
-            parameters: ['xdfRecordPath', 'streamQueries'],
-        })
-    }
-
-    @test()
     protected static async throwsIfRecordPathDoesNotEndInXdf() {
         const invalidPath = generateId()
 
@@ -48,9 +36,11 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
             XdfStreamRecorder.Create(invalidPath, [])
         )
 
-        errorAssert.assertError(err, 'INVALID_FILE_EXTENSION', {
-            xdfRecordPath: invalidPath,
-        })
+        assert.isEqual(
+            err.message,
+            this.generateErrorMessage(invalidPath),
+            'Did not receive the expected error!'
+        )
     }
 
     @test()
@@ -210,6 +200,15 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
 
     private static stopRecorder() {
         this.instance.stop()
+    }
+
+    private static generateErrorMessage(xdfRecordPath?: string) {
+        return `
+            \n -----------------------------------
+            \n Invalid file extension! 
+            \n Must end in ".xdf", not "${xdfRecordPath ?? this.xdfRecordPath}"
+            \n -----------------------------------
+        `
     }
 
     private static setFakeLabrecorder() {

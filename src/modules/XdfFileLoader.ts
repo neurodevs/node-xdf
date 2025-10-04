@@ -1,5 +1,3 @@
-import { assertOptions } from '@sprucelabs/schema'
-import SpruceError from '../errors/SpruceError'
 import LibxdfAdapter, { Libxdf } from './LibxdfAdapter'
 
 export default class XdfFileLoader implements XdfLoader {
@@ -27,7 +25,6 @@ export default class XdfFileLoader implements XdfLoader {
     }
 
     public async load(filePath: string, options?: XdfLoaderLoadOptions) {
-        assertOptions({ filePath }, ['filePath'])
         const { timeoutMs = 0 } = options ?? {}
 
         this.filePath = filePath
@@ -40,11 +37,17 @@ export default class XdfFileLoader implements XdfLoader {
 
     protected assertValidTimeout() {
         if (this.timeoutMs < 0) {
-            throw new SpruceError({
-                code: 'INVALID_TIMEOUT_MS',
-                timeoutMs: this.timeoutMs,
-            })
+            throw new Error(this.invalidTimeoutError)
         }
+    }
+
+    private get invalidTimeoutError() {
+        return `
+			\n -----------------------------------
+			\n You set an invalid timeout! 
+			\n It must be a positive number in milliseconds, not "${this.timeoutMs}".
+			\n -----------------------------------
+		`
     }
 
     private loadXdf() {

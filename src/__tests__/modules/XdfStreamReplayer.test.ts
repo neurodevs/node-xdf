@@ -1,4 +1,4 @@
-import { test, assert, errorAssert, generateId } from '@sprucelabs/test-utils'
+import { test, assert, generateId } from '@sprucelabs/test-utils'
 import { FakeLslOutlet, LslStreamOutlet } from '@neurodevs/node-lsl'
 import XdfFileLoader, { XdfStream } from '../../modules/XdfFileLoader'
 import XdfStreamReplayer, { XdfReplayer } from '../../modules/XdfStreamReplayer'
@@ -20,17 +20,6 @@ export default class XdfStreamReplayerTest extends AbstractPackageTest {
     @test()
     protected static async canCreateXdfStreamReplayer() {
         assert.isTruthy(this.instance, 'Should create an instance!')
-    }
-
-    @test()
-    protected static async createThrowsWithMissingRequiredOptions() {
-        const err = await assert.doesThrowAsync(async () => {
-            // @ts-ignore
-            await XdfStreamReplayer.Create()
-        })
-        errorAssert.assertError(err, 'MISSING_PARAMETERS', {
-            parameters: ['filePath'],
-        })
     }
 
     @test()

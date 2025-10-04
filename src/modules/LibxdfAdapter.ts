@@ -1,11 +1,9 @@
 import fs from 'fs'
-import { assertOptions } from '@sprucelabs/schema'
 import {
     MangledNameExtractorImpl,
     MangledNameMap,
 } from '@neurodevs/node-mangled-names'
 import { DataType, define, FieldType, FuncObj, open } from 'ffi-rs'
-import SpruceError from '../errors/SpruceError'
 import { XdfFile } from './XdfFileLoader'
 
 export default class LibxdfAdapter implements Libxdf {
@@ -30,13 +28,8 @@ export default class LibxdfAdapter implements Libxdf {
         libxdfPath: string,
         throwIfPathNotExists = true
     ) {
-        assertOptions({ libxdfPath }, ['libxdfPath'])
-
         if (throwIfPathNotExists && !fs.existsSync(libxdfPath)) {
-            throw new SpruceError({
-                code: 'FAILED_TO_LOAD_LIBXDF',
-                libxdfPath,
-            })
+            throw new Error(this.generateFailedMessage(libxdfPath))
         }
 
         const mangledNameMap = await this.loadMangledNameMap(libxdfPath)
@@ -46,7 +39,7 @@ export default class LibxdfAdapter implements Libxdf {
     private tryToLoadBindings() {
         try {
             this.bindings = this.loadBindings()
-        } catch (err: any) {
+        } catch (err: unknown) {
             this.throwFailedToLoadLiblsl(err)
         }
     }
@@ -79,12 +72,16 @@ export default class LibxdfAdapter implements Libxdf {
         return LibxdfAdapter.ffiRsDefine(funcs)
     }
 
-    private throwFailedToLoadLiblsl(err: any) {
-        throw new SpruceError({
-            code: 'FAILED_TO_LOAD_LIBXDF',
-            libxdfPath: this.libxdfPath,
-            originalError: err,
-        })
+    private throwFailedToLoadLiblsl(err: unknown) {
+        throw new Error(this.generateFailedMessage(err))
+    }
+
+    private generateFailedMessage(err: unknown) {
+        return `
+			${LibxdfAdapter.generateFailedMessage(this.libxdfPath)}
+            \n ${err}
+            \n
+		`
     }
 
     public loadXdf(path: string) {
@@ -128,6 +125,28 @@ export default class LibxdfAdapter implements Libxdf {
 
     private get loadXdfName() {
         return LibxdfAdapter.loadXdfName
+    }
+
+    private static generateFailedMessage(libxdfPath: string) {
+        return `
+			\n -----------------------------------
+			\n Failed to load libxdf! Tried to load from: 
+			\n     ${libxdfPath}
+			\n Instructions to save your day (on MacOS):
+			\n     1. git clone https://github.com/neurodevs/libxdf.git
+			\n     2. cd libxdf && cmake -S . -B build && cmake --build build
+			\n     3. sudo cp build/libxdf.dylib /opt/local/lib/
+			\n     4. Try whatever you were doing again!
+			\n Modify step 3 for your OS if you are not on MacOS.
+			\n Check the official repo for OS-specific instructions:
+			\n     https://github.com/xdf-modules/libxdf
+			\n If you're still unsure, ask an LLM with this error and your OS. 
+			\n You could also post an issue on the repo:
+			\n     https://github.com/neurodevs/node-xdf/issues
+			\n Good luck!
+			\n @ericthecurious
+			\n -----------------------------------
+        `
     }
 
     private static async loadMangledNameMap(libxdfPath: string) {

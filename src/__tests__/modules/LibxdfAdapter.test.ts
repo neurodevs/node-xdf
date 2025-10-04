@@ -1,4 +1,4 @@
-import { test, assert, errorAssert, generateId } from '@sprucelabs/test-utils'
+import { test, assert, generateId } from '@sprucelabs/test-utils'
 import {
     MangledNameExtractorImpl,
     FakeMangledNameExtractor,
@@ -47,27 +47,21 @@ export default class LibxdfTest extends AbstractPackageTest {
     }
 
     @test()
-    protected static async throwsWithMissingRequiredOptions() {
-        const err = await assert.doesThrowAsync(
-            // @ts-ignore
-            async () => await LibxdfAdapter.Create()
-        )
-
-        errorAssert.assertError(err, 'MISSING_PARAMETERS', {
-            parameters: ['libxdfPath'],
-        })
-    }
-
-    @test()
     protected static async throwsWhenBindingsFailToLoad() {
         this.shouldThrowWhenLoadingBindings = true
+
         const err = await assert.doesThrowAsync(
             async () => await this.LibxdfAdapter()
         )
 
-        errorAssert.assertError(err, 'FAILED_TO_LOAD_LIBXDF', {
-            libxdfPath: this.libxdfPath,
-        })
+        const actual = (err.message ?? err.stack).replace(/\s+/g, '')
+
+        const expected = this.generateFailedMessageWithFakeError().replace(
+            /\s+/g,
+            ''
+        )
+
+        assert.isEqual(actual, expected, 'Did not receive the expected error!')
     }
 
     @test()
@@ -130,15 +124,16 @@ export default class LibxdfTest extends AbstractPackageTest {
 
     @test()
     protected static async throwsIfLibxdfPathDoesNotExist() {
-        const libxdfPath = generateId()
+        this.libxdfPath = generateId()
 
         const err = await assert.doesThrowAsync(
-            async () => await this.LibxdfAdapter(libxdfPath, true)
+            async () => await this.LibxdfAdapter(this.libxdfPath, true)
         )
 
-        errorAssert.assertError(err, 'FAILED_TO_LOAD_LIBXDF', {
-            libxdfPath,
-        })
+        const actual = (err.message ?? err.stack).replace(/\s+/g, '')
+        const expected = this.generateFailedMessage().replace(/\s+/g, '')
+
+        assert.isEqual(actual, expected, 'Did not receive the expected error!')
     }
 
     @test()
@@ -177,11 +172,57 @@ export default class LibxdfTest extends AbstractPackageTest {
             this.ffiRsDefineOptions = options
 
             if (this.shouldThrowWhenLoadingBindings) {
-                throw new Error('Fake fail to create bindings!')
+                throw new Error(this.fakeErrorMessage)
             }
 
             return this.fakeBindings as any
         }
+    }
+
+    private static generateFailedMessage() {
+        return `
+			\n -----------------------------------
+			\n Failed to load libxdf! Tried to load from: 
+			\n     ${this.libxdfPath}
+			\n Instructions to save your day (on MacOS):
+			\n     1. git clone https://github.com/neurodevs/libxdf.git
+			\n     2. cd libxdf && cmake -S . -B build && cmake --build build
+			\n     3. sudo cp build/libxdf.dylib /opt/local/lib/
+			\n     4. Try whatever you were doing again!
+			\n Modify step 3 for your OS if you are not on MacOS.
+			\n Check the official repo for OS-specific instructions:
+			\n     https://github.com/xdf-modules/libxdf
+			\n If you're still unsure, ask an LLM with this error and your OS. 
+			\n You could also post an issue on the repo:
+			\n     https://github.com/neurodevs/node-xdf/issues
+			\n Good luck!
+			\n @ericthecurious
+			\n -----------------------------------
+		`
+    }
+
+    private static generateFailedMessageWithFakeError() {
+        return `
+			\n -----------------------------------
+			\n Failed to load libxdf! Tried to load from: 
+			\n     ${this.libxdfPath}
+			\n Instructions to save your day (on MacOS):
+			\n     1. git clone https://github.com/neurodevs/libxdf.git
+			\n     2. cd libxdf && cmake -S . -B build && cmake --build build
+			\n     3. sudo cp build/libxdf.dylib /opt/local/lib/
+			\n     4. Try whatever you were doing again!
+			\n Modify step 3 for your OS if you are not on MacOS.
+			\n Check the official repo for OS-specific instructions:
+			\n     https://github.com/xdf-modules/libxdf
+			\n If you're still unsure, ask an LLM with this error and your OS. 
+			\n You could also post an issue on the repo:
+			\n     https://github.com/neurodevs/node-xdf/issues
+			\n Good luck!
+			\n @ericthecurious
+			\n -----------------------------------
+            \n Error: ${this.fakeErrorMessage}
+            \n
+		`
     }
 
     private static loadXdf() {
@@ -198,6 +239,7 @@ export default class LibxdfTest extends AbstractPackageTest {
     private static readonly fakeNominalSampleRate = 0
     private static readonly fakeEventName = generateId()
     private static readonly fakeEventTimestamp = 0
+    private static readonly fakeErrorMessage = 'Fake error message!'
 
     private static fakeSerializedXdf = `{"streams": [{"stream_id": ${this.fakeStreamId}, "time_series": [], "time_stamps": [], "stream_info": {"channel_count": ${this.fakeChannelCount}, "channel_format": "${this.fakeChannelFormat}", "nominal_srate": ${this.fakeNominalSampleRate}, "stream_name": "${this.fakeStreamName}", "stream_type": "${this.fakeStreamType}"}}], "events": [{"stream_id": ${this.fakeStreamId}, "event_name": "${this.fakeEventName}", "event_timestamp": ${this.fakeEventTimestamp}}]}`
 

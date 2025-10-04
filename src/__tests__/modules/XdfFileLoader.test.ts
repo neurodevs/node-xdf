@@ -1,4 +1,4 @@
-import { test, assert, errorAssert, generateId } from '@sprucelabs/test-utils'
+import { test, assert, generateId } from '@sprucelabs/test-utils'
 import {
     FakeMangledNameExtractor,
     MangledNameExtractorImpl,
@@ -31,18 +31,6 @@ export default class XdfFileLoaderTest extends AbstractPackageTest {
     @test()
     protected static async canCreateInstance() {
         assert.isTruthy(this.instance, 'Should have created an instance!')
-    }
-
-    @test()
-    protected static async loadThrowsWithMissingRequiredOptions() {
-        const err = await assert.doesThrowAsync(
-            //@ts-ignore
-            async () => await this.instance.load()
-        )
-
-        errorAssert.assertError(err, 'MISSING_PARAMETERS', {
-            parameters: ['filePath'],
-        })
     }
 
     @test()
@@ -84,9 +72,20 @@ export default class XdfFileLoaderTest extends AbstractPackageTest {
     private static async assertInvalidTimeout(timeoutMs: number) {
         const err = await assert.doesThrowAsync(() => this.load({ timeoutMs }))
 
-        errorAssert.assertError(err, 'INVALID_TIMEOUT_MS', {
-            timeoutMs,
-        })
+        assert.isEqual(
+            err.message,
+            this.generateTimeoutError(timeoutMs),
+            'Did not receive the expected error!'
+        )
+    }
+
+    private static generateTimeoutError(timeoutMs: number) {
+        return `
+			\n -----------------------------------
+			\n You set an invalid timeout! 
+			\n It must be a positive number in milliseconds, not "${timeoutMs}".
+			\n -----------------------------------
+		`
     }
 
     private static readonly defaultLibxdfPath = '/opt/local/lib/libxdf.dylib'

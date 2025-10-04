@@ -1,6 +1,7 @@
 {
   "name": "@neurodevs/node-xdf",
-  "version": "1.4.3",
+  "version": "1.4.4",
+  "description": "Extensible Data Format (XDF) for persisting multi-modal, time-series data with metadata.",
   "main": "build/index.js",
   "repository": "https://github.com/neurodevs/node-xdf",
   "scripts": {
@@ -26,6 +27,11 @@
     "watch.rebuild": "yarn run clean.all && yarn install && yarn run watch.build.dev",
     "watch.tsc": "tsc -w"
   },
+  "dependencies": {
+    "@neurodevs/node-lsl": "^11.2.0",
+    "@neurodevs/node-mangled-names": "^0.0.8",
+    "ffi-rs": "^1.0.98"
+  },
   "devDependencies": {
     "@sprucelabs/jest-json-reporter": "^8.0.542",
     "@sprucelabs/resolve-path-aliases": "^2.0.516",
@@ -44,7 +50,6 @@
     "tsc-watch": "^6.2.1",
     "typescript": "^5.6.3"
   },
-  "description": "Extensible Data Format (XDF) for persisting multi-modal, time-series data with metadata",
   "skill": {
     "namespace": "node-xdf"
   },
@@ -65,14 +70,5 @@
     "moduleNameMapper": {
       "^#spruce/(.*)$": "<rootDir>/build/.spruce/$1"
     }
-  },
-  "dependencies": {
-    "@neurodevs/node-lsl": "^11.2.0",
-    "@neurodevs/node-mangled-names": "^0.0.8",
-    "@sprucelabs/error": "^6.0.541",
-    "@sprucelabs/schema": "^30.0.560",
-    "@sprucelabs/spruce-core-schemas": "^40.1.547",
-    "@sprucelabs/spruce-skill-utils": "^31.0.624",
-    "ffi-rs": "^1.0.98"
   }
 }
