@@ -1,4 +1,5 @@
-import { test, assert, generateId } from '@sprucelabs/test-utils'
+import { test, assert } from '@sprucelabs/test-utils'
+import generateId from '@neurodevs/generate-id'
 import { FakeLslOutlet, LslStreamOutlet } from '@neurodevs/node-lsl'
 import XdfFileLoader, { XdfStream } from '../../modules/XdfFileLoader'
 import XdfStreamReplayer, { XdfReplayer } from '../../modules/XdfStreamReplayer'

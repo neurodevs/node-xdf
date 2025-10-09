@@ -1,4 +1,4 @@
-import { generateId } from '@sprucelabs/test-utils'
+import generateId from '@neurodevs/generate-id'
 import { LslOutlet, LslStreamOutlet } from '@neurodevs/node-lsl'
 import XdfFileLoader, { XdfFile, XdfStream } from './XdfFileLoader'
 

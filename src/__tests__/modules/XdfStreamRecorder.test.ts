@@ -1,5 +1,6 @@
 import os from 'os'
-import { test, assert, generateId } from '@sprucelabs/test-utils'
+import { test, assert } from '@sprucelabs/test-utils'
+import generateId from '@neurodevs/generate-id'
 import LabrecorderAdapter from '../../modules/LabrecorderAdapter'
 import XdfStreamRecorder from '../../modules/XdfStreamRecorder'
 import FakeLabrecorder from '../../testDoubles/Labrecorder/FakeLabrecorder'
