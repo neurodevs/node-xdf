@@ -2,8 +2,22 @@
   "name": "@neurodevs/node-xdf",
   "version": "1.4.5",
   "description": "Extensible Data Format (XDF) for persisting multi-modal, time-series data with metadata.",
+  "keywords": [
+    "nodejs",
+    "typescript",
+    "tdd"
+  ],
+  "license": "MIT",
+  "author": "Eric Yates <hello@ericthecurious.com>",
+  "homepage": "https://github.com/neurodevs/node-xdf",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neurodevs/node-xdf.git"
+  },
+  "bugs": {
+    "url": "https://github.com/neurodevs/node-xdf/issues"
+  },
   "main": "build/index.js",
-  "repository": "https://github.com/neurodevs/node-xdf",
   "scripts": {
     "build.ci": "yarn run build.tsc && yarn run build.resolve-paths && yarn run lint",
     "build.dev": "yarn run build.tsc --sourceMap ; yarn run resolve-paths.lint",
@@ -51,9 +65,6 @@
     "tsc-watch": "^6.2.1",
     "typescript": "^5.6.3"
   },
-  "skill": {
-    "namespace": "node-xdf"
-  },
   "jest": {
     "testRunner": "jest-circus/runner",
     "maxWorkers": 4,
@@ -71,5 +82,8 @@
     "moduleNameMapper": {
       "^#spruce/(.*)$": "<rootDir>/build/.spruce/$1"
     }
+  },
+  "skill": {
+    "namespace": "node-xdf"
   }
 }
