@@ -8,8 +8,8 @@ import { DataType, OpenParams } from 'ffi-rs'
 import LibxdfAdapter, {
     FfiRsDefineOptions,
     LibxdfBindings,
-} from '../../modules/LibxdfAdapter'
-import { XdfFile } from '../../modules/XdfFileLoader'
+} from '../../impl/LibxdfAdapter'
+import { XdfFile } from '../../impl/XdfFileLoader'
 import SpyLibxdf from '../../testDoubles/Libxdf/SpyLibxdf'
 import AbstractPackageTest from '../AbstractPackageTest'
 

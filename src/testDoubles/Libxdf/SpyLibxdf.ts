@@ -1,5 +1,5 @@
 import { MangledNameMap } from '@neurodevs/node-mangled-names'
-import LibxdfAdapter from '../../modules/LibxdfAdapter'
+import LibxdfAdapter from '../../impl/LibxdfAdapter'
 
 export default class SpyLibxdf extends LibxdfAdapter {
     public constructor(libxdfPath: string, mangledNameMap: MangledNameMap) {

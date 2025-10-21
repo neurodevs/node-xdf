@@ -4,8 +4,8 @@ import {
     FakeNameExtractor,
     MangledNameExtractor,
 } from '@neurodevs/node-mangled-names'
-import LibxdfAdapter from '../../modules/LibxdfAdapter'
-import XdfFileLoader, { XdfStream } from '../../modules/XdfFileLoader'
+import LibxdfAdapter from '../../impl/LibxdfAdapter'
+import XdfFileLoader, { XdfStream } from '../../impl/XdfFileLoader'
 import FakeLibxdf from '../../testDoubles/Libxdf/FakeLibxdf'
 import SpyXdfLoader from '../../testDoubles/XdfLoader/SpyXdfLoader'
 import AbstractPackageTest from '../AbstractPackageTest'

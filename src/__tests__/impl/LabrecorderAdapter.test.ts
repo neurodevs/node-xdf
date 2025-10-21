@@ -5,7 +5,7 @@ import LabrecorderAdapter, {
     BoundRecording,
     Labrecorder,
     LabrecorderBindings,
-} from '../../modules/LabrecorderAdapter'
+} from '../../impl/LabrecorderAdapter'
 import AbstractPackageTest from '../AbstractPackageTest'
 
 export default class LabrecorderAdapterTest extends AbstractPackageTest {
