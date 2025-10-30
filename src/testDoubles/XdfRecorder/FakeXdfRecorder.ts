@@ -1,4 +1,7 @@
-import { XdfRecorder, XdfRecorderOptions } from '../../impl/XdfStreamRecorder'
+import {
+    XdfRecorder,
+    XdfRecorderOptions,
+} from '../../impl/XdfStreamRecorder.js'
 
 export default class FakeXdfRecorder implements XdfRecorder {
     public static callsToConstructor: (XdfRecorderOptions | undefined)[] = []

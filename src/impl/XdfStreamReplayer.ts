@@ -1,22 +1,23 @@
 import generateId from '@neurodevs/generate-id'
-import { LslOutlet, LslStreamOutlet } from '@neurodevs/node-lsl'
-import XdfFileLoader, { XdfFile, XdfStream } from './XdfFileLoader'
+import { LslStreamOutlet, StreamOutlet } from '@neurodevs/node-lsl'
+
+import XdfFileLoader, { XdfFile, XdfStream } from './XdfFileLoader.js'
 
 export default class XdfStreamReplayer implements XdfReplayer {
     public static Class?: XdfReplayerConstructor
 
     private xdfFile: XdfFile
-    private outlets: LslOutlet[]
+    private outlets: StreamOutlet[]
     private forMs?: number
 
-    protected constructor(xdfFile: XdfFile, outlets: LslOutlet[]) {
+    protected constructor(xdfFile: XdfFile, outlets: StreamOutlet[]) {
         this.xdfFile = xdfFile
         this.outlets = outlets
     }
 
     public static async Create(filePath: string) {
         const xdfFile = await this.loadXdfFile(filePath)
-        const outlets = await this.createLslOutlets(xdfFile)
+        const outlets = await this.createStreamOutlets(xdfFile)
 
         return new (this.Class ?? this)(xdfFile, outlets)
     }
@@ -71,12 +72,12 @@ export default class XdfStreamReplayer implements XdfReplayer {
         return await loader.load(filePath)
     }
 
-    private static createLslOutlets(xdfFile: XdfFile) {
+    private static createStreamOutlets(xdfFile: XdfFile) {
         const { streams } = xdfFile
-        return Promise.all(streams.map((stream) => this.LslOutlet(stream)))
+        return Promise.all(streams.map((stream) => this.StreamOutlet(stream)))
     }
 
-    private static async LslOutlet(stream: XdfStream) {
+    private static async StreamOutlet(stream: XdfStream) {
         const { type, nominalSampleRateHz } = stream
 
         return await LslStreamOutlet.Create({
@@ -103,5 +104,5 @@ export interface XdfReplayer {
 
 export type XdfReplayerConstructor = new (
     xdfFile: XdfFile,
-    outlets: LslOutlet[]
+    outlets: StreamOutlet[]
 ) => XdfReplayer

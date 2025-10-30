@@ -1,16 +1,16 @@
-import AbstractSpruceTest from '@sprucelabs/test-utils'
 import {
-    FakeLslOutlet,
+    FakeStreamOutlet,
     FakeStreamInfo,
     LslStreamInfo,
     LslStreamOutlet,
 } from '@neurodevs/node-lsl'
+import AbstractModuleTest from '@neurodevs/node-tdd'
 
-export default class AbstractPackageTest extends AbstractSpruceTest {
+export default class AbstractPackageTest extends AbstractModuleTest {
     protected static async beforeEach() {
         await super.beforeEach()
 
-        this.setFakeLslOutlet()
+        this.setFakeStreamOutlet()
         this.setFakeStreamInfo()
     }
 
@@ -19,8 +19,8 @@ export default class AbstractPackageTest extends AbstractSpruceTest {
         FakeStreamInfo.resetTestDouble()
     }
 
-    protected static setFakeLslOutlet() {
-        LslStreamOutlet.Class = FakeLslOutlet
-        FakeLslOutlet.resetTestDouble()
+    protected static setFakeStreamOutlet() {
+        LslStreamOutlet.Class = FakeStreamOutlet
+        FakeStreamOutlet.resetTestDouble()
     }
 }

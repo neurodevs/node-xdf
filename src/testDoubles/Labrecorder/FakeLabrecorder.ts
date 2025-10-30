@@ -1,4 +1,4 @@
-import { BoundRecording, Labrecorder } from '../../impl/LabrecorderAdapter'
+import { BoundRecording, Labrecorder } from '../../impl/LabrecorderAdapter.js'
 
 export default class FakeLabrecorder implements Labrecorder {
     public static constructorCalls: string[] = []

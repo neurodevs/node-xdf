@@ -1,7 +1,8 @@
 {
   "name": "@neurodevs/node-xdf",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "description": "Extensible Data Format (XDF) for persisting multi-modal, time-series data with metadata.",
+  "type": "module",
   "keywords": [
     "nodejs",
     "typescript",
@@ -42,17 +43,13 @@
     "watch.tsc": "tsc -w"
   },
   "dependencies": {
-    "@neurodevs/node-lsl": "^11.4.2",
-    "@neurodevs/node-mangled-names": "^1.0.0",
+    "@neurodevs/node-lsl": "^12.0.4",
+    "@neurodevs/node-mangled-names": "^1.0.1",
     "ffi-rs": "^1.0.98"
   },
   "devDependencies": {
-    "@neurodevs/generate-id": "^1.0.0",
-    "@sprucelabs/jest-json-reporter": "^8.0.542",
-    "@sprucelabs/resolve-path-aliases": "^2.0.516",
-    "@sprucelabs/spruce-test-fixtures": "^62.4.27",
-    "@sprucelabs/test": "^9.0.59",
-    "@sprucelabs/test-utils": "^5.1.502",
+    "@neurodevs/generate-id": "^1.0.9",
+    "@neurodevs/node-tdd": "^0.2.2",
     "@types/node": "^22.9.0",
     "chokidar-cli": "^3.0.0",
     "concurrently": "^9.1.0",

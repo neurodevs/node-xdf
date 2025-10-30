@@ -1,12 +1,13 @@
-import { test, assert } from '@sprucelabs/test-utils'
 import generateId from '@neurodevs/generate-id'
+import { test, assert } from '@neurodevs/node-tdd'
 import { DataType, OpenParams } from 'ffi-rs'
+
 import LabrecorderAdapter, {
     BoundRecording,
     Labrecorder,
     LabrecorderBindings,
-} from '../../impl/LabrecorderAdapter'
-import AbstractPackageTest from '../AbstractPackageTest'
+} from '../../impl/LabrecorderAdapter.js'
+import AbstractPackageTest from '../AbstractPackageTest.js'
 
 export default class LabrecorderAdapterTest extends AbstractPackageTest {
     private static instance: Labrecorder

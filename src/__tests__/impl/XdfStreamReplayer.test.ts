@@ -1,10 +1,11 @@
-import { test, assert } from '@sprucelabs/test-utils'
 import generateId from '@neurodevs/generate-id'
-import { FakeLslOutlet, LslStreamOutlet } from '@neurodevs/node-lsl'
-import XdfFileLoader, { XdfStream } from '../../impl/XdfFileLoader'
-import XdfStreamReplayer, { XdfReplayer } from '../../impl/XdfStreamReplayer'
-import FakeXdfLoader from '../../testDoubles/XdfLoader/FakeXdfLoader'
-import AbstractPackageTest from '../AbstractPackageTest'
+import { FakeStreamOutlet, LslStreamOutlet } from '@neurodevs/node-lsl'
+import { test, assert } from '@neurodevs/node-tdd'
+
+import XdfFileLoader, { XdfStream } from '../../impl/XdfFileLoader.js'
+import XdfStreamReplayer, { XdfReplayer } from '../../impl/XdfStreamReplayer.js'
+import FakeXdfLoader from '../../testDoubles/XdfLoader/FakeXdfLoader.js'
+import AbstractPackageTest from '../AbstractPackageTest.js'
 
 export default class XdfStreamReplayerTest extends AbstractPackageTest {
     private static instance: XdfReplayer
@@ -13,7 +14,7 @@ export default class XdfStreamReplayerTest extends AbstractPackageTest {
         await super.beforeEach()
 
         this.fakeXdfLoader()
-        this.fakeLslOutlet()
+        this.fakeStreamOutlet()
 
         this.instance = await this.XdfStreamReplayer()
     }
@@ -46,7 +47,7 @@ export default class XdfStreamReplayerTest extends AbstractPackageTest {
         await this.replay()
 
         assert.isEqual(
-            FakeLslOutlet.callsToConstructor.length,
+            FakeStreamOutlet.callsToConstructor.length,
             this.fakeStreams.length,
             'Should create an LSL outlet for each stream!'
         )
@@ -71,7 +72,7 @@ export default class XdfStreamReplayerTest extends AbstractPackageTest {
                 maxBuffered: 0,
             }
 
-            const actual = FakeLslOutlet.callsToConstructor[i].options
+            const actual = FakeStreamOutlet.callsToConstructor[i].options
 
             assert.doesInclude(
                 actual,
@@ -86,7 +87,7 @@ export default class XdfStreamReplayerTest extends AbstractPackageTest {
         await this.replay()
 
         assert.isEqual(
-            FakeLslOutlet.callsToPushSample.length,
+            FakeStreamOutlet.callsToPushSample.length,
             this.numStreams * this.numSamplesPerChannel,
             'Should call pushSample the correct number of times!'
         )
@@ -165,9 +166,9 @@ export default class XdfStreamReplayerTest extends AbstractPackageTest {
         }
     }
 
-    private static fakeLslOutlet() {
-        LslStreamOutlet.Class = FakeLslOutlet
-        FakeLslOutlet.resetTestDouble()
+    private static fakeStreamOutlet() {
+        LslStreamOutlet.Class = FakeStreamOutlet
+        FakeStreamOutlet.resetTestDouble()
     }
 
     private static readonly filePath = generateId()

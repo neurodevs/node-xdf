@@ -2,7 +2,7 @@ import {
     XdfFile,
     XdfLoader,
     XdfLoaderLoadOptions,
-} from '../../impl/XdfFileLoader'
+} from '../../impl/XdfFileLoader.js'
 
 export default class FakeXdfLoader implements XdfLoader {
     public static numConstructorCalls = 0

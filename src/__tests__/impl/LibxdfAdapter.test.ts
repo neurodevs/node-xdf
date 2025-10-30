@@ -1,17 +1,18 @@
-import { test, assert } from '@sprucelabs/test-utils'
 import generateId from '@neurodevs/generate-id'
 import {
     MangledNameExtractor,
     FakeNameExtractor,
 } from '@neurodevs/node-mangled-names'
+import { test, assert } from '@neurodevs/node-tdd'
 import { DataType, OpenParams } from 'ffi-rs'
+
 import LibxdfAdapter, {
     FfiRsDefineOptions,
     LibxdfBindings,
-} from '../../impl/LibxdfAdapter'
-import { XdfFile } from '../../impl/XdfFileLoader'
-import SpyLibxdf from '../../testDoubles/Libxdf/SpyLibxdf'
-import AbstractPackageTest from '../AbstractPackageTest'
+} from '../../impl/LibxdfAdapter.js'
+import { XdfFile } from '../../impl/XdfFileLoader.js'
+import SpyLibxdf from '../../testDoubles/Libxdf/SpyLibxdf.js'
+import AbstractPackageTest from '../AbstractPackageTest.js'
 
 export default class LibxdfTest extends AbstractPackageTest {
     private static instance: SpyLibxdf

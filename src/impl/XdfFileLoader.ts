@@ -1,4 +1,4 @@
-import LibxdfAdapter, { Libxdf } from './LibxdfAdapter'
+import LibxdfAdapter, { Libxdf } from './LibxdfAdapter.js'
 
 export default class XdfFileLoader implements XdfLoader {
     public static Class?: XdfLoaderConstructor

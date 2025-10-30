@@ -1,10 +1,11 @@
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
+
 import LabrecorderAdapter, {
     BoundRecording,
     Labrecorder,
-} from './LabrecorderAdapter'
+} from './LabrecorderAdapter.js'
 
 export default class XdfStreamRecorder implements XdfRecorder {
     public static Class?: XdfRecorderConstructor

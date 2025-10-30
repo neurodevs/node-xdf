@@ -1,11 +1,12 @@
 import os from 'os'
-import { test, assert } from '@sprucelabs/test-utils'
 import generateId from '@neurodevs/generate-id'
-import LabrecorderAdapter from '../../impl/LabrecorderAdapter'
-import XdfStreamRecorder from '../../impl/XdfStreamRecorder'
-import FakeLabrecorder from '../../testDoubles/Labrecorder/FakeLabrecorder'
-import SpyXdfRecorder from '../../testDoubles/XdfRecorder/SpyXdfRecorder'
-import AbstractPackageTest from '../AbstractPackageTest'
+import { test, assert } from '@neurodevs/node-tdd'
+
+import LabrecorderAdapter from '../../impl/LabrecorderAdapter.js'
+import XdfStreamRecorder from '../../impl/XdfStreamRecorder.js'
+import FakeLabrecorder from '../../testDoubles/Labrecorder/FakeLabrecorder.js'
+import SpyXdfRecorder from '../../testDoubles/XdfRecorder/SpyXdfRecorder.js'
+import AbstractPackageTest from '../AbstractPackageTest.js'
 
 export default class XdfStreamRecorderTest extends AbstractPackageTest {
     private static instance: SpyXdfRecorder

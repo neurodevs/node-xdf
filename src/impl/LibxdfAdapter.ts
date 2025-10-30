@@ -4,7 +4,8 @@ import {
     MangledNameMap,
 } from '@neurodevs/node-mangled-names'
 import { DataType, define, FieldType, FuncObj, open } from 'ffi-rs'
-import { XdfFile } from './XdfFileLoader'
+
+import { XdfFile } from './XdfFileLoader.js'
 
 export default class LibxdfAdapter implements Libxdf {
     public static Class?: LibxdfConstructor

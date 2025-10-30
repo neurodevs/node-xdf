@@ -1,5 +1,7 @@
-import { Libxdf } from '../../impl/LibxdfAdapter'
-import XdfFileLoader, { XdfLoaderLoadOptions } from '../../impl/XdfFileLoader'
+import { Libxdf } from '../../impl/LibxdfAdapter.js'
+import XdfFileLoader, {
+    XdfLoaderLoadOptions,
+} from '../../impl/XdfFileLoader.js'
 
 export default class SpyXdfLoader extends XdfFileLoader {
     public loadCalls: SpyLoadCall[] = []
