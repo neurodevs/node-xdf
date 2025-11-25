@@ -92,11 +92,11 @@ export default class XdfStreamRecorder implements XdfRecorder {
         })
     }
 
-    public stop() {
+    public finish() {
         if (this.isRunning) {
             this.deleteRecordingInstance()
         } else {
-            console.warn('Recorder is already stopped.')
+            console.warn('Recorder is already finished.')
         }
     }
 
@@ -116,7 +116,7 @@ export default class XdfStreamRecorder implements XdfRecorder {
 
 export interface XdfRecorder {
     start(): void
-    stop(): void
+    finish(): void
     isRunning: boolean
 }
 

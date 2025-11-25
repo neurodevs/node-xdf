@@ -9,7 +9,7 @@ import XdfStreamRecorder, {
 export default class FakeXdfRecorder implements XdfRecorder {
     public static callsToConstructor: (XdfRecorderOptions | undefined)[] = []
     public static numCallsToStart = 0
-    public static numCallsToStop = 0
+    public static numCallsToFinish = 0
 
     public constructor(options?: XdfRecorderOptions) {
         this.callsToConstructor.push(options)
@@ -20,8 +20,8 @@ export default class FakeXdfRecorder implements XdfRecorder {
         this.isRunning = true
     }
 
-    public stop() {
-        FakeXdfRecorder.numCallsToStop++
+    public finish() {
+        FakeXdfRecorder.numCallsToFinish++
         this.isRunning = false
     }
 
@@ -34,7 +34,7 @@ export default class FakeXdfRecorder implements XdfRecorder {
     public static resetTestDouble() {
         FakeXdfRecorder.callsToConstructor = []
         FakeXdfRecorder.numCallsToStart = 0
-        FakeXdfRecorder.numCallsToStop = 0
+        FakeXdfRecorder.numCallsToFinish = 0
 
         XdfStreamRecorder.mkdir = fakeMkdir as typeof mkdir
         resetCallsToMkdir()

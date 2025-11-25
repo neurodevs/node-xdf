@@ -24,9 +24,9 @@ async function rerecord() {
 
     await new Promise((resolve) => setTimeout(resolve, 10000))
 
-    console.log('Stopping recorder...')
+    console.log('Finishing recorder...')
 
-    recorder.stop()
+    recorder.finish()
 
     console.log('Finished!')
 }

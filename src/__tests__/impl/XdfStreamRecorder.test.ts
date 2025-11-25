@@ -58,7 +58,7 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
 
     @test()
     protected static async callingStartCallsCreateRecording() {
-        this.startRecorder()
+        this.start()
 
         const { filename, watchFor } = FakeLabrecorder.createRecordingCalls[0]
 
@@ -82,7 +82,7 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
 
     @test()
     protected static async callingStartSetsRecording() {
-        this.startRecorder()
+        this.start()
 
         const recording = this.instance.getRecording()
 
@@ -90,8 +90,8 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
     }
 
     @test()
-    protected static async callingStopCallsDeleteRecording() {
-        this.startThenStop()
+    protected static async callingFinishCallsDeleteRecording() {
+        this.startThenFinish()
 
         assert.isEqual(
             FakeLabrecorder.deleteRecordingCalls.length,
@@ -118,7 +118,7 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
 
     @test()
     protected static async defaultsToLocalHostnameInWatchFor() {
-        this.startRecorder()
+        this.start()
 
         const { watchFor } = FakeLabrecorder.createRecordingCalls[0]
 
@@ -169,17 +169,17 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
     }
 
     @test()
-    protected static async isRunningReturnsFalseAfterStop() {
+    protected static async isRunningReturnsFalseAfterFinish() {
         this.concrete.start()
-        this.concrete.stop()
+        this.concrete.finish()
 
         assert.isFalse(this.concrete.isRunning, 'Should not be running!')
     }
 
     @test()
     protected static async doesNotCreateRecordingIfAlreadyExists() {
-        this.startRecorder()
-        this.startRecorder()
+        this.start()
+        this.start()
 
         assert.isEqual(
             FakeLabrecorder.createRecordingCalls.length,
@@ -190,8 +190,8 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
 
     @test()
     protected static async doesNotDeleteRecordingIfDoesNotExist() {
-        this.startThenStop()
-        this.stopRecorder()
+        this.startThenFinish()
+        this.finish()
 
         assert.isEqual(
             FakeLabrecorder.deleteRecordingCalls.length,
@@ -202,7 +202,7 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
 
     @test()
     protected static async recursivelyCreatesDirectoriesInXdfRecordPath() {
-        this.startRecorder()
+        this.start()
 
         assert.isEqual(
             this.passedDir,
@@ -217,17 +217,17 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
         )
     }
 
-    private static startThenStop() {
-        this.startRecorder()
-        this.stopRecorder()
+    private static startThenFinish() {
+        this.start()
+        this.finish()
     }
 
-    private static startRecorder() {
+    private static start() {
         this.instance.start()
     }
 
-    private static stopRecorder() {
-        this.instance.stop()
+    private static finish() {
+        this.instance.finish()
     }
 
     private static generateErrorMessage(xdfRecordPath?: string) {
