@@ -66,6 +66,8 @@ export default class XdfStreamRecorder implements XdfRecorder {
         if (!this.isRunning) {
             this.createDirsRecursively()
             this.createRecordingInstance()
+        } else {
+            console.warn('Recorder is already running.')
         }
     }
 
@@ -106,6 +108,8 @@ export default class XdfStreamRecorder implements XdfRecorder {
     public stop() {
         if (this.isRunning) {
             this.deleteRecordingInstance()
+        } else {
+            console.warn('Recorder is already stopped.')
         }
     }
 
