@@ -68,7 +68,7 @@ export default class XdfStreamRecorder implements XdfRecorder {
         if (!this.isRunning) {
             this.createRecordingInstance()
         } else {
-            console.warn('Recorder is already running.')
+            console.warn('Cannot start recorder because it is already running.')
         }
     }
 
@@ -96,7 +96,7 @@ export default class XdfStreamRecorder implements XdfRecorder {
         if (this.isRunning) {
             this.deleteRecordingInstance()
         } else {
-            console.warn('Recorder is already finished.')
+            console.warn('Cannot finish recorder because it is not running.')
         }
     }
 
