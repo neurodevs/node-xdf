@@ -17,7 +17,7 @@ export default class XdfStreamRecorder implements XdfRecorder {
     private streamQueries: string[]
     private hostname: string
 
-    protected constructor(options: Required<XdfRecorderOptions>) {
+    protected constructor(options: XdfRecorderOptions) {
         const { labrecorder, xdfRecordPath, streamQueries, hostname } = options
 
         this.labrecorder = labrecorder
@@ -124,14 +124,14 @@ export interface XdfRecorder {
 }
 
 export type XdfRecorderConstructor = new (
-    options: Required<XdfRecorderOptions>
+    options: XdfRecorderOptions
 ) => XdfRecorder
 
 export interface XdfRecorderOptions {
     labrecorder: Labrecorder
     xdfRecordPath: string
     streamQueries: string[]
-    hostname?: string
+    hostname: string
 }
 
 export interface CreateRecorderOptions {

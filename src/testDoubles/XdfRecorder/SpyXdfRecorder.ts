@@ -3,7 +3,7 @@ import XdfStreamRecorder, {
 } from '../../impl/XdfStreamRecorder.js'
 
 export default class SpyXdfRecorder extends XdfStreamRecorder {
-    public constructor(options: Required<XdfRecorderOptions>) {
+    public constructor(options: XdfRecorderOptions) {
         super(options)
     }
 
