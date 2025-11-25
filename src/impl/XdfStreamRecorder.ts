@@ -11,7 +11,7 @@ export default class XdfStreamRecorder implements XdfRecorder {
     public static Class?: XdfRecorderConstructor
     public static mkdir = fs.mkdirSync
 
-    protected recording: BoundRecording
+    protected recording?: BoundRecording
     private labrecorder: Labrecorder
     private xdfRecordPath: string
     private streamQueries: string[]
@@ -30,7 +30,7 @@ export default class XdfStreamRecorder implements XdfRecorder {
 
     public static Create(
         xdfRecordPath: string,
-        streamQueries: any,
+        streamQueries: string[],
         options?: CreateRecorderOptions
     ) {
         const labrecorder = this.LabrecorderAdapter()
@@ -114,7 +114,7 @@ export default class XdfStreamRecorder implements XdfRecorder {
     }
 
     private deleteRecordingInstance() {
-        this.labrecorder.deleteRecording(this.recording)
+        this.labrecorder.deleteRecording(this.recording!)
         delete this.recording
     }
 
@@ -136,7 +136,7 @@ export type XdfRecorderConstructor = new (
 export interface XdfRecorderOptions {
     labrecorder: Labrecorder
     xdfRecordPath: string
-    streamQueries: any
+    streamQueries: string[]
     hostname?: string
 }
 

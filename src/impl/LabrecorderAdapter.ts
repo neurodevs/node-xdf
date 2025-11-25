@@ -28,7 +28,7 @@ export default class LabrecorderAdapter implements Labrecorder {
     }
 
     private registerFunctions() {
-        this.bindings = this.ffiRsDefine(this.functions)
+        this.bindings = this.ffiRsDefine(this.functions) as LabrecorderBindings
     }
 
     public createRecording(filename: string, watchFor: string[]) {
@@ -69,38 +69,20 @@ export default class LabrecorderAdapter implements Labrecorder {
 
     private get functions() {
         return {
-            ...this.recordingCreateFunction,
-            ...this.recordingStopFunction,
-            ...this.recordingDeleteFunction,
-        }
-    }
-
-    private get recordingCreateFunction() {
-        return {
             recording_create: {
                 library: 'labrecorder',
-                retType: this.RecordingInstanceType,
+                retType: this.BoundRecordingType,
                 paramsType: [this.FilenameType, this.WatchForType],
             },
-        }
-    }
-
-    private get recordingStopFunction() {
-        return {
             recording_stop: {
                 library: 'labrecorder',
                 retType: DataType.Void,
-                paramsType: [this.RecordingInstanceType],
+                paramsType: [this.BoundRecordingType],
             },
-        }
-    }
-
-    private get recordingDeleteFunction() {
-        return {
             recording_delete: {
                 library: 'labrecorder',
                 retType: DataType.Void,
-                paramsType: [this.RecordingInstanceType],
+                paramsType: [this.BoundRecordingType],
             },
         }
     }
@@ -115,7 +97,7 @@ export default class LabrecorderAdapter implements Labrecorder {
 
     private readonly FilenameType = DataType.String
     private readonly WatchForType = DataType.StringArray
-    private readonly RecordingInstanceType = DataType.External
+    private readonly BoundRecordingType = DataType.External
 }
 
 export interface Labrecorder {
@@ -134,4 +116,4 @@ export interface LabrecorderBindings {
     recording_delete(args: [BoundRecording]): void
 }
 
-export type BoundRecording = any
+export type BoundRecording = DataType.External

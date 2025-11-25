@@ -1,3 +1,4 @@
+import { MakeDirectoryOptions } from 'fs'
 import os from 'os'
 import path from 'path'
 import generateId from '@neurodevs/generate-id'
@@ -13,7 +14,7 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
     private static instance: SpyXdfRecorder
     private static concrete: XdfStreamRecorder
     private static passedDir: string
-    private static passedOptions: any
+    private static passedOptions: MakeDirectoryOptions
 
     protected static async beforeEach() {
         await super.beforeEach()
@@ -248,7 +249,10 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
         this.passedOptions = {}
 
         // @ts-ignore
-        XdfStreamRecorder.mkdir = (dir: string, options: any) => {
+        XdfStreamRecorder.mkdir = (
+            dir: string,
+            options: MakeDirectoryOptions
+        ) => {
             this.passedDir = dir
             this.passedOptions = options
         }

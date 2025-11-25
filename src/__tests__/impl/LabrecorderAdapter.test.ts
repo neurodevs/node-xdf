@@ -13,10 +13,15 @@ export default class LabrecorderAdapterTest extends AbstractPackageTest {
     private static instance: Labrecorder
     private static fakeBindings: LabrecorderBindings
     private static ffiRsOpenOptions?: OpenParams
-    private static ffiRsDefineOptions?: Record<string, any>
-    private static callsToRecordingCreate: any[] = []
-    private static callsToRecordingStop: any[] = []
-    private static callsToRecordingDelete: any[] = []
+    private static ffiRsDefineOptions?: Record<string, unknown>
+
+    private static callsToRecordingCreate: {
+        filename: string
+        watchFor: string[]
+    }[] = []
+
+    private static callsToRecordingStop: BoundRecording[] = []
+    private static callsToRecordingDelete: BoundRecording[] = []
 
     private static readonly filename = generateId()
     private static readonly watchFor = [generateId(), generateId()]
@@ -97,7 +102,7 @@ export default class LabrecorderAdapterTest extends AbstractPackageTest {
         const defaultLabrecorderPath = '/opt/local/lib/liblabrecorder.dylib'
         LabrecorderAdapter.Create()
 
-        const { path } = this.ffiRsOpenOptions as any
+        const { path } = this.ffiRsOpenOptions ?? {}
 
         assert.isEqual(path, defaultLabrecorderPath)
     }
@@ -131,7 +136,7 @@ export default class LabrecorderAdapterTest extends AbstractPackageTest {
     }
 
     private static createRecording() {
-        this.instance.createRecording(this.filename, this.watchFor)
+        return this.instance.createRecording(this.filename, this.watchFor)
     }
 
     private static stopRecording(recording: BoundRecording) {
@@ -167,18 +172,18 @@ export default class LabrecorderAdapterTest extends AbstractPackageTest {
         this.callsToRecordingDelete = []
 
         return {
-            recording_create: ([filename, watchFor]: any) => {
+            recording_create: ([filename, watchFor]: [string, string[]]) => {
                 this.callsToRecordingCreate.push({
                     filename,
                     watchFor,
                 })
                 return {} as BoundRecording
             },
-            recording_stop: ([recording]: any) => {
-                this.callsToRecordingStop.push({ recording })
+            recording_stop: ([recording]: [BoundRecording]) => {
+                this.callsToRecordingStop.push(recording)
             },
-            recording_delete: ([recording]: any) => {
-                this.callsToRecordingDelete.push({ recording })
+            recording_delete: ([recording]: [BoundRecording]) => {
+                this.callsToRecordingDelete.push(recording)
             },
         }
     }
