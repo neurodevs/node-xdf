@@ -96,6 +96,9 @@ export default class XdfStreamRecorder implements XdfRecorder {
 
     private get queriesWithHostname() {
         return this.streamQueries.map((query: string) => {
+            if (query.includes('hostname=')) {
+                return query
+            }
             return `${query} and hostname="${this.hostname}"`
         })
     }

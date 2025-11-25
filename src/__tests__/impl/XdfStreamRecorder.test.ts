@@ -129,6 +129,30 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
     }
 
     @test()
+    protected static async doesNotAddHostnameIfAlreadyPresent() {
+        const streamQueries = [
+            `${this.generateId()} and hostname="${this.hostname}"`,
+            `${this.generateId()} and hostname="${this.hostname}"`,
+        ]
+
+        const recorder = XdfStreamRecorder.Create(
+            this.xdfRecordPath,
+            streamQueries
+        ) as SpyXdfRecorder
+
+        recorder.start()
+
+        const { watchFor } = FakeLabrecorder.createRecordingCalls[0]
+
+        streamQueries.forEach((query: string) => {
+            assert.isTrue(
+                watchFor.includes(query),
+                'Should have included original query!'
+            )
+        })
+    }
+
+    @test()
     protected static async isRunningDefaultsToFalse() {
         delete XdfStreamRecorder.Class
         this.concrete = this.XdfStreamRecorder()
