@@ -17,13 +17,13 @@ export default class XdfStreamRecorder implements XdfRecorder {
     private streamQueries: string[]
     private hostname: string
 
-    protected constructor(options: XdfRecorderOptions) {
+    protected constructor(options: Required<XdfRecorderOptions>) {
         const { labrecorder, xdfRecordPath, streamQueries, hostname } = options
 
         this.labrecorder = labrecorder
         this.xdfRecordPath = xdfRecordPath
         this.streamQueries = streamQueries
-        this.hostname = hostname ?? os.hostname()
+        this.hostname = hostname
 
         this.throwIfPathNotXdf()
     }
@@ -34,10 +34,11 @@ export default class XdfStreamRecorder implements XdfRecorder {
         options?: CreateRecorderOptions
     ) {
         const labrecorder = this.LabrecorderAdapter()
-        const { hostname, makeRecordingDir = true } = options ?? {}
 
-        if (makeRecordingDir) {
-            await this.createRecordingDir(xdfRecordPath)
+        const { hostname = os.hostname(), shouldMkdir = true } = options ?? {}
+
+        if (shouldMkdir) {
+            await this.mkdirFrom(xdfRecordPath)
         }
 
         return new (this.Class ?? this)({
@@ -107,7 +108,7 @@ export default class XdfStreamRecorder implements XdfRecorder {
         delete this.recording
     }
 
-    private static async createRecordingDir(xdfRecordPath: string) {
+    private static async mkdirFrom(xdfRecordPath: string) {
         await this.mkdir(path.dirname(xdfRecordPath), { recursive: true })
     }
 
@@ -123,7 +124,7 @@ export interface XdfRecorder {
 }
 
 export type XdfRecorderConstructor = new (
-    options: XdfRecorderOptions
+    options: Required<XdfRecorderOptions>
 ) => XdfRecorder
 
 export interface XdfRecorderOptions {
@@ -135,5 +136,5 @@ export interface XdfRecorderOptions {
 
 export interface CreateRecorderOptions {
     hostname?: string
-    makeRecordingDir?: boolean
+    shouldMkdir?: boolean
 }

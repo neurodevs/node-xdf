@@ -224,7 +224,7 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
         resetCallsToMkdir()
 
         await this.XdfStreamRecorder({
-            makeRecordingDir: false,
+            shouldMkdir: false,
         })
 
         assert.isEqual(callsToMkdir.length, 0, 'Should not have called mkdir!')
