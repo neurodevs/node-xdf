@@ -112,21 +112,21 @@ export default class LabrecorderAdapterTest extends AbstractPackageTest {
         const recording = this.createRecording()
         this.stopRecording(recording)
 
-        assert.isEqualDeep(this.callsToRecordingStop[0], { recording })
+        assert.isEqualDeep(this.callsToRecordingStop[0], recording)
     }
 
     @test()
     protected static async deleteRecordingCallsBindings() {
         const recording = this.createAndDeleteRecording()
 
-        assert.isEqualDeep(this.callsToRecordingDelete[0], { recording })
+        assert.isEqualDeep(this.callsToRecordingDelete[0], recording)
     }
 
     @test()
     protected static async callingDeleteFirstCallsStop() {
         const recording = this.createAndDeleteRecording()
 
-        assert.isEqualDeep(this.callsToRecordingStop[0], { recording })
+        assert.isEqualDeep(this.callsToRecordingStop[0], recording)
     }
 
     private static createAndDeleteRecording() {
