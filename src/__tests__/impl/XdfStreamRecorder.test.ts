@@ -1,4 +1,5 @@
 import os from 'os'
+import path from 'path'
 import generateId from '@neurodevs/generate-id'
 import { test, assert } from '@neurodevs/node-tdd'
 
@@ -205,12 +206,8 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
     }
 
     private static generateErrorMessage(xdfRecordPath?: string) {
-        return `
-            \n -----------------------------------
-            \n Invalid file extension! 
-            \n Must end in ".xdf", not "${xdfRecordPath ?? this.xdfRecordPath}"
-            \n -----------------------------------
-        `
+        const fileExtension = path.extname(xdfRecordPath ?? this.xdfRecordPath)
+        return `Invalid file extension! Must end in .xdf, not ${fileExtension} \n`
     }
 
     private static setFakeLabrecorder() {
