@@ -51,15 +51,15 @@ export default class XdfStreamRecorder implements XdfRecorder {
     }
 
     private get hasXdfFileExtension() {
-        return this.xdfRecordPath.endsWith('.xdf')
-    }
-
-    private get invalidExtensionMessage() {
-        return `Invalid file extension! Must end in .xdf, not ${this.fileExtension} \n`
+        return this.fileExtension === '.xdf'
     }
 
     private get fileExtension() {
         return path.extname(this.xdfRecordPath)
+    }
+
+    private get invalidExtensionMessage() {
+        return `Invalid file extension! Must end in .xdf, not ${this.fileExtension} \n`
     }
 
     public start() {
