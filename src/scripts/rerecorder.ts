@@ -4,7 +4,7 @@ import XdfStreamReplayer from '../impl/XdfStreamReplayer.js'
 async function rerecord() {
     console.log('Starting recording...')
 
-    const recorder = XdfStreamRecorder.Create(
+    const recorder = await XdfStreamRecorder.Create(
         '/Users/ericthecurious/Downloads/test.xdf',
         ['type="EEG"', 'type="PPG"']
     )

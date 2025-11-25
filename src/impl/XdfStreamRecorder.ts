@@ -1,4 +1,4 @@
-import fs from 'fs'
+import { mkdir } from 'fs/promises'
 import os from 'os'
 import path from 'path'
 
@@ -9,7 +9,7 @@ import LabrecorderAdapter, {
 
 export default class XdfStreamRecorder implements XdfRecorder {
     public static Class?: XdfRecorderConstructor
-    public static mkdir = fs.mkdirSync
+    public static mkdir = mkdir
 
     protected recording?: BoundRecording
     private labrecorder: Labrecorder
@@ -28,13 +28,15 @@ export default class XdfStreamRecorder implements XdfRecorder {
         this.throwIfPathNotXdf()
     }
 
-    public static Create(
+    public static async Create(
         xdfRecordPath: string,
         streamQueries: string[],
         options?: CreateRecorderOptions
     ) {
         const labrecorder = this.LabrecorderAdapter()
         const { hostname } = options ?? {}
+
+        await this.createRecordingDir(xdfRecordPath)
 
         return new (this.Class ?? this)({
             labrecorder,
@@ -64,25 +66,10 @@ export default class XdfStreamRecorder implements XdfRecorder {
 
     public start() {
         if (!this.isRunning) {
-            this.createDirsRecursively()
             this.createRecordingInstance()
         } else {
             console.warn('Recorder is already running.')
         }
-    }
-
-    private createDirsRecursively() {
-        this.mkdir(this.recordingDir, {
-            recursive: true,
-        })
-    }
-
-    private get recordingDir() {
-        return path.dirname(this.xdfRecordPath)
-    }
-
-    private get mkdir() {
-        return XdfStreamRecorder.mkdir
     }
 
     private createRecordingInstance() {
@@ -116,6 +103,10 @@ export default class XdfStreamRecorder implements XdfRecorder {
     private deleteRecordingInstance() {
         this.labrecorder.deleteRecording(this.recording!)
         delete this.recording
+    }
+
+    private static async createRecordingDir(xdfRecordPath: string) {
+        await this.mkdir(path.dirname(xdfRecordPath), { recursive: true })
     }
 
     private static LabrecorderAdapter() {

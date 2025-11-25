@@ -24,7 +24,7 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
 
         this.setFakeMkdir()
 
-        this.instance = this.XdfStreamRecorder()
+        this.instance = await this.XdfStreamRecorder()
     }
 
     @test()
@@ -104,7 +104,7 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
     protected static async acceptsOptionalHostname() {
         const hostname = generateId()
 
-        const recorder = this.XdfStreamRecorder(hostname)
+        const recorder = await this.XdfStreamRecorder(hostname)
         recorder.start()
 
         const { watchFor } = FakeLabrecorder.createRecordingCalls[0]
@@ -136,10 +136,10 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
             `${this.generateId()} and hostname="${this.hostname}"`,
         ]
 
-        const recorder = XdfStreamRecorder.Create(
+        const recorder = (await XdfStreamRecorder.Create(
             this.xdfRecordPath,
             streamQueries
-        ) as SpyXdfRecorder
+        )) as SpyXdfRecorder
 
         recorder.start()
 
@@ -156,7 +156,7 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
     @test()
     protected static async isRunningDefaultsToFalse() {
         delete XdfStreamRecorder.Class
-        this.concrete = this.XdfStreamRecorder()
+        this.concrete = await this.XdfStreamRecorder()
 
         assert.isFalse(this.concrete.isRunning, 'Should not be running!')
     }
@@ -264,11 +264,12 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
 
     private static readonly streamQueries = [generateId(), generateId()]
 
-    private static XdfStreamRecorder(hostname?: string) {
-        return XdfStreamRecorder.Create(
+    private static async XdfStreamRecorder(hostname?: string) {
+        const recorder = await XdfStreamRecorder.Create(
             this.xdfRecordPath,
             this.streamQueries,
             { hostname }
-        ) as SpyXdfRecorder
+        )
+        return recorder as SpyXdfRecorder
     }
 }

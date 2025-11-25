@@ -1,4 +1,7 @@
-import {
+import { mkdir } from 'fs/promises'
+import { fakeMkdir, resetCallsToMkdir } from '@neurodevs/fake-node-core'
+
+import XdfStreamRecorder, {
     XdfRecorder,
     XdfRecorderOptions,
 } from '../../impl/XdfStreamRecorder.js'
@@ -32,5 +35,8 @@ export default class FakeXdfRecorder implements XdfRecorder {
         FakeXdfRecorder.callsToConstructor = []
         FakeXdfRecorder.numCallsToStart = 0
         FakeXdfRecorder.numCallsToStop = 0
+
+        XdfStreamRecorder.mkdir = fakeMkdir as typeof mkdir
+        resetCallsToMkdir()
     }
 }
