@@ -1,11 +1,18 @@
-import { MakeDirectoryOptions } from 'fs'
+import { mkdir } from 'fs/promises'
 import os from 'os'
 import path from 'path'
+import {
+    callsToMkdir,
+    fakeMkdir,
+    resetCallsToMkdir,
+} from '@neurodevs/fake-node-core'
 import generateId from '@neurodevs/generate-id'
 import { test, assert } from '@neurodevs/node-tdd'
 
 import LabrecorderAdapter from '../../impl/LabrecorderAdapter.js'
-import XdfStreamRecorder from '../../impl/XdfStreamRecorder.js'
+import XdfStreamRecorder, {
+    CreateRecorderOptions,
+} from '../../impl/XdfStreamRecorder.js'
 import FakeLabrecorder from '../../testDoubles/Labrecorder/FakeLabrecorder.js'
 import SpyXdfRecorder from '../../testDoubles/XdfRecorder/SpyXdfRecorder.js'
 import AbstractPackageTest from '../AbstractPackageTest.js'
@@ -13,8 +20,6 @@ import AbstractPackageTest from '../AbstractPackageTest.js'
 export default class XdfStreamRecorderTest extends AbstractPackageTest {
     private static instance: SpyXdfRecorder
     private static concrete: XdfStreamRecorder
-    private static passedDir: string
-    private static passedOptions: MakeDirectoryOptions
 
     protected static async beforeEach() {
         await super.beforeEach()
@@ -104,7 +109,7 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
     protected static async acceptsOptionalHostname() {
         const hostname = generateId()
 
-        const recorder = await this.XdfStreamRecorder(hostname)
+        const recorder = await this.XdfStreamRecorder({ hostname })
         recorder.start()
 
         const { watchFor } = FakeLabrecorder.createRecordingCalls[0]
@@ -204,17 +209,25 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
     protected static async recursivelyCreatesDirectoriesInXdfRecordPath() {
         this.start()
 
-        assert.isEqual(
-            this.passedDir,
-            this.recordDir,
-            'Should have passed recordDir!'
-        )
-
         assert.isEqualDeep(
-            this.passedOptions,
-            { recursive: true },
-            'Should have passed recursive equals true!'
+            callsToMkdir[0],
+            {
+                path: this.recordDir,
+                options: { recursive: true },
+            },
+            'Did not call mkdir as expected!'
         )
+    }
+
+    @test()
+    protected static async doesNotMakeRecordingDirIfPassedFlag() {
+        resetCallsToMkdir()
+
+        await this.XdfStreamRecorder({
+            makeRecordingDir: false,
+        })
+
+        assert.isEqual(callsToMkdir.length, 0, 'Should not have called mkdir!')
     }
 
     private static startThenFinish() {
@@ -245,17 +258,8 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
     }
 
     private static setFakeMkdir() {
-        this.passedDir = ''
-        this.passedOptions = {}
-
-        // @ts-ignore
-        XdfStreamRecorder.mkdir = (
-            dir: string,
-            options: MakeDirectoryOptions
-        ) => {
-            this.passedDir = dir
-            this.passedOptions = options
-        }
+        XdfStreamRecorder.mkdir = fakeMkdir as typeof mkdir
+        resetCallsToMkdir()
     }
 
     private static readonly recordDir = generateId()
@@ -264,11 +268,13 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
 
     private static readonly streamQueries = [generateId(), generateId()]
 
-    private static async XdfStreamRecorder(hostname?: string) {
+    private static async XdfStreamRecorder(
+        options?: Partial<CreateRecorderOptions>
+    ) {
         const recorder = await XdfStreamRecorder.Create(
             this.xdfRecordPath,
             this.streamQueries,
-            { hostname }
+            options
         )
         return recorder as SpyXdfRecorder
     }

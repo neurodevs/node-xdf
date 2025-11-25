@@ -34,9 +34,11 @@ export default class XdfStreamRecorder implements XdfRecorder {
         options?: CreateRecorderOptions
     ) {
         const labrecorder = this.LabrecorderAdapter()
-        const { hostname } = options ?? {}
+        const { hostname, makeRecordingDir = true } = options ?? {}
 
-        await this.createRecordingDir(xdfRecordPath)
+        if (makeRecordingDir) {
+            await this.createRecordingDir(xdfRecordPath)
+        }
 
         return new (this.Class ?? this)({
             labrecorder,
@@ -133,4 +135,5 @@ export interface XdfRecorderOptions {
 
 export interface CreateRecorderOptions {
     hostname?: string
+    makeRecordingDir?: boolean
 }
