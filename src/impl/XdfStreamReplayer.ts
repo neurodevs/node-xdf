@@ -82,7 +82,7 @@ export default class XdfStreamReplayer implements XdfReplayer {
 
         return await LslStreamOutlet.Create({
             type,
-            sampleRate: nominalSampleRateHz,
+            sampleRateHz: nominalSampleRateHz,
             channelNames: Array.from(
                 { length: stream.channelCount },
                 (_, i) => `${type}_channel_${i}`
@@ -90,10 +90,10 @@ export default class XdfStreamReplayer implements XdfReplayer {
             name: type,
             sourceId: type,
             manufacturer: generateId(),
-            unit: generateId(),
+            units: generateId(),
             channelFormat: 'float32',
             chunkSize: 1,
-            maxBuffered: 0,
+            maxBufferedMs: 0,
         })
     }
 }

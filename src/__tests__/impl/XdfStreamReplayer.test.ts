@@ -62,14 +62,14 @@ export default class XdfStreamReplayerTest extends AbstractPackageTest {
                 type: stream.type,
                 name: stream.type,
                 sourceId: stream.type,
-                sampleRate: stream.nominalSampleRateHz,
+                sampleRateHz: stream.nominalSampleRateHz,
                 channelNames: Array.from(
                     { length: stream.channelCount },
                     (_, i) => `${stream.type}_channel_${i}`
                 ),
                 channelFormat: 'float32',
                 chunkSize: 1,
-                maxBuffered: 0,
+                maxBufferedMs: 0,
             }
 
             const actual = FakeStreamOutlet.callsToConstructor[i].options
