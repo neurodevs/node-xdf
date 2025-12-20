@@ -1,3 +1,3 @@
 import XdfStreamRecorder from '../impl/XdfStreamRecorder.js'
 
-XdfStreamRecorder.Create('test.csv', [])
+await XdfStreamRecorder.Create('test.csv', [])
