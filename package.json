@@ -48,7 +48,7 @@
     "ffi-rs": "^1.0.98"
   },
   "devDependencies": {
-    "@neurodevs/fake-node-core": "0.10.0",
+    "@neurodevs/fake-node-core": "0.11.1",
     "@neurodevs/generate-id": "1.1.2",
     "@neurodevs/node-tdd": "0.2.5",
     "@types/node": "^22.9.0",
