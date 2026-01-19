@@ -1,4 +1,4 @@
-import { BoundRecording, Labrecorder } from '../../impl/LabrecorderAdapter.js'
+import { RecordingHandle, Labrecorder } from '../../impl/LabrecorderAdapter.js'
 
 export default class FakeLabrecorder implements Labrecorder {
     public static constructorCalls: string[] = []
@@ -8,8 +8,8 @@ export default class FakeLabrecorder implements Labrecorder {
         watchFor: string[]
     }[] = []
 
-    public static stopRecordingCalls: BoundRecording[] = []
-    public static deleteRecordingCalls: BoundRecording[] = []
+    public static stopRecordingCalls: RecordingHandle[] = []
+    public static deleteRecordingCalls: RecordingHandle[] = []
 
     public constructor(labrecorderPath: string) {
         FakeLabrecorder.constructorCalls.push(labrecorderPath)
@@ -17,14 +17,14 @@ export default class FakeLabrecorder implements Labrecorder {
 
     public createRecording(filename: string, watchFor: string[]) {
         FakeLabrecorder.createRecordingCalls.push({ filename, watchFor })
-        return {} as BoundRecording
+        return {} as RecordingHandle
     }
 
-    public stopRecording(recording: BoundRecording) {
+    public stopRecording(recording: RecordingHandle) {
         FakeLabrecorder.stopRecordingCalls.push(recording)
     }
 
-    public deleteRecording(recording: BoundRecording) {
+    public deleteRecording(recording: RecordingHandle) {
         FakeLabrecorder.deleteRecordingCalls.push(recording)
     }
 

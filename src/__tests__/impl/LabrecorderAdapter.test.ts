@@ -3,7 +3,7 @@ import { test, assert } from '@neurodevs/node-tdd'
 import { DataType, OpenParams } from 'ffi-rs'
 
 import LabrecorderAdapter, {
-    BoundRecording,
+    RecordingHandle,
     Labrecorder,
     LabrecorderBindings,
 } from '../../impl/LabrecorderAdapter.js'
@@ -20,8 +20,8 @@ export default class LabrecorderAdapterTest extends AbstractPackageTest {
         watchFor: string[]
     }[] = []
 
-    private static callsToRecordingStop: BoundRecording[] = []
-    private static callsToRecordingDelete: BoundRecording[] = []
+    private static callsToRecordingStop: RecordingHandle[] = []
+    private static callsToRecordingDelete: RecordingHandle[] = []
 
     private static readonly filename = generateId()
     private static readonly watchFor = [generateId(), generateId()]
@@ -139,11 +139,11 @@ export default class LabrecorderAdapterTest extends AbstractPackageTest {
         return this.instance.createRecording(this.filename, this.watchFor)
     }
 
-    private static stopRecording(recording: BoundRecording) {
+    private static stopRecording(recording: RecordingHandle) {
         this.instance.stopRecording(recording)
     }
 
-    private static deleteRecording(recording: BoundRecording) {
+    private static deleteRecording(recording: RecordingHandle) {
         this.instance.deleteRecording(recording)
     }
 
@@ -177,12 +177,12 @@ export default class LabrecorderAdapterTest extends AbstractPackageTest {
                     filename,
                     watchFor,
                 })
-                return {} as BoundRecording
+                return {} as RecordingHandle
             },
-            recording_stop: ([recording]: [BoundRecording]) => {
+            recording_stop: ([recording]: [RecordingHandle]) => {
                 this.callsToRecordingStop.push(recording)
             },
-            recording_delete: ([recording]: [BoundRecording]) => {
+            recording_delete: ([recording]: [RecordingHandle]) => {
                 this.callsToRecordingDelete.push(recording)
             },
         }

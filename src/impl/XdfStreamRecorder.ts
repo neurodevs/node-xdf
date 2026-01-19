@@ -3,7 +3,7 @@ import os from 'os'
 import path from 'path'
 
 import LabrecorderAdapter, {
-    BoundRecording,
+    RecordingHandle,
     Labrecorder,
 } from './LabrecorderAdapter.js'
 
@@ -11,7 +11,7 @@ export default class XdfStreamRecorder implements XdfRecorder {
     public static Class?: XdfRecorderConstructor
     public static mkdir = mkdir
 
-    protected recording?: BoundRecording
+    protected recording?: RecordingHandle
     private labrecorder: Labrecorder
     private xdfRecordPath: string
     private streamQueries: string[]

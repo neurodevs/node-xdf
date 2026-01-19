@@ -55,11 +55,11 @@ export default class LabrecorderAdapter implements Labrecorder {
         return this.bindings.recording_create([filename, watchFor])
     }
 
-    public stopRecording(recording: BoundRecording) {
+    public stopRecording(recording: RecordingHandle) {
         this.bindings.recording_stop([recording])
     }
 
-    public deleteRecording(recording: BoundRecording) {
+    public deleteRecording(recording: RecordingHandle) {
         this.stopRecording(recording)
         this.bindings.recording_delete([recording])
     }
@@ -74,9 +74,9 @@ export default class LabrecorderAdapter implements Labrecorder {
 }
 
 export interface Labrecorder {
-    createRecording(filename: string, watchFor: string[]): BoundRecording
-    stopRecording(recording: BoundRecording): void
-    deleteRecording(recording: BoundRecording): void
+    createRecording(filename: string, watchFor: string[]): RecordingHandle
+    stopRecording(recording: RecordingHandle): void
+    deleteRecording(recording: RecordingHandle): void
 }
 
 export type LabrecorderConstructor = new (
@@ -84,9 +84,9 @@ export type LabrecorderConstructor = new (
 ) => Labrecorder
 
 export interface LabrecorderBindings {
-    recording_create(args: [string, string[]]): BoundRecording
-    recording_stop(args: [BoundRecording]): void
-    recording_delete(args: [BoundRecording]): void
+    recording_create(args: [string, string[]]): RecordingHandle
+    recording_stop(args: [RecordingHandle]): void
+    recording_delete(args: [RecordingHandle]): void
 }
 
-export type BoundRecording = DataType.External
+export type RecordingHandle = DataType.External
