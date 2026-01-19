@@ -97,13 +97,18 @@ export default class XdfStreamRecorder implements XdfRecorder {
 
     public finish() {
         if (this.isRunning) {
-            this.deleteRecordingInstance()
+            this.stopRecording()
+            this.deleteRecording()
         } else {
             console.warn('Cannot finish recorder because it is not running.')
         }
     }
 
-    private deleteRecordingInstance() {
+    private stopRecording() {
+        this.labrecorder.stopRecording(this.recording!)
+    }
+
+    private deleteRecording() {
         this.labrecorder.deleteRecording(this.recording!)
         delete this.recording
     }

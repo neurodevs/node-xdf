@@ -95,6 +95,17 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
     }
 
     @test()
+    protected static async callingFinishCallsStopRecording() {
+        this.startThenFinish()
+
+        assert.isEqual(
+            FakeLabrecorder.stopRecordingCalls.length,
+            1,
+            'Should have called stopRecording!\n'
+        )
+    }
+
+    @test()
     protected static async callingFinishCallsDeleteRecording() {
         this.startThenFinish()
 
