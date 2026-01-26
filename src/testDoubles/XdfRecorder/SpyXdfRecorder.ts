@@ -1,9 +1,9 @@
 import XdfStreamRecorder, {
-    XdfRecorderOptions,
+    XdfRecorderConstructorOptions,
 } from '../../impl/XdfStreamRecorder.js'
 
 export default class SpyXdfRecorder extends XdfStreamRecorder {
-    public constructor(options: XdfRecorderOptions) {
+    public constructor(options: XdfRecorderConstructorOptions) {
         super(options)
     }
 

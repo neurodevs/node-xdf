@@ -3,15 +3,18 @@ import { fakeMkdir, resetCallsToMkdir } from '@neurodevs/fake-node-core'
 
 import XdfStreamRecorder, {
     XdfRecorder,
-    XdfRecorderOptions,
+    XdfRecorderConstructorOptions,
 } from '../../impl/XdfStreamRecorder.js'
 
 export default class FakeXdfRecorder implements XdfRecorder {
-    public static callsToConstructor: (XdfRecorderOptions | undefined)[] = []
+    public static callsToConstructor: (
+        | XdfRecorderConstructorOptions
+        | undefined
+    )[] = []
     public static numCallsToStart = 0
     public static numCallsToFinish = 0
 
-    public constructor(options?: XdfRecorderOptions) {
+    public constructor(options?: XdfRecorderConstructorOptions) {
         this.callsToConstructor.push(options)
     }
 

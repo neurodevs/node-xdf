@@ -17,7 +17,7 @@ export default class XdfStreamRecorder implements XdfRecorder {
     private streamQueries: string[]
     private hostname: string
 
-    protected constructor(options: XdfRecorderOptions) {
+    protected constructor(options: XdfRecorderConstructorOptions) {
         const { labrecorder, xdfRecordPath, streamQueries, hostname } = options
 
         this.labrecorder = labrecorder
@@ -31,13 +31,13 @@ export default class XdfStreamRecorder implements XdfRecorder {
     public static async Create(
         xdfRecordPath: string,
         streamQueries: string[],
-        options?: CreateRecorderOptions
+        options?: XdfRecorderOptions
     ) {
         const labrecorder = this.LabrecorderAdapter()
 
-        const { hostname = os.hostname(), shouldMkdir = true } = options ?? {}
+        const { hostname = os.hostname(), makeOutputDir = true } = options ?? {}
 
-        if (shouldMkdir) {
+        if (makeOutputDir) {
             await this.makeOutputDirFor(xdfRecordPath)
         }
 
@@ -129,18 +129,26 @@ export interface XdfRecorder {
     isRunning: boolean
 }
 
+export interface XdfRecorderOptions {
+    /**
+     * The hostname to use when recording streams.
+     * @default os.hostname()
+     */
+    hostname?: string
+    /**
+     * Whether to create the output directory if it does not exist.
+     * @default true
+     */
+    makeOutputDir?: boolean
+}
+
 export type XdfRecorderConstructor = new (
-    options: XdfRecorderOptions
+    options: XdfRecorderConstructorOptions
 ) => XdfRecorder
 
-export interface XdfRecorderOptions {
+export interface XdfRecorderConstructorOptions {
     labrecorder: Labrecorder
     xdfRecordPath: string
     streamQueries: string[]
     hostname: string
-}
-
-export interface CreateRecorderOptions {
-    hostname?: string
-    shouldMkdir?: boolean
 }

@@ -11,7 +11,7 @@ import { test, assert } from '@neurodevs/node-tdd'
 
 import LabrecorderAdapter from '../../impl/LabrecorderAdapter.js'
 import XdfStreamRecorder, {
-    CreateRecorderOptions,
+    XdfRecorderOptions,
 } from '../../impl/XdfStreamRecorder.js'
 import FakeLabrecorder from '../../testDoubles/Labrecorder/FakeLabrecorder.js'
 import SpyXdfRecorder from '../../testDoubles/XdfRecorder/SpyXdfRecorder.js'
@@ -235,7 +235,7 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
         resetCallsToMkdir()
 
         await this.XdfStreamRecorder({
-            shouldMkdir: false,
+            makeOutputDir: false,
         })
 
         assert.isEqual(callsToMkdir.length, 0, 'Should not have called mkdir!')
@@ -280,7 +280,7 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
     private static readonly streamQueries = [generateId(), generateId()]
 
     private static async XdfStreamRecorder(
-        options?: Partial<CreateRecorderOptions>
+        options?: Partial<XdfRecorderOptions>
     ) {
         const recorder = await XdfStreamRecorder.Create(
             this.xdfRecordPath,
