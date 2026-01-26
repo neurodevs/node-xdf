@@ -36,7 +36,11 @@ export default class LabrecorderAdapter implements Labrecorder {
             recording_create: {
                 library: 'labrecorder',
                 retType: DataType.External,
-                paramsType: [DataType.String, DataType.StringArray],
+                paramsType: [
+                    DataType.String,
+                    DataType.StringArray,
+                    DataType.U64,
+                ],
             },
             recording_stop: {
                 library: 'labrecorder',
@@ -52,7 +56,11 @@ export default class LabrecorderAdapter implements Labrecorder {
     }
 
     public createRecording(filename: string, watchFor: string[]) {
-        return this.bindings.recording_create([filename, watchFor])
+        return this.bindings.recording_create([
+            filename,
+            watchFor,
+            watchFor.length,
+        ])
     }
 
     public stopRecording(recording: RecordingHandle) {
@@ -60,7 +68,6 @@ export default class LabrecorderAdapter implements Labrecorder {
     }
 
     public deleteRecording(recording: RecordingHandle) {
-        this.stopRecording(recording)
         this.bindings.recording_delete([recording])
     }
 
@@ -84,7 +91,8 @@ export type LabrecorderConstructor = new (
 ) => Labrecorder
 
 export interface LabrecorderBindings {
-    recording_create(args: [string, string[]]): RecordingHandle
+    recording_create(args: [string, string[], number]): RecordingHandle
+
     recording_stop(args: [RecordingHandle]): void
     recording_delete(args: [RecordingHandle]): void
 }

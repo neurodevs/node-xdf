@@ -18,6 +18,7 @@ export default class LabrecorderAdapterTest extends AbstractPackageTest {
     private static callsToRecordingCreate: {
         filename: string
         watchFor: string[]
+        watchForCount: number
     }[] = []
 
     private static callsToRecordingStop: RecordingHandle[] = []
@@ -62,6 +63,7 @@ export default class LabrecorderAdapterTest extends AbstractPackageTest {
                     paramsType: [
                         DataType.String, // filename
                         DataType.StringArray, // watchfor
+                        DataType.U64, // watchfor_count
                     ],
                 },
                 recording_stop: {
@@ -92,6 +94,7 @@ export default class LabrecorderAdapterTest extends AbstractPackageTest {
             {
                 filename: this.filename,
                 watchFor: this.watchFor,
+                watchForCount: this.watchFor.length,
             },
             'Should create a recording!'
         )
@@ -120,13 +123,6 @@ export default class LabrecorderAdapterTest extends AbstractPackageTest {
         const recording = this.createAndDeleteRecording()
 
         assert.isEqualDeep(this.callsToRecordingDelete[0], recording)
-    }
-
-    @test()
-    protected static async callingDeleteFirstCallsStop() {
-        const recording = this.createAndDeleteRecording()
-
-        assert.isEqualDeep(this.callsToRecordingStop[0], recording)
     }
 
     private static createAndDeleteRecording() {
@@ -172,10 +168,15 @@ export default class LabrecorderAdapterTest extends AbstractPackageTest {
         this.callsToRecordingDelete = []
 
         return {
-            recording_create: ([filename, watchFor]: [string, string[]]) => {
+            recording_create: ([filename, watchFor, watchForCount]: [
+                string,
+                string[],
+                number,
+            ]) => {
                 this.callsToRecordingCreate.push({
                     filename,
                     watchFor,
+                    watchForCount,
                 })
                 return {} as RecordingHandle
             },
