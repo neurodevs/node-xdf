@@ -11,7 +11,7 @@ export default class XdfStreamRecorder implements XdfRecorder {
     public static Class?: XdfRecorderConstructor
     public static mkdir = mkdir
 
-    protected recording?: RecordingHandle
+    protected handle?: RecordingHandle
     private labrecorder: Labrecorder
     private xdfRecordPath: string
     private streamQueries: string[]
@@ -69,21 +69,21 @@ export default class XdfStreamRecorder implements XdfRecorder {
 
     public start() {
         if (!this.isRunning) {
-            this.createRecordingInstance()
+            this.createRecordingHandle()
         } else {
             console.warn('Cannot start recorder because it is already running.')
         }
     }
 
-    private createRecordingInstance() {
-        this.recording = this.labrecorder.createRecording(
+    private createRecordingHandle() {
+        this.handle = this.labrecorder.createRecording(
             this.xdfRecordPath,
             this.queriesWithHostname
         )
     }
 
     public get isRunning() {
-        return Boolean(this.recording)
+        return Boolean(this.handle)
     }
 
     private get queriesWithHostname() {
@@ -105,12 +105,12 @@ export default class XdfStreamRecorder implements XdfRecorder {
     }
 
     private stopRecording() {
-        this.labrecorder.stopRecording(this.recording!)
+        this.labrecorder.stopRecording(this.handle!)
     }
 
     private deleteRecording() {
-        this.labrecorder.deleteRecording(this.recording!)
-        delete this.recording
+        this.labrecorder.deleteRecording(this.handle!)
+        delete this.handle
     }
 
     private static async makeOutputDirFor(xdfRecordPath: string) {

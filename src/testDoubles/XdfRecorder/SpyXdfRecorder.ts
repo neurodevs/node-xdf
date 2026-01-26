@@ -8,6 +8,6 @@ export default class SpyXdfRecorder extends XdfStreamRecorder {
     }
 
     public getRecording() {
-        return this.recording
+        return this.handle
     }
 }
