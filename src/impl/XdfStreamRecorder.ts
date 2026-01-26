@@ -38,7 +38,7 @@ export default class XdfStreamRecorder implements XdfRecorder {
         const { hostname = os.hostname(), shouldMkdir = true } = options ?? {}
 
         if (shouldMkdir) {
-            await this.mkdirFrom(xdfRecordPath)
+            await this.makeOutputDirFor(xdfRecordPath)
         }
 
         return new (this.Class ?? this)({
@@ -113,8 +113,9 @@ export default class XdfStreamRecorder implements XdfRecorder {
         delete this.recording
     }
 
-    private static async mkdirFrom(xdfRecordPath: string) {
-        await this.mkdir(path.dirname(xdfRecordPath), { recursive: true })
+    private static async makeOutputDirFor(xdfRecordPath: string) {
+        const outputDir = path.dirname(xdfRecordPath)
+        await this.mkdir(outputDir, { recursive: true })
     }
 
     private static LabrecorderAdapter() {
