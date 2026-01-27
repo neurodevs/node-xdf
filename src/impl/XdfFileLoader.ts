@@ -1,4 +1,4 @@
-import LibxdfAdapter, { Libxdf } from './LibxdfAdapter.js'
+import { Libxdf, LibxdfAdapter } from '@neurodevs/ndx-native'
 
 export default class XdfFileLoader implements XdfLoader {
     public static Class?: XdfLoaderConstructor

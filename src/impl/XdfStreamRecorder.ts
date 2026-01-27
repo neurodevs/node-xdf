@@ -1,11 +1,12 @@
-import { mkdir } from 'fs/promises'
-import os from 'os'
-import path from 'path'
+import { mkdir } from 'node:fs/promises'
+import os from 'node:os'
+import path from 'node:path'
 
-import LabrecorderAdapter, {
+import {
     RecordingHandle,
     Labrecorder,
-} from './LabrecorderAdapter.js'
+    LabrecorderAdapter,
+} from '@neurodevs/ndx-native'
 
 export default class XdfStreamRecorder implements XdfRecorder {
     public static Class?: XdfRecorderConstructor

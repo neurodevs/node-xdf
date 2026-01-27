@@ -1,19 +1,19 @@
-import { mkdir } from 'fs/promises'
-import os from 'os'
-import path from 'path'
+import { mkdir } from 'node:fs/promises'
+import os from 'node:os'
+import path from 'node:path'
+
 import {
     callsToMkdir,
     fakeMkdir,
     resetCallsToMkdir,
 } from '@neurodevs/fake-node-core'
 import generateId from '@neurodevs/generate-id'
+import { FakeLabrecorder, LabrecorderAdapter } from '@neurodevs/ndx-native'
 import { test, assert } from '@neurodevs/node-tdd'
 
-import LabrecorderAdapter from '../../impl/LabrecorderAdapter.js'
 import XdfStreamRecorder, {
     XdfRecorderOptions,
 } from '../../impl/XdfStreamRecorder.js'
-import FakeLabrecorder from '../../testDoubles/Labrecorder/FakeLabrecorder.js'
 import SpyXdfRecorder from '../../testDoubles/XdfRecorder/SpyXdfRecorder.js'
 import AbstractPackageTest from '../AbstractPackageTest.js'
 

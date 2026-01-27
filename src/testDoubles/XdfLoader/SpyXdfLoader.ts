@@ -1,4 +1,5 @@
-import { Libxdf } from '../../impl/LibxdfAdapter.js'
+import { Libxdf } from '@neurodevs/ndx-native'
+
 import XdfFileLoader, {
     XdfLoaderLoadOptions,
 } from '../../impl/XdfFileLoader.js'

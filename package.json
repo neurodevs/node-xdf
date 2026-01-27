@@ -1,6 +1,6 @@
 {
   "name": "@neurodevs/node-xdf",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "Extensible Data Format (XDF) for persisting multi-modal, time-series data with metadata.",
   "type": "module",
   "keywords": [
@@ -44,9 +44,8 @@
   },
   "dependencies": {
     "@neurodevs/fake-node-core": "^0.11.1",
-    "@neurodevs/node-lsl": "^17.1.0",
-    "@neurodevs/node-mangled-names": "^1.0.1",
-    "ffi-rs": "^1.0.98"
+    "@neurodevs/ndx-native": "^0.0.1",
+    "@neurodevs/node-lsl": "^17.1.0"
   },
   "devDependencies": {
     "@neurodevs/generate-id": "1.1.2",

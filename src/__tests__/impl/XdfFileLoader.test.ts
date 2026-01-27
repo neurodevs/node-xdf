@@ -1,13 +1,12 @@
 import generateId from '@neurodevs/generate-id'
+import { LibxdfAdapter, FakeLibxdf } from '@neurodevs/ndx-native'
 import {
     FakeNameExtractor,
     MangledNameExtractor,
 } from '@neurodevs/node-mangled-names'
 import { test, assert } from '@neurodevs/node-tdd'
 
-import LibxdfAdapter from '../../impl/LibxdfAdapter.js'
 import XdfFileLoader, { XdfStream } from '../../impl/XdfFileLoader.js'
-import FakeLibxdf from '../../testDoubles/Libxdf/FakeLibxdf.js'
 import SpyXdfLoader from '../../testDoubles/XdfLoader/SpyXdfLoader.js'
 import AbstractPackageTest from '../AbstractPackageTest.js'
 
