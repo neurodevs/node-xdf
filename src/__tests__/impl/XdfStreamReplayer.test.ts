@@ -72,7 +72,7 @@ export default class XdfStreamReplayerTest extends AbstractPackageTest {
                 maxBufferedMs: 0,
             }
 
-            const actual = FakeStreamOutlet.callsToConstructor[i].options
+            const actual = FakeStreamOutlet.callsToConstructor[i]
 
             assert.doesInclude(
                 actual,

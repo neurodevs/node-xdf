@@ -43,9 +43,9 @@
     "watch.tsc": "tsc -w"
   },
   "dependencies": {
-    "@neurodevs/fake-node-core": "^0.11.1",
-    "@neurodevs/ndx-native": "^0.0.1",
-    "@neurodevs/node-lsl": "^17.1.0"
+    "@neurodevs/fake-node-core": "^0.12.0",
+    "@neurodevs/ndx-native": "^0.2.0",
+    "@neurodevs/node-lsl": "^18.0.0"
   },
   "devDependencies": {
     "@neurodevs/generate-id": "1.1.2",
