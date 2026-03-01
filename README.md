@@ -1,7 +1,9 @@
 # node-xdf
+
 Extensible Data Format (XDF) for persisting multi-modal, time-series data with metadata
 
 ## Table of Contents
+
 - [Overview](#overview)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -25,9 +27,9 @@ sudo cp build/libxdf.dylib /opt/local/lib/
 
 Then, install the package with your preferred package manager:
 
-`npm install @neurodevs/node-xdf` 
+`npm install @neurodevs/node-xdf`
 
-or 
+or
 
 `yarn add @neurodevs/node-xdf`
 
@@ -39,10 +41,10 @@ or
 import { XdfFileLoader } from '@neurodevs/node-xdf'
 
 async function loadXdf() {
-    const loader = await XdfFileLoader.Create()
+  const loader = await XdfFileLoader.Create()
 
-    const data = await loader.load('/path/to/file.xdf')
-    console.log('XDF Data:', data)
+  const data = await loader.load('/path/to/file.xdf')
+  console.log('XDF Data:', data)
 }
 ```
 
@@ -54,7 +56,7 @@ This package was developed using test-driven development (TDD). If you also foll
 import { XdfFileLoader, FakeXdfLoader } from '@neurodevs/node-lsl'
 
 async function someTestFunction() {
-    XdfFileLoader.Class = FakeXdfLoader
-    const fake = await XdfFileLoader.Create()
+  XdfFileLoader.Class = FakeXdfLoader
+  const fake = await XdfFileLoader.Create()
 }
 ```
