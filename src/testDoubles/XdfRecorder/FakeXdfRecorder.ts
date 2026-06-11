@@ -1,4 +1,5 @@
-import { mkdir } from 'fs/promises'
+import type { mkdir } from 'node:fs/promises'
+
 import { fakeMkdir, resetCallsToMkdir } from '@neurodevs/fake-node-core'
 
 import XdfStreamRecorder, {
