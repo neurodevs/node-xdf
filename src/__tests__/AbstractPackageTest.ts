@@ -1,6 +1,6 @@
 import {
-    FakeStreamOutlet,
-    FakeStreamInfo,
+    FakeLslOutlet,
+    FakeLslInfo,
     LslStreamInfo,
     LslStreamOutlet,
 } from '@neurodevs/node-lsl'
@@ -15,12 +15,12 @@ export default class AbstractPackageTest extends AbstractModuleTest {
     }
 
     protected static setFakeStreamInfo() {
-        LslStreamInfo.Class = FakeStreamInfo
-        FakeStreamInfo.resetTestDouble()
+        LslStreamInfo.Class = FakeLslInfo
+        FakeLslInfo.resetTestDouble()
     }
 
     protected static setFakeStreamOutlet() {
-        LslStreamOutlet.Class = FakeStreamOutlet
-        FakeStreamOutlet.resetTestDouble()
+        LslStreamOutlet.Class = FakeLslOutlet
+        FakeLslOutlet.resetTestDouble()
     }
 }

@@ -1,5 +1,5 @@
 import generateId from '@neurodevs/generate-id'
-import { FakeStreamOutlet, LslStreamOutlet } from '@neurodevs/node-lsl'
+import { FakeLslOutlet, LslStreamOutlet } from '@neurodevs/node-lsl'
 import { test, assert } from '@neurodevs/node-tdd'
 
 import XdfFileLoader, { XdfStream } from '../../impl/XdfFileLoader.js'
@@ -14,7 +14,7 @@ export default class XdfStreamReplayerTest extends AbstractPackageTest {
         await super.beforeEach()
 
         this.fakeXdfLoader()
-        this.fakeStreamOutlet()
+        this.fakeLslOutlet()
 
         this.instance = await this.XdfStreamReplayer()
     }
@@ -47,7 +47,7 @@ export default class XdfStreamReplayerTest extends AbstractPackageTest {
         await this.replay()
 
         assert.isEqual(
-            FakeStreamOutlet.callsToConstructor.length,
+            FakeLslOutlet.callsToConstructor.length,
             this.fakeStreams.length,
             'Should create an LSL outlet for each stream!'
         )
@@ -72,7 +72,7 @@ export default class XdfStreamReplayerTest extends AbstractPackageTest {
                 maxBufferedMs: 0,
             }
 
-            const actual = FakeStreamOutlet.callsToConstructor[i]
+            const actual = FakeLslOutlet.callsToConstructor[i]
 
             assert.doesInclude(
                 actual,
@@ -87,7 +87,7 @@ export default class XdfStreamReplayerTest extends AbstractPackageTest {
         await this.replay()
 
         assert.isEqual(
-            FakeStreamOutlet.callsToPushSample.length,
+            FakeLslOutlet.callsToPushSample.length,
             this.numStreams * this.numSamplesPerChannel,
             'Should call pushSample the correct number of times!'
         )
@@ -166,9 +166,9 @@ export default class XdfStreamReplayerTest extends AbstractPackageTest {
         }
     }
 
-    private static fakeStreamOutlet() {
-        LslStreamOutlet.Class = FakeStreamOutlet
-        FakeStreamOutlet.resetTestDouble()
+    private static fakeLslOutlet() {
+        LslStreamOutlet.Class = FakeLslOutlet
+        FakeLslOutlet.resetTestDouble()
     }
 
     private static readonly filePath = generateId()

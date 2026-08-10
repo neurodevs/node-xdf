@@ -1,3 +1,4 @@
+import { RecordingHandle } from '@neurodevs/ndx-native'
 import XdfStreamRecorder, {
     XdfRecorderConstructorOptions,
 } from '../../impl/XdfStreamRecorder.js'
@@ -7,7 +8,7 @@ export default class SpyXdfRecorder extends XdfStreamRecorder {
         super(options)
     }
 
-    public getRecording() {
+    public getRecordingHandle(): RecordingHandle | undefined {
         return this.handle
     }
 }

@@ -37,8 +37,8 @@
     "watch.lint": "concurrently 'yarn lint' \"chokidar 'src/**/*' -c 'yarn lint.tsc'\""
   },
   "dependencies": {
-    "@neurodevs/ndx-native": "^0.2.0",
-    "@neurodevs/node-lsl": "^18.0.0"
+    "@neurodevs/ndx-native": "^8.0.0",
+    "@neurodevs/node-lsl": "^22.1.0"
   },
   "devDependencies": {
     "@neurodevs/eslint-config-ndx": "^1.0.2",

@@ -1,5 +1,5 @@
 import generateId from '@neurodevs/generate-id'
-import { LslStreamOutlet, StreamOutlet } from '@neurodevs/node-lsl'
+import { LslStreamOutlet, LslOutlet } from '@neurodevs/node-lsl'
 
 import XdfFileLoader, { XdfFile, XdfStream } from './XdfFileLoader.js'
 
@@ -7,10 +7,10 @@ export default class XdfStreamReplayer implements XdfReplayer {
     public static Class?: XdfReplayerConstructor
 
     private xdfFile: XdfFile
-    private outlets: StreamOutlet[]
+    private outlets: LslOutlet[]
     private forMs?: number
 
-    protected constructor(xdfFile: XdfFile, outlets: StreamOutlet[]) {
+    protected constructor(xdfFile: XdfFile, outlets: LslOutlet[]) {
         this.xdfFile = xdfFile
         this.outlets = outlets
     }
@@ -104,5 +104,5 @@ export interface XdfReplayer {
 
 export type XdfReplayerConstructor = new (
     xdfFile: XdfFile,
-    outlets: StreamOutlet[]
+    outlets: LslOutlet[]
 ) => XdfReplayer

@@ -89,7 +89,7 @@ export default class XdfStreamRecorderTest extends AbstractPackageTest {
     protected static async callingStartSetsRecording() {
         this.start()
 
-        const recording = this.instance.getRecording()
+        const recording = this.instance.getRecordingHandle()
 
         assert.isTruthy(recording, 'Should have set recording!\n')
     }
