@@ -41,7 +41,7 @@
     "@neurodevs/node-lsl": "^22.1.0"
   },
   "devDependencies": {
-    "@neurodevs/eslint-config-ndx": "^1.0.2",
+    "@neurodevs/eslint-config-ndx": "2.0.0",
     "@neurodevs/fake-node-core": "^0.12.0",
     "@neurodevs/generate-id": "^1.1.2",
     "@neurodevs/node-tdd": "^1.1.2",
