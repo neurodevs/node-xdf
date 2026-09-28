@@ -1,6 +1,6 @@
 {
   "name": "@neurodevs/node-xdf",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Extensible Data Format (XDF) for persisting multi-modal, time-series data with metadata.",
   "type": "module",
   "keywords": [
@@ -42,7 +42,6 @@
   },
   "devDependencies": {
     "@neurodevs/eslint-config-ndx": "2.0.3",
-    "@neurodevs/fake-node-core": "^0.12.0",
     "@neurodevs/generate-id": "^1.1.2",
     "@neurodevs/node-tdd": "^1.1.2",
     "@neurodevs/prettier-config-ndx": "^1.0.2",
