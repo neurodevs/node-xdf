@@ -1,6 +1,6 @@
 {
   "name": "@neurodevs/node-xdf",
-  "version": "5.0.2",
+  "version": "5.0.3",
   "description": "Extensible Data Format (XDF) for persisting multi-modal, time-series data with metadata.",
   "type": "module",
   "keywords": [
@@ -36,8 +36,8 @@
     "watch.lint": "concurrently 'yarn lint' \"chokidar 'src/**/*' -c 'yarn lint.tsc'\""
   },
   "dependencies": {
-    "@neurodevs/ndx-native": "^8.0.0",
-    "@neurodevs/node-lsl": "^22.1.0"
+    "@neurodevs/ndx-native": "^13.0.0",
+    "@neurodevs/node-lsl": "^23.7.1"
   },
   "devDependencies": {
     "@neurodevs/eslint-config-ndx": "^2.0.3",
