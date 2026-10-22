@@ -9,8 +9,7 @@ import XdfStreamRecorder, {
 
 export default class FakeXdfRecorder implements XdfRecorder {
     public static callsToConstructor: (
-        | XdfRecorderConstructorOptions
-        | undefined
+        XdfRecorderConstructorOptions | undefined
     )[] = []
     public static numCallsToStart = 0
     public static numCallsToFinish = 0
