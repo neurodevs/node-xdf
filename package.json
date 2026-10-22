@@ -1,6 +1,6 @@
 {
   "name": "@neurodevs/node-xdf",
-  "version": "5.0.3",
+  "version": "5.0.4",
   "description": "Extensible Data Format (XDF) for persisting multi-modal, time-series data with metadata.",
   "type": "module",
   "keywords": [
